@@ -342,6 +342,54 @@
       text-align: center;
       animation: popupFadeIn 0.2s;
     }
+    /* Premium Join Popup */
+    #joinPremiumPopupOverlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3001;
+    }
+    #joinPremiumPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #232323;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      padding: 32px 24px 24px 24px;
+      min-width: 260px;
+      max-width: 90vw;
+      z-index: 3002;
+      text-align: center;
+      color: #fff;
+      animation: popupFadeIn 0.25s;
+    }
+    #joinPremiumPopup button {
+      background: var(--accent);
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 12px 0 0 0;
+      transition: background 0.2s;
+      display: block;
+      width: 100%;
+    }
+    #joinPremiumPopup button:hover {
+      background: #ffe066;
+    }
+    #joinPremiumPopup .close-btn {
+      background: #444;
+      color: #fff;
+      margin-top: 16px;
+      font-weight: normal;
+    }
     @media (max-width: 600px) {
       .top-bar, .bottom-bar {
         width: calc(100vw - 12px);
@@ -361,6 +409,10 @@
         height: 100vh;
         object-fit: cover;
       }
+      #joinPremiumPopup {
+        min-width: 80vw;
+        padding: 24px 8px 16px 8px;
+      }
     }
     /* Swiper custom styles for full-screen vertical video */
     .swiper {
@@ -375,6 +427,27 @@
       background: #000;
     }
     .swiper-slide video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      background: #000;
+      border-radius: 0;
+      display: block;
+      max-width: 100vw;
+      max-height: 100vh;
+    }
+    /* Premium video full screen */
+    #premium-video-holder {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+    }
+    #premium-video-holder video {
       width: 100vw;
       height: 100vh;
       object-fit: cover;
@@ -402,6 +475,13 @@
     <button id="privacyBtn">Privacy Policy</button>
   </div>
 
+  <!-- Join Premium Popup -->
+  <div id="joinPremiumPopupOverlay"></div>
+  <div id="joinPremiumPopup">
+    <button id="joinPremiumNowBtn">Click Here to Join Premium</button>
+    <button class="close-btn" id="closeJoinPremiumBtn">Close</button>
+  </div>
+
   <!-- Main Content -->
   <main>
     <!-- Home Page -->
@@ -423,10 +503,9 @@
     </div>
     <!-- Premium Area Page -->
     <div class="page" id="premium-page">
-      <div id="premium-video-holder" style="margin-top:0;">
+      <div id="premium-video-holder">
         <!-- Premium video will be loaded here by JS -->
       </div>
-      <button id="joinPremiumBtn" style="margin: 24px auto 0 auto; display:block; background: #ffd700; color: #222; font-weight: bold; border: none; border-radius: 10px; padding: 16px 0; width: 90%; max-width: 340px; font-size: 1.1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">Join Premium Now For More</button>
     </div>
     <!-- Info Page -->
     <div class="page" id="info-page">
@@ -509,7 +588,11 @@
     }
     navBtns.home.onclick = () => { showPage('home'); };
     navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
-    navBtns.premium.onclick = () => { showPage('premium'); loadPremiumVideo(); };
+    navBtns.premium.onclick = () => {
+      showPage('premium');
+      loadPremiumVideo();
+      showJoinPremiumPopup();
+    };
 
     // Menu popup logic
     const menuBtn = document.getElementById('menu-button');
@@ -542,20 +625,31 @@
       window.history.pushState({menu: false, page: 'privacy'}, 'Privacy');
     };
 
+    // Premium Join Popup logic
+    const joinPremiumPopup = document.getElementById('joinPremiumPopup');
+    const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
+    const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
+    const closeJoinPremiumBtn = document.getElementById('closeJoinPremiumBtn');
+
+    function showJoinPremiumPopup() {
+      joinPremiumPopup.style.display = 'block';
+      joinPremiumPopupOverlay.style.display = 'block';
+    }
+    function hideJoinPremiumPopup() {
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+    }
+    joinPremiumNowBtn.onclick = function() {
+      // Do the same as before (open WhatsApp link)
+      window.open('https://wa.me/254720047018', '_blank');
+    };
+    closeJoinPremiumBtn.onclick = hideJoinPremiumPopup;
+    joinPremiumPopupOverlay.onclick = hideJoinPremiumPopup;
+
     // Premium Popup logic
-    const joinPremiumBtn = document.getElementById('joinPremiumBtn');
     const premiumPopup = document.getElementById('premiumPopup');
     const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
     const wrongKeyPopup = document.getElementById('wrongKeyPopup');
-    joinPremiumBtn.onclick = function() {
-      premiumPopup.style.display = 'block';
-      premiumPopupOverlay.style.display = 'block';
-      document.getElementById('premiumKeyInput').value = '';
-    };
-    premiumPopupOverlay.onclick = function() {
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
-    };
     document.getElementById('premiumKeyBtn').onclick = function() {
       const key = document.getElementById('premiumKeyInput').value;
       if (key === '1234567') {
@@ -566,6 +660,10 @@
           wrongKeyPopup.style.display = 'none';
         }, 1500);
       }
+    };
+    premiumPopupOverlay.onclick = function() {
+      premiumPopup.style.display = 'none';
+      premiumPopupOverlay.style.display = 'none';
     };
 
     // Helper: get thumbnail URL for a video file
@@ -673,7 +771,7 @@
       });
     }
 
-    // Premium Video - Supabase (POST method, with debug, using prefix)
+    // Premium Video - Pure JS, full screen
     async function loadPremiumVideo() {
       const container = document.getElementById('premium-video-holder');
       container.innerHTML = '';
@@ -702,20 +800,24 @@
             const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/${file.name}`;
             const thumbUrl = getThumbnailUrl('premium', file.name);
             container.innerHTML = `
-              <div class="tiktok-video-div">
-                <video 
-                  src="${videoUrl}" 
-                  class="tiktok-video"
-                  controls 
-                  playsinline 
-                  autoplay
-                  loop
-                  muted
-                  preload="auto"
-                  poster="${thumbUrl}"
-                ></video>
-              </div>
+              <video 
+                src="${videoUrl}" 
+                class="tiktok-video"
+                style="width:100vw;height:100vh;object-fit:cover;display:block;background:#000;"
+                playsinline
+                autoplay
+                loop
+                muted
+                preload="auto"
+                poster="${thumbUrl}"
+              ></video>
             `;
+            // Play video automatically
+            const vid = container.querySelector('video');
+            if (vid) {
+              vid.currentTime = 0;
+              vid.play().catch(()=>{});
+            }
           } else {
             container.innerHTML = '<div style="text-align:center;color:#888;">No premium video found.</div>';
           }
