@@ -491,20 +491,32 @@
       }
     };
 
-    // Previews Videos - Supabase (no thumbnails)
+    // Previews Videos - Supabase (POST method, with debug, using prefix)
     async function loadPreviewsVideos() {
       const container = document.getElementById('previews-videos');
       container.innerHTML = '';
       try {
         const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/previews`, {
-          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prefix: '' })
         });
-        const data = await response.json();
+        const text = await response.text();
+        console.log('Supabase raw response (previews):', text);
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          container.innerHTML = '<div style="text-align:center;color:#888;">Invalid response from Supabase.</div>';
+          return;
+        }
         if (Array.isArray(data) && data.length > 0) {
-          // Sort newest first
           data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           data.forEach((file, idx) => {
-            // Only show video files
             if (!file.name.match(/\.(mp4|webm|ogg)$/i)) return;
             const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/${file.name}`;
             const videoDiv = document.createElement('div');
@@ -540,17 +552,30 @@
       }
     }
 
-    // Premium Video - Supabase (no thumbnails)
+    // Premium Video - Supabase (POST method, with debug, using prefix)
     async function loadPremiumVideo() {
       const container = document.getElementById('premium-video-holder');
       container.innerHTML = '';
       try {
         const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/premium`, {
-          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prefix: '' })
         });
-        const data = await response.json();
+        const text = await response.text();
+        console.log('Supabase raw response (premium):', text);
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          container.innerHTML = '<div style="text-align:center;color:#888;">Invalid response from Supabase.</div>';
+          return;
+        }
         if (Array.isArray(data) && data.length > 0) {
-          // Show the newest video file
           data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           const file = data.find(f => f.name.match(/\.(mp4|webm|ogg)$/i));
           if (file) {
