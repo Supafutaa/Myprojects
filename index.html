@@ -146,14 +146,16 @@
       border-radius: var(--radius);
       padding-bottom: 0;
       gap: 0;
-      transition: opacity 0.4s, visibility 0.4s;
+      transition: opacity 0.4s, visibility 0.4s, transform 0.4s;
       opacity: 1;
       visibility: visible;
+      will-change: opacity, transform;
     }
     .bottom-bar.hide {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+      transform: translateX(-50%) translateY(100px);
     }
     .bottom-bar .bar-btn {
       flex: 1;
@@ -609,6 +611,28 @@
         return;
       }
     };
+
+    // Hide/show bottom bar on scroll direction
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    function handleScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const bottomBar = document.getElementById('bottomBar');
+          if (window.scrollY > lastScrollY + 8) {
+            // Scrolling down
+            bottomBar.classList.add('hide');
+          } else if (window.scrollY < lastScrollY - 8) {
+            // Scrolling up
+            bottomBar.classList.remove('hide');
+          }
+          lastScrollY = window.scrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', handleScroll);
 
     // Helper: get thumbnail URL for a video file
     function getThumbnailUrl(bucket, fileName) {
