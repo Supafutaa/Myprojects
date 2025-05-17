@@ -8,9 +8,12 @@
 </head>
 <body>
   <header class="top-bar">
-    <img src="assets/images/logo.png" class="logo" alt="S Logo" />
+    <img src="assets/images/logo.png" class="logo" id="logo" alt="S Logo" />
     <button id="menu-button">&#9776;</button>
   </header>
+
+  <!-- Launch image, hidden by default -->
+  <img src="assets/images/launch-image.jpg" id="launchImage" alt="Launch" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999; background:#fff;" />
 
   <div class="info-page">
     <img src="assets/images/info-image.jpg" alt="Info" class="info-image" />
@@ -30,5 +33,11 @@
   </nav>
 
   <script src="js/script.js"></script>
+  <script>
+    // Show launch image when logo is clicked
+    document.getElementById('logo').onclick = function() {
+      document.getElementById('launchImage').style.display = 'block';
+    };
+  </script>
 </body>
 </html>
