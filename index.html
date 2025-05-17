@@ -64,7 +64,7 @@
       flex: 1;
       text-align: center;
       font-weight: 900;
-      color: var(--primary);
+      color: #4fc3f7;
       font-size: 2rem;
       letter-spacing: 2px;
       user-select: none;
@@ -156,7 +156,7 @@
       justify-content: center;
       background: none;
       border: none;
-      color: var(--gold);
+      color: #fff;
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
@@ -166,26 +166,22 @@
       border-radius: 10px;
       height: 100%;
     }
-    .bottom-bar .bar-btn.active,
-    .bottom-bar .bar-btn:active {
-      color: var(--accent);
-      background: rgba(255, 215, 0, 0.08);
-    }
-    .bar-btn .icon {
-      margin-bottom: 2px;
-      display: block;
-      width: var(--icon-size);
-      height: var(--icon-size);
-      line-height: var(--icon-size);
-      text-align: center;
-    }
-    .bar-btn .icon img {
+    .bottom-bar .bar-btn .icon img {
       width: var(--icon-size);
       height: var(--icon-size);
       display: block;
       object-fit: contain;
-      filter: brightness(1.2) sepia(1) hue-rotate(10deg) saturate(5) brightness(1.1);
-      /* Gold effect for PNG/SVG icons */
+      filter: brightness(1.2) invert(1);
+      transition: filter 0.2s;
+    }
+    .bottom-bar .bar-btn.active,
+    .bottom-bar .bar-btn:active {
+      color: #4fc3f7;
+      background: rgba(79, 195, 247, 0.08);
+    }
+    .bottom-bar .bar-btn.active .icon img,
+    .bottom-bar .bar-btn:active .icon img {
+      filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
     }
     main {
       margin: 0 auto;
@@ -471,13 +467,13 @@
     </button>
     <button class="bar-btn" id="previewsNav">
       <span class="icon">
-        <img src="assets/images/previews icon.png.png" alt="Previews" />
+        <img src="assets/images/previews icon.png" alt="Previews" />
       </span>
       Previews
     </button>
     <button class="bar-btn" id="premiumNav">
       <span class="icon">
-        <img src="assets/images/premium area icon.png.png" alt="Premium" />
+        <img src="assets/images/premium area icon.png" alt="Premium" />
       </span>
       Premium Area
     </button>
@@ -559,9 +555,8 @@
     document.getElementById('premiumKeyBtn').onclick = function() {
       const key = document.getElementById('premiumKeyInput').value;
       if (key === '1234567') {
-        window.location.href = "https://t.me/+BzdnBVoE76EzNWZk"; // Replace with your Telegram channel link
+        window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
       } else {
-        // Show Wrong Key popup
         wrongKeyPopup.style.display = 'block';
         setTimeout(() => {
           wrongKeyPopup.style.display = 'none';
@@ -569,15 +564,11 @@
       }
     };
 
-    // Helper: get thumbnail URL for a video file
     function getThumbnailUrl(bucket, fileName) {
-      // Advice: Store thumbnails in a "thumbnails" folder inside each bucket, with the same base name and .jpg extension.
-      // Example: previews/video1.mp4 -> previews/thumbnails/video1.jpg
-      const base = fileName.replace(/\.[^/.]+$/, ""); // remove extension
+      const base = fileName.replace(/\.[^/.]+$/, "");
       return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/thumbnails/${base}.jpg`;
     }
 
-    // Previews Videos - Supabase (POST method, with debug, using prefix)
     async function loadPreviewsVideos() {
       const container = document.getElementById('previews-videos');
       container.innerHTML = '';
@@ -621,14 +612,9 @@
                 poster="${thumbUrl}"
                 data-idx="${idx}"
               ></video>
-              <div style="padding:8px 0 0 0;text-align:center;">
-                <button style="background:none;border:none;color:#4fc3f7;font-size:1.1rem;cursor:pointer;">&#128077; Like</button>
-                <button style="background:none;border:none;color:#4fc3f7;font-size:1.1rem;cursor:pointer;">&#128172; Comment</button>
-              </div>
             `;
             container.appendChild(videoDiv);
           });
-          // Autoplay logic: only one video plays at a time
           const videos = container.querySelectorAll('video');
           videos.forEach((vid, idx) => {
             vid.onplay = () => {
@@ -643,7 +629,6 @@
       }
     }
 
-    // Premium Video - Supabase (POST method, with debug, using prefix)
     async function loadPremiumVideo() {
       const container = document.getElementById('premium-video-holder');
       container.innerHTML = '';
@@ -687,7 +672,6 @@
                 ></video>
               </div>
             `;
-            // Only one video, so no need for pause logic
           } else {
             container.innerHTML = '<div style="text-align:center;color:#888;">No premium video found.</div>';
           }
@@ -699,8 +683,7 @@
       }
     }
 
-    // Launch to Home
     showPage('home');
   </script>
 </body>
-</html>
+</html
