@@ -137,8 +137,8 @@
       width: calc(100vw - 32px);
       max-width: 480px;
       height: 70px;
-      background: var(--medium-grey);
-      box-shadow: var(--shadow);
+      background: transparent !important;
+      box-shadow: none !important;
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -146,16 +146,8 @@
       border-radius: var(--radius);
       padding-bottom: 0;
       gap: 0;
-      transition: opacity 0.4s, visibility 0.4s, transform 0.4s;
       opacity: 1;
       visibility: visible;
-      will-change: opacity, transform;
-    }
-    .bottom-bar.hide {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateX(-50%) translateY(100px);
     }
     .bottom-bar .bar-btn {
       flex: 1;
@@ -514,9 +506,9 @@
       if (navBtns[page]) navBtns[page].classList.add('active');
       lastActivePage = page;
     }
-    navBtns.home.onclick = () => { showPage('home'); showBottomBar(); };
-    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); showBottomBar(); };
-    navBtns.premium.onclick = () => { showPage('premium'); loadPremiumVideo(); showBottomBar(); };
+    navBtns.home.onclick = () => { showPage('home'); };
+    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
+    navBtns.premium.onclick = () => { showPage('premium'); loadPremiumVideo(); };
 
     // Menu popup logic
     const menuBtn = document.getElementById('menu-button');
@@ -525,13 +517,10 @@
     function showMenu() {
       popupMenu.style.display = 'block';
       popupOverlay.style.display = 'block';
-      hideBottomBar();
-      window.history.pushState({menu: true}, 'Menu');
     }
     function hideMenu() {
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
-      showBottomBar();
     }
     menuBtn.onclick = showMenu;
     popupOverlay.onclick = hideMenu;
@@ -561,13 +550,10 @@
       premiumPopup.style.display = 'block';
       premiumPopupOverlay.style.display = 'block';
       document.getElementById('premiumKeyInput').value = '';
-      hideBottomBar();
-      window.history.pushState({premiumPopup: true}, 'Premium');
     };
     premiumPopupOverlay.onclick = function() {
       premiumPopup.style.display = 'none';
       premiumPopupOverlay.style.display = 'none';
-      showBottomBar();
     };
     document.getElementById('premiumKeyBtn').onclick = function() {
       const key = document.getElementById('premiumKeyInput').value;
@@ -580,59 +566,6 @@
         }, 1500);
       }
     };
-
-    // Hide/show bottom bar helpers
-    function hideBottomBar() {
-      document.getElementById('bottomBar').classList.add('hide');
-    }
-    function showBottomBar() {
-      document.getElementById('bottomBar').classList.remove('hide');
-    }
-
-    // Handle back button for menu and popups
-    window.onpopstate = function(event) {
-      // If menu or popup is open, close it and go back to last active page
-      if (popupMenu.style.display === 'block') {
-        hideMenu();
-        showPage(lastActivePage);
-        return;
-      }
-      if (premiumPopup.style.display === 'block') {
-        premiumPopup.style.display = 'none';
-        premiumPopupOverlay.style.display = 'none';
-        showBottomBar();
-        showPage(lastActivePage);
-        return;
-      }
-      // If info/privacy, go back to last active page
-      if (pages.info.classList.contains('active') || pages.privacy.classList.contains('active')) {
-        showPage(lastActivePage);
-        showBottomBar();
-        return;
-      }
-    };
-
-    // Hide/show bottom bar on scroll direction
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-    function handleScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const bottomBar = document.getElementById('bottomBar');
-          if (window.scrollY > lastScrollY + 8) {
-            // Scrolling down
-            bottomBar.classList.add('hide');
-          } else if (window.scrollY < lastScrollY - 8) {
-            // Scrolling up
-            bottomBar.classList.remove('hide');
-          }
-          lastScrollY = window.scrollY;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }
-    window.addEventListener('scroll', handleScroll);
 
     // Helper: get thumbnail URL for a video file
     function getThumbnailUrl(bucket, fileName) {
