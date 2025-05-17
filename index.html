@@ -583,6 +583,21 @@
     };
     let lastActivePage = 'home';
 
+    // Helper to close all popups before opening a new one
+    function closeAllPopups() {
+      // Hide menu popup
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      // Hide join premium popup
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+      // Hide premium password popup
+      premiumPopup.style.display = 'none';
+      premiumPopupOverlay.style.display = 'none';
+      // Hide wrong key popup
+      wrongKeyPopup.style.display = 'none';
+    }
+
     function showPage(page) {
       Object.values(pages).forEach(p => p.classList.remove('active'));
       Object.values(navBtns).forEach(b => b.classList.remove('active'));
@@ -603,6 +618,7 @@
     const popupMenu = document.getElementById('popupMenu');
     const popupOverlay = document.getElementById('popupOverlay');
     function showMenu() {
+      closeAllPopups();
       popupMenu.style.display = 'block';
       popupOverlay.style.display = 'block';
     }
@@ -636,6 +652,7 @@
     const closeJoinPremiumBtn = document.getElementById('closeJoinPremiumBtn');
 
     function showJoinPremiumPopup() {
+      closeAllPopups();
       joinPremiumPopup.style.display = 'block';
       joinPremiumPopupOverlay.style.display = 'block';
     }
@@ -644,7 +661,6 @@
       joinPremiumPopupOverlay.style.display = 'none';
     }
     joinPremiumNowBtn.onclick = function() {
-      // Instead of WhatsApp, show the premium password popup
       hideJoinPremiumPopup();
       showPremiumPasswordPopup();
     };
@@ -656,6 +672,7 @@
     const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
     const wrongKeyPopup = document.getElementById('wrongKeyPopup');
     function showPremiumPasswordPopup() {
+      closeAllPopups();
       premiumPopup.style.display = 'block';
       premiumPopupOverlay.style.display = 'block';
       document.getElementById('premiumKeyInput').value = '';
@@ -665,6 +682,7 @@
       if (key === '1234567') {
         window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
       } else {
+        closeAllPopups();
         wrongKeyPopup.style.display = 'block';
         setTimeout(() => {
           wrongKeyPopup.style.display = 'none';
