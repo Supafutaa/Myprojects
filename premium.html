@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium Area</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <img src="assets/images/logo.png" class="logo" alt="S Logo" />
+    <button id="menu-button">&#9776;</button>
+  </header>
+
+  <div class="video-feed">
+    <video src="https://dvicmtexrtfbxqomndxh.supabase.co/storage/v1/object/public/premium//4.mp4" autoplay loop muted playsinline controls></video>
+  </div>
+
+  <div class="premium-access">
+    <button id="joinPremium">Join Premium Now For More</button>
+  </div>
+
+  <nav id="side-menu" class="side-menu">
+    <button onclick="location.href='previews.html'">Previews</button>
+    <button onclick="location.href='premium.html'">Premium Area</button>
+    <button onclick="location.href='info.html'">Info</button>
+  </nav>
+
+  <nav class="bottom-bar" id="bottomBar">
+    <button onclick="location.href='previews.html'">Previews</button>
+    <button onclick="location.href='premium.html'">Premium Area</button>
+    <button onclick="location.href='info.html'">Info</button>
+  </nav>
+
+  <script>
+    document.getElementById('joinPremium').addEventListener('click', () => {
+      const pass = prompt('Enter password to join premium:');
+      if (pass === '1234567') {
+        window.location.href = 'https://t.me/yourtelegramchannel';
+      } else if (pass !== null) {
+        alert('Incorrect password!');
+      }
+    });
+  </script>
+  <script src="js/script.js"></script>
+</body>
+</html>

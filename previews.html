@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Previews</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <img src="assets/images/logo.png" class="logo" alt="S Logo" />
+    <button id="menu-button">&#9776;</button>
+  </header>
+
+  <div id="video-feed" class="video-feed">
+    <video src="https://dvicmtexrtfbxqomndxh.supabase.co/storage/v1/object/public/previews//3.mp4" autoplay loop muted playsinline controls></video>
+    <video src="https://dvicmtexrtfbxqomndxh.supabase.co/storage/v1/object/public/previews//2.mp4" autoplay loop muted playsinline controls></video>
+  </div>
+
+  <nav id="side-menu" class="side-menu">
+    <button onclick="location.href='previews.html'">Previews</button>
+    <button onclick="location.href='premium.html'">Premium Area</button>
+    <button onclick="location.href='info.html'">Info</button>
+  </nav>
+
+  <nav class="bottom-bar" id="bottomBar">
+    <button onclick="location.href='previews.html'">Previews</button>
+    <button onclick="location.href='premium.html'">Premium Area</button>
+    <button onclick="location.href='info.html'">Info</button>
+  </nav>
+
+  <script src="supabase/supabase.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
