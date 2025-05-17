@@ -159,6 +159,14 @@
       font-size: var(--icon-size);
       margin-bottom: 2px;
       display: block;
+      width: 28px;
+      height: 28px;
+    }
+    .bar-btn .icon img {
+      width: 28px;
+      height: 28px;
+      display: block;
+      object-fit: contain;
     }
     main {
       margin: 0 auto;
@@ -435,15 +443,21 @@
   <!-- Bottom Bar -->
   <nav class="bottom-bar" id="bottomBar">
     <button class="bar-btn active" id="homeNav">
-      <span class="icon">&#8962;</span>
+      <span class="icon">
+        <img src="assets/images/home icon.png" alt="Home" />
+      </span>
       Home
     </button>
     <button class="bar-btn" id="previewsNav">
-      <span class="icon">&#127909;</span>
+      <span class="icon">
+        <img src="assets/images/previews icon.png" alt="Previews" />
+      </span>
       Previews
     </button>
     <button class="bar-btn" id="premiumNav">
-      <span class="icon">&#11088;</span>
+      <span class="icon">
+        <img src="assets/images/premium area icon.png.png" alt="Premium" />
+      </span>
       Premium Area
     </button>
   </nav>
