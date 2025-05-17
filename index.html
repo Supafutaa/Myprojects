@@ -10,7 +10,7 @@
     :root {
       --primary: #4fc3f7;
       --accent: #ffd700;
-      --bg: #f7fafd;
+      --bg: #111;
       --bar-bg: #fff;
       --shadow: 0 2px 16px rgba(0,0,0,0.08);
       --radius: 18px;
@@ -200,6 +200,11 @@
       min-height: 320px;
       max-height: 80vh;
     }
+    .home-img-holder img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
     .home-img-holder span {
       color: #bdbdbd;
       font-size: 1.2rem;
@@ -220,6 +225,11 @@
       overflow: hidden;
       min-height: 320px;
       max-height: 80vh;
+    }
+    .info-img-holder img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
     .info-img-holder span {
       color: #bdbdbd;
@@ -352,7 +362,7 @@
     <!-- Home Page -->
     <div class="page active" id="home-page">
       <div class="home-img-holder">
-        <img src="assets/images/home image.jpg" alt="Home" style="width:100%;height:auto;display:block;" />
+        <img src="assets/images/home image.jpg" alt="Home" />
       </div>
     </div>
     <!-- Previews Page -->
@@ -371,7 +381,7 @@
     <!-- Info Page -->
     <div class="page" id="info-page">
       <div class="info-img-holder">
-        <img src="assets/images/info image.jpg" alt="Info" style="width:100%;height:auto;display:block;" />
+        <img src="assets/images/info image.jpg" alt="Info" />
       </div>
       <div class="info-text">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.
@@ -494,7 +504,7 @@
       }
     };
 
-    // Previews Videos - Supabase
+    // Previews Videos - Supabase (no thumbnails)
     async function loadPreviewsVideos() {
       const container = document.getElementById('previews-videos');
       container.innerHTML = '';
@@ -503,21 +513,20 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
       // Folder: previews
       try {
-        const { data } = await fetch(`${SUPABASE_URL}/storage/v1/object/list/previews`, {
+        const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/previews`, {
           headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
-        }).then(res => res.json());
+        });
+        const data = await response.json();
         if (data && Array.isArray(data)) {
           // Sort newest first
           data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           data.forEach((file, idx) => {
             const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/${file.name}`;
-            const thumbUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/thumbnails/${file.name}.jpg`;
             const videoDiv = document.createElement('div');
             videoDiv.style = "margin: 0 auto 24px auto; max-width: 100vw; border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.08);";
             videoDiv.innerHTML = `
               <video 
                 src="${videoUrl}" 
-                poster="${thumbUrl}" 
                 controls 
                 playsinline 
                 preload="none"
@@ -546,7 +555,7 @@
       }
     }
 
-    // Premium Video - Supabase
+    // Premium Video - Supabase (no thumbnails)
     async function loadPremiumVideo() {
       const container = document.getElementById('premium-video-holder');
       container.innerHTML = '';
@@ -555,19 +564,18 @@
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
       // Folder: premium
       try {
-        const { data } = await fetch(`${SUPABASE_URL}/storage/v1/object/list/premium`, {
+        const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/premium`, {
           headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }
-        }).then(res => res.json());
+        });
+        const data = await response.json();
         if (data && Array.isArray(data) && data.length > 0) {
           // Show the newest video
           data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
           const file = data[0];
           const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/${file.name}`;
-          const thumbUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/thumbnails/${file.name}.jpg`;
           container.innerHTML = `
             <video 
               src="${videoUrl}" 
-              poster="${thumbUrl}" 
               controls 
               playsinline 
               preload="none"
