@@ -5,6 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Info</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Popup menu styles */
+    #popupMenu {
+      display: none;
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 20px 30px;
+      z-index: 10000;
+      text-align: center;
+      min-width: 200px;
+      animation: popupFadeIn 0.3s;
+    }
+    #popupMenu button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    #popupMenu button:hover {
+      background: #444;
+    }
+    #popupOverlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.2);
+      z-index: 9999;
+    }
+    @keyframes popupFadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px);}
+      to { opacity: 1; transform: translateX(-50%) translateY(0);}
+    }
+  </style>
 </head>
 <body>
   <header class="top-bar">
@@ -13,6 +58,14 @@
     </a>
     <button id="menu-button">&#9776;</button>
   </header>
+
+  <!-- Popup overlay and menu -->
+  <div id="popupOverlay"></div>
+  <div id="popupMenu">
+    <button onclick="location.href='previews.html'">Previews</button>
+    <button onclick="location.href='premium.html'">Premium Area</button>
+    <button onclick="location.href='info.html'">Info</button>
+  </div>
 
   <div class="info-page">
     <img src="assets/images/info-image.jpg" alt="Info" class="info-image" />
@@ -32,5 +85,21 @@
   </nav>
 
   <script src="js/script.js"></script>
+  <script>
+    // Popup menu logic
+    const menuBtn = document.getElementById('menu-button');
+    const popupMenu = document.getElementById('popupMenu');
+    const popupOverlay = document.getElementById('popupOverlay');
+
+    menuBtn.onclick = function() {
+      popupMenu.style.display = 'block';
+      popupOverlay.style.display = 'block';
+    };
+
+    popupOverlay.onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+    };
+  </script>
 </body>
 </html>
