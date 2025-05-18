@@ -232,10 +232,13 @@
       to { opacity: 1;}
     }
     .home-img-holder {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100vw;
-      height: calc(100vh - 64px - 72px);
+      height: 100vh;
       max-width: 100vw;
-      max-height: calc(100vh - 64px - 72px);
+      max-height: 100vh;
       background: #222;
       border-radius: 0;
       margin: 0;
@@ -243,8 +246,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      position: relative;
+      z-index: 1;
     }
     .home-img-holder img {
       width: 100vw;
