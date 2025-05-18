@@ -134,26 +134,28 @@
       from { opacity: 0; transform: translateX(-50%) translateY(-20px);}
       to { opacity: 1; transform: translateX(-50%) translateY(0);}
     }
-    .bottom-bar {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: var(--bar-float);
-      width: calc(100vw - 32px);
-      max-width: 480px;
-      height: 70px;
-      background: transparent !important;
-      box-shadow: var(--shadow); /* Changed from none to shadow */
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 1002;
-      border-radius: var(--radius);
-      padding-bottom: 0;
-      gap: 0;
-      opacity: 1;
-      visibility: visible;
-    }
+    /* Replace your current .bottom-bar CSS with this: */
+.bottom-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 70px;
+  background: #000 !important;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 1002;
+  border-radius: 0;
+  padding-bottom: 0;
+  gap: 0;
+  opacity: 1;
+  visibility: visible;
+  transform: none; /* Remove floating centering */
+}
     .bottom-bar .bar-btn {
       flex: 1;
       display: flex;
