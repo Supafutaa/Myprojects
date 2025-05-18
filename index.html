@@ -111,9 +111,8 @@
     }
     #popupMenu button, #popupMenu a {
       display: block;
-      width: 90%;
       margin: 12px auto;
-      padding: 12px 0;
+      padding: 12px 24px;
       background: var(--primary);
       color: #fff;
       border: none;
@@ -123,6 +122,10 @@
       font-family: inherit;
       text-decoration: none;
       transition: background 0.2s;
+      width: auto;
+      min-width: 80px;
+      max-width: 90vw;
+      white-space: nowrap;
     }
     #popupMenu button:hover, #popupMenu a:hover {
       background: #039be5;
@@ -168,6 +171,8 @@
       transition: color 0.2s;
       border-radius: 10px;
       height: 100%;
+      min-width: 0;
+      width: auto;
     }
     .bottom-bar .bar-btn .icon img {
       width: var(--icon-size);
@@ -321,6 +326,10 @@
       font-weight: bold;
       cursor: pointer;
       transition: background 0.2s;
+      width: auto;
+      min-width: 80px;
+      max-width: 90vw;
+      white-space: nowrap;
     }
     #premiumPopup button:hover {
       background: #ffe066;
@@ -379,7 +388,10 @@
       margin: 12px 0 0 0;
       transition: background 0.2s;
       display: block;
-      width: 100%;
+      width: auto;
+      min-width: 80px;
+      max-width: 90vw;
+      white-space: nowrap;
     }
     #joinPremiumPopup button:hover {
       background: #ffe066;
@@ -574,20 +586,17 @@
 
     // Helper to close all popups before opening a new one
     function closeAllPopups() {
-      // Hide menu popup
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
-      // Hide join premium popup
       joinPremiumPopup.style.display = 'none';
       joinPremiumPopupOverlay.style.display = 'none';
-      // Hide premium password popup
       premiumPopup.style.display = 'none';
       premiumPopupOverlay.style.display = 'none';
-      // Hide wrong key popup
       wrongKeyPopup.style.display = 'none';
-      // Remove event listeners for join premium popup
       document.removeEventListener('keydown', joinPremiumExitHandler, true);
       document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
+      document.removeEventListener('keydown', premiumKeyExitHandler, true);
+      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
     }
 
     function showPage(page) {
@@ -646,7 +655,6 @@
       closeAllPopups();
       joinPremiumPopup.style.display = 'block';
       joinPremiumPopupOverlay.style.display = 'block';
-      // Add event listeners for overlay and keydown to exit to previews page
       document.addEventListener('keydown', joinPremiumExitHandler, true);
       document.addEventListener('click', joinPremiumOverlayClickHandler, true);
     }
@@ -657,14 +665,12 @@
       document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
     }
     function joinPremiumExitHandler(e) {
-      // Only exit if not clicking the button itself
       if (document.activeElement === joinPremiumNowBtn) return;
       hideJoinPremiumPopup();
       showPage('previews');
       loadPreviewsVideos();
     }
     function joinPremiumOverlayClickHandler(e) {
-      // Only exit if clicking outside the button and popup
       if (
         e.target === joinPremiumPopupOverlay ||
         (e.target !== joinPremiumNowBtn && !joinPremiumPopup.contains(e.target))
@@ -680,18 +686,46 @@
       showPremiumPasswordPopup();
     };
 
-    // Premium Popup logic
+    // Premium Key Popup logic (must enter key or exit)
     const premiumPopup = document.getElementById('premiumPopup');
     const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
     const wrongKeyPopup = document.getElementById('wrongKeyPopup');
+    const premiumKeyBtn = document.getElementById('premiumKeyBtn');
+    const premiumKeyInput = document.getElementById('premiumKeyInput');
+
     function showPremiumPasswordPopup() {
       closeAllPopups();
       premiumPopup.style.display = 'block';
       premiumPopupOverlay.style.display = 'block';
-      document.getElementById('premiumKeyInput').value = '';
+      premiumKeyInput.value = '';
+      document.addEventListener('keydown', premiumKeyExitHandler, true);
+      document.addEventListener('click', premiumKeyOverlayClickHandler, true);
     }
-    document.getElementById('premiumKeyBtn').onclick = function() {
-      const key = document.getElementById('premiumKeyInput').value;
+    function hidePremiumPasswordPopup() {
+      premiumPopup.style.display = 'none';
+      premiumPopupOverlay.style.display = 'none';
+      document.removeEventListener('keydown', premiumKeyExitHandler, true);
+      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
+    }
+    function premiumKeyExitHandler(e) {
+      if (document.activeElement === premiumKeyBtn || document.activeElement === premiumKeyInput) return;
+      hidePremiumPasswordPopup();
+      showPage('previews');
+      loadPreviewsVideos();
+    }
+    function premiumKeyOverlayClickHandler(e) {
+      if (
+        e.target === premiumPopupOverlay ||
+        (e.target !== premiumKeyBtn && e.target !== premiumKeyInput && !premiumPopup.contains(e.target))
+      ) {
+        hidePremiumPasswordPopup();
+        showPage('previews');
+        loadPreviewsVideos();
+      }
+    }
+    premiumKeyBtn.onclick = function(e) {
+      e.stopPropagation();
+      const key = premiumKeyInput.value;
       if (key === '1234567') {
         window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
       } else {
@@ -702,9 +736,12 @@
         }, 1500);
       }
     };
-    premiumPopupOverlay.onclick = function() {
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
+    premiumPopupOverlay.onclick = function(e) {
+      if (e.target === premiumPopupOverlay) {
+        hidePremiumPasswordPopup();
+        showPage('previews');
+        loadPreviewsVideos();
+      }
     };
 
     // Helper: get thumbnail URL for a video file
