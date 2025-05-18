@@ -9,7 +9,6 @@
   <!-- Swiper.js CSS CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
-    /* ...existing styles... */
     :root {
       --primary: #4fc3f7;
       --accent: #ffd700;
@@ -20,7 +19,7 @@
       --icon-size: 34px;
       --menu-width: 90vw;
       --menu-max-width: 340px;
-      --bar-height: 70px;
+      --bar-float: 5px;
       --medium-grey: #799dcc;
     }
     html, body {
@@ -34,19 +33,440 @@
     }
     body {
       padding-top: 64px;
-      padding-bottom: var(--bar-height);
+      padding-bottom: 72px;
       min-height: 100vh;
       position: relative;
       background: var(--bg);
     }
-    /* ...rest of your CSS unchanged... */
+    .top-bar {
+      position: fixed;
+      top: var(--bar-float);
+      left: 50%;
+      transform: translateX(-50%);
+      right: auto;
+      width: calc(100vw - 32px);
+      max-width: 480px;
+      height: 64px;
+      background: transparent;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1002;
+      padding: 0 16px;
+      border-radius: var(--radius);
+    }
+    .logo {
+      height: 50px;
+      width: 50px;
+      object-fit: contain;
+    }
+    .app-title {
+      flex: 1;
+      text-align: center;
+      font-weight: 900;
+      color: #ffffff;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      user-select: none;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .menu-btn:active, .menu-btn:focus {
+      background: #f0f7fa;
+      outline: none;
+    }
+    #popupOverlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.18);
+      z-index: 1001;
+    }
+    #popupMenu {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: transparent;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 32px 0 16px 0;
+      min-width: 220px;
+      width: var(--menu-width);
+      max-width: var(--menu-max-width);
+      z-index: 1003;
+      text-align: center;
+      animation: popupFadeIn 0.25s;
+    }
+    #popupMenu button, #popupMenu a {
+      display: block;
+      margin: 12px auto;
+      padding: 12px 24px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-family: inherit;
+      text-decoration: none;
+      transition: background 0.2s;
+      width: auto;
+      min-width: 80px;
+      max-width: 90vw;
+      white-space: nowrap;
+    }
+    #popupMenu button:hover, #popupMenu a:hover {
+      background: #039be5;
+    }
+    @keyframes popupFadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px);}
+      to { opacity: 1; transform: translateX(-50%) translateY(0);}
+    }
+    .bottom-bar {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: var(--bar-float);
+      width: calc(100vw - 32px);
+      max-width: 480px;
+      height: 70px;
+      background: transparent !important;
+      box-shadow: var(--shadow); /* Changed from none to shadow */
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 1002;
+      border-radius: var(--radius);
+      padding-bottom: 0;
+      gap: 0;
+      opacity: 1;
+      visibility: visible;
+    }
+    .bottom-bar .bar-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      transition: color 0.2s;
+      border-radius: 10px;
+      height: 100%;
+      min-width: 0;
+      width: auto;
+    }
+    .bottom-bar .bar-btn .icon img {
+      width: var(--icon-size);
+      height: var(--icon-size);
+      display: block;
+      object-fit: contain;
+      filter: brightness(1.2) invert(1);
+      transition: filter 0.2s;
+    }
+    .bottom-bar .bar-btn.active,
+    .bottom-bar .bar-btn:active {
+      color: #4fc3f7;
+      background: rgba(79, 195, 247, 0.08);
+    }
+    .bottom-bar .bar-btn.active .icon img,
+    .bottom-bar .bar-btn:active .icon img {
+      filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
+    }
+    main {
+      margin: 0 auto;
+      max-width: 480px;
+      min-height: calc(100vh - 128px);
+      padding: 0 0 24px 0;
+      box-sizing: border-box;
+      background: var(--bg);
+    }
+    .page {
+      display: none;
+      width: 100%;
+      height: 100%;
+      min-height: 60vh;
+      margin: 0 auto;
+      padding-top: 12px;
+    }
+    .page.active {
+      display: block;
+      animation: fadeIn 0.3s;
+    }
+    /* BLUR EFFECT FOR ACTIVE PAGE WHEN MENU IS OPEN */
     .page.blur {
       filter: blur(6px);
       pointer-events: none;
       user-select: none;
       transition: filter 0.2s;
     }
-    /* ...rest of your CSS unchanged... */
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
+    .home-img-holder {
+      width: 100vw;
+      height: calc(100vh - 64px - 72px);
+      max-width: 100vw;
+      max-height: calc(100vh - 64px - 72px);
+      background: #222;
+      border-radius: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      position: relative;
+    }
+    .home-img-holder img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: block;
+      border-radius: 0;
+      margin: 0;
+      padding: 0;
+      max-width: 100vw;
+      max-height: 100vh;
+    }
+    .info-img-holder {
+      width: 100%;
+      max-width: 100vw;
+      aspect-ratio: 9/16;
+      background: #222;
+      border-radius: 18px;
+      margin: 0 auto 18px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 320px;
+      max-height: 80vh;
+    }
+    .info-img-holder img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .info-text {
+      margin: 0 auto;
+      max-width: 420px;
+      padding: 12px 10px 0 10px;
+      color: #eee;
+      font-size: 1.0rem;
+      font-weight: bold;
+      line-height: 1.0;
+      text-align: center;
+      white-space: pre-line;
+    }
+    /* Blinking animation for Pay via Mpesa */
+    .blink {
+      animation: blink-animation 1s steps(2, start) infinite;
+      -webkit-animation: blink-animation 1s steps(2, start) infinite;
+    }
+    @keyframes blink-animation {
+      to {
+        visibility: hidden;
+      }
+    }
+    .privacy-text {
+      margin: 0 auto;
+      max-width: 420px;
+      padding: 12px 10px 0 10px;
+      color: #eee;
+      font-size: 1.0rem;
+      font-weight: bold;
+      line-height: 1.0;
+      text-align: center;
+      white-space: pre-line;
+    }
+    #premiumPopupOverlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.18);
+      z-index: 2000;
+    }
+    #premiumPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: transparent;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 32px 24px 24px 24px;
+      min-width: 260px;
+      max-width: 90vw;
+      z-index: 2001;
+      text-align: center;
+      animation: popupFadeIn 0.25s;
+      color: #fff;
+    }
+    #premiumPopup h3 {
+      margin: 0 0 18px 0;
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    #premiumPopup input[type="password"] {
+      width: 90%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #bdbdbd;
+      font-size: 1rem;
+      margin-bottom: 18px;
+      outline: none;
+      text-align: center;
+    }
+    #premiumPopup button {
+      background: var(--accent);
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: auto;
+      min-width: 80px;
+      max-width: 90vw;
+      white-space: nowrap;
+    }
+    #premiumPopup button:hover {
+      background: #ffe066;
+    }
+    #wrongKeyPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #e53935;
+      color: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.14);
+      padding: 32px 36px;
+      z-index: 3000;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      animation: popupFadeIn 0.2s;
+    }
+    /* Premium Join Popup */
+    #joinPremiumPopupOverlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3001;
+    }
+    #joinPremiumPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: transparent;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      padding: 32px 24px 24px 24px;
+      min-width: 260px;
+      max-width: 90vw;
+      z-index: 3002;
+      text-align: center;
+      color: #fff;
+      animation: popupFadeIn 0.25s;
+    }
+    #joinPremiumPopup button {
+      background: var(--accent);
+      color: #222;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 12px 0 0 0;
+      transition: background 0.2s;
+      display: block;
+      width: auto;
+      min-width: 80px;
+      max-width: 90vw;
+      white-space: nowrap;
+      align-self: center;
+    }
+    #joinPremiumPopup button:hover {
+      background: #ffe066;
+    }
+    @media (max-width: 600px) {
+      .top-bar, .bottom-bar {
+        width: calc(100vw - 12px);
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 12px;
+      }
+      .home-img-holder, .info-img-holder {
+        border-radius: 10px;
+        min-height: 180px;
+      }
+      main {
+        max-width: 100vw;
+      }
+      .home-img-holder img {
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+      }
+      #joinPremiumPopup {
+        min-width: 80vw;
+        padding: 24px 8px 16px 8px;
+      }
+    }
+    /* Swiper custom styles for full-screen vertical video */
+    .swiper {
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+    }
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+    .swiper-slide video,
+    #premium-video-holder video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain; /* Changed from cover to contain */
+      background: #000;
+      border-radius: 0;
+      display: block;
+      max-width: 100vw;
+      max-height: 100vh;
+    }
   </style>
 </head>
 <body>
@@ -81,7 +501,7 @@
     </div>
     <!-- Previews Page -->
     <div class="page" id="previews-page">
-      <div id="previews-videos" style="height:100%;">
+      <div id="previews-videos" style="height:100vh;">
         <!-- Swiper will be injected here -->
         <div class="swiper" id="previews-swiper">
           <div class="swiper-wrapper" id="previews-swiper-wrapper">
@@ -90,7 +510,7 @@
         </div>
       </div>
     </div>
-    <!-- Premium Page -->
+    <!-- Premium Area Page -->
     <div class="page" id="premium-page">
       <div id="premium-video-holder">
         <!-- Premium video will be loaded here by JS -->
@@ -108,7 +528,7 @@
           <span style="color:#97adf7; display:block; font-size: 1.25rem; text-align:center;">Validity: 1 month</span><br>
           After payment, Go to Menu, Click Payment. You will be redirected to WhatsApp.<br> 
           Paste the Mpesa transaction code & receive the Premium Key.<br>
-          Then, Go the Premium Tab, Click Join Premium Button.<br>
+          Then, Go the Premium Area Tab, Click Join Premium Button.<br>
           Enter the Key and access premium content<br>
 
           <span style="color:#ffd700; display:block; font-size: 1.5rem; text-align:center;">Benefits of Premium Membership</span><br>
@@ -177,18 +597,16 @@
       <span class="icon">
         <img src="assets/images/premium area icon.png" alt="Premium" />
       </span>
-      Premium
+      Premium Area
     </button>
   </nav>
 
   <!-- Swiper.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    // Supabase credentials
+    // Supabase config
     const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // Navigation logic
     const pages = {
@@ -203,167 +621,366 @@
       previews: document.getElementById('previewsNav'),
       premium: document.getElementById('premiumNav')
     };
+    let lastActivePage = 'home';
+
+    // Helper to close all popups before opening a new one
+    function closeAllPopups() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+      premiumPopup.style.display = 'none';
+      premiumPopupOverlay.style.display = 'none';
+      wrongKeyPopup.style.display = 'none';
+      // Remove blur if present
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+      document.removeEventListener('keydown', joinPremiumExitHandler, true);
+      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
+      document.removeEventListener('keydown', premiumKeyExitHandler, true);
+      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
+    }
+
     function showPage(page) {
       Object.values(pages).forEach(p => p.classList.remove('active'));
       Object.values(navBtns).forEach(b => b.classList.remove('active'));
       if (pages[page]) pages[page].classList.add('active');
       if (navBtns[page]) navBtns[page].classList.add('active');
+      lastActivePage = page;
     }
-
-    function setPageBlur(blur) {
-      Object.values(pages).forEach(p => {
-        if (blur) {
-          p.classList.add('blur');
-        } else {
-          p.classList.remove('blur');
-        }
-      });
-    }
+    navBtns.home.onclick = () => { showPage('home'); };
+    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
+    navBtns.premium.onclick = () => {
+      showPage('premium');
+      loadPremiumVideo();
+      showJoinPremiumPopup();
+    };
 
     // Menu popup logic
     const menuBtn = document.getElementById('menu-button');
     const popupMenu = document.getElementById('popupMenu');
     const popupOverlay = document.getElementById('popupOverlay');
-    menuBtn.onclick = function() {
+
+    let menuOpen = false;
+
+    function showMenu() {
+      if (menuOpen) {
+        hideMenu();
+        return;
+      }
+      closeAllPopups();
       popupMenu.style.display = 'block';
       popupOverlay.style.display = 'block';
-      setPageBlur(true);
-    };
-    popupOverlay.onclick = function() {
+      menuOpen = true;
+      // Blur all active pages
+      document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
+      setTimeout(() => {
+        document.addEventListener('mousedown', menuGlobalClickHandler, true);
+      }, 0);
+    }
+
+    function hideMenu() {
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
-      setPageBlur(false);
+      menuOpen = false;
+      // Remove blur from all pages
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+      document.removeEventListener('mousedown', menuGlobalClickHandler, true);
+    }
+
+    function menuGlobalClickHandler(e) {
+      // If click is outside the popupMenu or on the menu button, close the menu
+      if (
+        !popupMenu.contains(e.target) ||
+        e.target === menuBtn
+      ) {
+        hideMenu();
+      }
+    }
+
+    menuBtn.onclick = showMenu;
+    popupOverlay.onclick = hideMenu;
+
+    // Menu links logic
+    document.getElementById('paymentLink').onclick = function(e) {
+      showMenu();
+      window.history.pushState({menu: true}, 'Menu');
     };
-
-    // Close menu on any menu button/link click
-    Array.from(popupMenu.querySelectorAll('button, a')).forEach(el => {
-      el.onclick = function() {
-        popupMenu.style.display = 'none';
-        popupOverlay.style.display = 'none';
-        setPageBlur(false);
-      };
-    });
-
     document.getElementById('infoBtn').onclick = function() {
+      hideMenu();
       showPage('info');
+      window.history.pushState({menu: false, page: 'info'}, 'Info');
     };
     document.getElementById('privacyBtn').onclick = function() {
+      hideMenu();
       showPage('privacy');
+      window.history.pushState({menu: false, page: 'privacy'}, 'Privacy');
     };
 
-    // Fetch and display preview videos from Supabase bucket
-    async function loadPreviewsVideos() {
-      const wrapper = document.getElementById('previews-swiper-wrapper');
-      wrapper.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Loading...</div>';
-      try {
-        const { data, error } = await supabase.storage.from('previews').list('', { limit: 50 });
-        if (error || !data || data.length === 0) {
-          wrapper.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">No previews found.</div>';
-          return;
-        }
-        wrapper.innerHTML = '';
-        data.forEach(file => {
-          if (file.name.endsWith('.mp4') || file.name.endsWith('.webm')) {
-            const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/${encodeURIComponent(file.name)}`;
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-            slide.innerHTML = `<video src="${videoUrl}" controls style="width:100%;height:100%;background:#000;"></video>`;
-            wrapper.appendChild(slide);
-          }
-        });
-        if (!window.previewsSwiper) {
-          window.previewsSwiper = new Swiper('#previews-swiper', {
-            direction: 'vertical',
-            slidesPerView: 1,
-            spaceBetween: 0,
-            mousewheel: true,
-            allowTouchMove: true,
-            resistanceRatio: 0
-          });
-        } else {
-          window.previewsSwiper.update();
-          window.previewsSwiper.slideTo(0, 0);
-        }
-      } catch (e) {
-        wrapper.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Failed to load previews.</div>';
-      }
-    }
-
-    // Fetch and display premium videos from Supabase bucket
-    async function loadPremiumVideo() {
-      const container = document.getElementById('premium-video-holder');
-      container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Loading...</div>';
-      try {
-        const { data, error } = await supabase.storage.from('premium').list('', { limit: 1 });
-        if (error || !data || data.length === 0) {
-          container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">No premium video found.</div>';
-          return;
-        }
-        // Show the first video only
-        const file = data.find(f => f.name.endsWith('.mp4') || f.name.endsWith('.webm'));
-        if (!file) {
-          container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">No premium video found.</div>';
-          return;
-        }
-        const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/${encodeURIComponent(file.name)}`;
-        container.innerHTML = `<video src="${videoUrl}" controls style="width:100%;height:100%;background:#000;"></video>`;
-      } catch (e) {
-        container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Failed to load premium video.</div>';
-      }
-    }
-
-    navBtns.home.onclick = () => showPage('home');
-    navBtns.previews.onclick = () => {
-      showPage('previews');
-      loadPreviewsVideos();
-    };
-    navBtns.premium.onclick = () => {
-      showPage('premium');
-      joinPremiumPopup.style.display = 'block';
-      joinPremiumPopupOverlay.style.display = 'block';
-      loadPremiumVideo();
-    };
-
-    // Premium Popup logic
+    // Premium Join Popup logic (no close button, must click button or exit)
     const joinPremiumPopup = document.getElementById('joinPremiumPopup');
     const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
     const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
+
+    function showJoinPremiumPopup() {
+      closeAllPopups();
+      joinPremiumPopup.style.display = 'block';
+      joinPremiumPopupOverlay.style.display = 'block';
+      document.addEventListener('keydown', joinPremiumExitHandler, true);
+      document.addEventListener('click', joinPremiumOverlayClickHandler, true);
+    }
+    function hideJoinPremiumPopup() {
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+      document.removeEventListener('keydown', joinPremiumExitHandler, true);
+      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
+    }
+    function joinPremiumExitHandler(e) {
+      if (document.activeElement === joinPremiumNowBtn) return;
+      hideJoinPremiumPopup();
+      showPage('previews');
+      loadPreviewsVideos();
+    }
+    function joinPremiumOverlayClickHandler(e) {
+      if (
+        e.target === joinPremiumPopupOverlay ||
+        (e.target !== joinPremiumNowBtn && !joinPremiumPopup.contains(e.target))
+      ) {
+        hideJoinPremiumPopup();
+        showPage('previews');
+        loadPreviewsVideos();
+      }
+    }
+    joinPremiumNowBtn.onclick = function(e) {
+      e.stopPropagation();
+      hideJoinPremiumPopup();
+      showPremiumPasswordPopup();
+    };
+
+    // Premium Key Popup logic (must enter key or exit)
     const premiumPopup = document.getElementById('premiumPopup');
     const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
     const wrongKeyPopup = document.getElementById('wrongKeyPopup');
     const premiumKeyBtn = document.getElementById('premiumKeyBtn');
     const premiumKeyInput = document.getElementById('premiumKeyInput');
 
-    joinPremiumNowBtn.onclick = function() {
-      joinPremiumPopup.style.display = 'none';
-      joinPremiumPopupOverlay.style.display = 'none';
+    function showPremiumPasswordPopup() {
+      closeAllPopups();
       premiumPopup.style.display = 'block';
       premiumPopupOverlay.style.display = 'block';
       premiumKeyInput.value = '';
-    };
-    premiumKeyBtn.onclick = function() {
-      // Replace this with your real key logic
-      if (premiumKeyInput.value === '1234567') {
-        premiumPopup.style.display = 'none';
-        premiumPopupOverlay.style.display = 'none';
-        alert('Premium Unlocked! (Replace with your logic)');
+      document.addEventListener('keydown', premiumKeyExitHandler, true);
+      document.addEventListener('click', premiumKeyOverlayClickHandler, true);
+    }
+    function hidePremiumPasswordPopup() {
+      premiumPopup.style.display = 'none';
+      premiumPopupOverlay.style.display = 'none';
+      document.removeEventListener('keydown', premiumKeyExitHandler, true);
+      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
+    }
+    function premiumKeyExitHandler(e) {
+      if (document.activeElement === premiumKeyBtn || document.activeElement === premiumKeyInput) return;
+      hidePremiumPasswordPopup();
+      showPage('previews');
+      loadPreviewsVideos();
+    }
+    function premiumKeyOverlayClickHandler(e) {
+      if (
+        e.target === premiumPopupOverlay ||
+        (e.target !== premiumKeyBtn && e.target !== premiumKeyInput && !premiumPopup.contains(e.target))
+      ) {
+        hidePremiumPasswordPopup();
+        showPage('previews');
+        loadPreviewsVideos();
+      }
+    }
+    premiumKeyBtn.onclick = function(e) {
+      e.stopPropagation();
+      const key = premiumKeyInput.value;
+      if (key === '1234567') {
+        window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
       } else {
-        premiumPopup.style.display = 'none';
-        premiumPopupOverlay.style.display = 'none';
+        closeAllPopups();
         wrongKeyPopup.style.display = 'block';
         setTimeout(() => {
           wrongKeyPopup.style.display = 'none';
+          showPage('previews');
+          loadPreviewsVideos();
         }, 1500);
       }
     };
-    premiumPopupOverlay.onclick = function() {
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
+    premiumPopupOverlay.onclick = function(e) {
+      if (e.target === premiumPopupOverlay) {
+        hidePremiumPasswordPopup();
+        showPage('previews');
+        loadPreviewsVideos();
+      }
     };
-    joinPremiumPopupOverlay.onclick = function() {
-      joinPremiumPopup.style.display = 'none';
-      joinPremiumPopupOverlay.style.display = 'none';
-    };
+
+    // Helper: get thumbnail URL for a video file
+    function getThumbnailUrl(bucket, fileName) {
+      const base = fileName.replace(/\.[^/.]+$/, "");
+      return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/thumbnails/${base}.jpg`;
+    }
+
+    // Swiper instance for previews
+    let previewsSwiper = null;
+    let previewsData = [];
+
+    async function loadPreviewsVideos() {
+      const wrapper = document.getElementById('previews-swiper-wrapper');
+      wrapper.innerHTML = '';
+      try {
+        const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/previews`, {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prefix: '' })
+        });
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          wrapper.innerHTML = '<div style="text-align:center;color:#888;">Invalid response from Supabase.</div>';
+          return;
+        }
+        if (Array.isArray(data) && data.length > 0) {
+          data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          previewsData = data.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
+          if (previewsData.length === 0) {
+            wrapper.innerHTML = '<div style="text-align:center;color:#888;">No videos found.</div>';
+            return;
+          }
+          previewsData.forEach((file, idx) => {
+            const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/${file.name}`;
+            const thumbUrl = getThumbnailUrl('previews', file.name);
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.innerHTML = `
+              <video 
+                src="${videoUrl}" 
+                class="tiktok-video"
+                playsinline
+                loop
+                muted
+                preload="auto"
+                poster="${thumbUrl}"
+                data-idx="${idx}"
+              ></video>
+            `;
+            wrapper.appendChild(slide);
+          });
+          // Initialize or update Swiper
+          if (previewsSwiper) {
+            previewsSwiper.update();
+            previewsSwiper.slideTo(0, 0);
+          } else {
+            previewsSwiper = new Swiper('#previews-swiper', {
+              direction: 'vertical',
+              slidesPerView: 1,
+              spaceBetween: 0,
+              mousewheel: true,
+              allowTouchMove: true,
+              resistanceRatio: 0,
+              on: {
+                slideChange: function () {
+                  playActivePreviewVideo();
+                },
+                afterInit: function () {
+                  playActivePreviewVideo();
+                }
+              }
+            });
+          }
+          playActivePreviewVideo();
+        } else {
+          wrapper.innerHTML = '<div style="text-align:center;color:#888;">No videos found.</div>';
+        }
+      } catch (e) {
+        wrapper.innerHTML = '<div style="text-align:center;color:#888;">Failed to load videos.</div>';
+      }
+    }
+
+    function playActivePreviewVideo() {
+      if (!previewsSwiper) return;
+      const slides = document.querySelectorAll('#previews-swiper .swiper-slide');
+      slides.forEach((slide, idx) => {
+        const video = slide.querySelector('video');
+        if (video) {
+          if (idx === previewsSwiper.activeIndex) {
+            video.currentTime = 0;
+            video.play().catch(()=>{});
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        }
+      });
+    }
+
+    // Premium Video - Pure JS, full screen
+    async function loadPremiumVideo() {
+      const container = document.getElementById('premium-video-holder');
+      container.innerHTML = '';
+      try {
+        const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/premium`, {
+          method: 'POST',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prefix: '' })
+        });
+        const text = await response.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          container.innerHTML = '<div style="text-align:center;color:#888;">Invalid response from Supabase.</div>';
+          return;
+        }
+        if (Array.isArray(data) && data.length > 0) {
+          data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          const file = data.find(f => f.name.match(/\.(mp4|webm|ogg)$/i));
+          if (file) {
+            const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/${file.name}`;
+            const thumbUrl = getThumbnailUrl('premium', file.name);
+            container.innerHTML = `
+              <video 
+                src="${videoUrl}" 
+                class="tiktok-video"
+                style="width:100vw;height:100vh;object-fit:contain;display:block;background:#000;"
+                playsinline
+                autoplay
+                loop
+                muted
+                preload="auto"
+                poster="${thumbUrl}"
+              ></video>
+            `;
+            // Play video automatically
+            const vid = container.querySelector('video');
+            if (vid) {
+              vid.currentTime = 0;
+              vid.play().catch(()=>{});
+            }
+          } else {
+            container.innerHTML = '<div style="text-align:center;color:#888;">No premium video found.</div>';
+          }
+        } else {
+          container.innerHTML = '<div style="text-align:center;color:#888;">No premium video found.</div>';
+        }
+      } catch (e) {
+        container.innerHTML = '<div style="text-align:center;color:#888;">Failed to load premium video.</div>';
+      }
+    }
+
+    // Launch to Home
+    showPage('home');
   </script>
 </body>
 </html>
