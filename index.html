@@ -100,7 +100,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      height: 92vh;
+      height: 90vh;
       width: 20vw;
       min-width: 180px;
       max-width: 320px;
@@ -111,7 +111,6 @@
       border-bottom-right-radius: 24px;
       padding: 0;
       animation: slideInLeft 0.25s;
-      display: none;
       flex-direction: column;
       align-items: stretch;
     }
@@ -708,6 +707,8 @@
     function showMenu() {
       popupMenu.style.display = 'flex';
       popupOverlay.style.display = 'block';
+      // Blur the active page when menu is open
+      document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
       setTimeout(() => {
         document.addEventListener('mousedown', menuGlobalClickHandler, true);
       }, 0);
@@ -715,6 +716,8 @@
     function hideMenu() {
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
+      // Remove blur when menu closes
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
       document.removeEventListener('mousedown', menuGlobalClickHandler, true);
     }
     function menuGlobalClickHandler(e) {
