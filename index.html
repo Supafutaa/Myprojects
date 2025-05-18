@@ -724,7 +724,7 @@
         loadPreviewsVideos();
       }
     }
-    premiumKeyBtn.onclick = function(e) {
+        premiumKeyBtn.onclick = function(e) {
       e.stopPropagation();
       const key = premiumKeyInput.value;
       if (key === '1234567') {
@@ -734,6 +734,8 @@
         wrongKeyPopup.style.display = 'block';
         setTimeout(() => {
           wrongKeyPopup.style.display = 'none';
+          showPage('previews');
+          loadPreviewsVideos();
         }, 1500);
       }
     };
