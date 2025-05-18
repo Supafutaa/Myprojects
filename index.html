@@ -13,7 +13,7 @@
       --primary: #4fc3f7;
       --accent: #ffd700;
       --bg: #000000;
-      --bar-bg: #ffbf00;
+      --bar-bg: #000000;
       --shadow: 0 4px 24px rgba(0,0,0,0.18);
       --radius: 18px;
       --icon-size: 34px;
@@ -134,28 +134,27 @@
       from { opacity: 0; transform: translateX(-50%) translateY(-20px);}
       to { opacity: 1; transform: translateX(-50%) translateY(0);}
     }
-    /* Replace your current .bottom-bar CSS with this: */
-.bottom-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  max-width: 100vw;
-  height: 70px;
-  background: #000 !important;
-  box-shadow: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 1002;
-  border-radius: 0;
-  padding-bottom: 0;
-  gap: 0;
-  opacity: 1;
-  visibility: visible;
-  transform: none; /* Remove floating centering */
-}
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      max-width: 100vw;
+      height: 70px;
+      background: #000 !important;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      z-index: 1002;
+      border-radius: 0;
+      padding-bottom: 0;
+      gap: 0;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
     .bottom-bar .bar-btn {
       flex: 1;
       display: flex;
@@ -213,7 +212,6 @@
       display: block;
       animation: fadeIn 0.3s;
     }
-    /* BLUR EFFECT FOR ACTIVE PAGE WHEN MENU IS OPEN */
     .page.blur {
       filter: blur(6px);
       pointer-events: none;
@@ -280,7 +278,6 @@
       text-align: center;
       white-space: pre-line;
     }
-    /* Blinking animation for Pay via Mpesa */
     .blink {
       animation: blink-animation 1s steps(2, start) infinite;
       -webkit-animation: blink-animation 1s steps(2, start) infinite;
@@ -376,7 +373,6 @@
       text-align: center;
       animation: popupFadeIn 0.2s;
     }
-    /* Premium Join Popup */
     #joinPremiumPopupOverlay {
       display: none;
       position: fixed;
@@ -446,7 +442,6 @@
         padding: 24px 8px 16px 8px;
       }
     }
-    /* Swiper custom styles for full-screen vertical video */
     .swiper {
       width: 100vw;
       height: 100vh;
@@ -462,7 +457,7 @@
     #premium-video-holder video {
       width: 100vw;
       height: 100vh;
-      object-fit: contain; /* Changed from cover to contain */
+      object-fit: contain;
       background: #000;
       border-radius: 0;
       display: block;
