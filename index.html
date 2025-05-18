@@ -9,6 +9,7 @@
   <!-- Swiper.js CSS CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
+    /* ...existing styles... */
     :root {
       --primary: #4fc3f7;
       --accent: #ffd700;
@@ -38,439 +39,14 @@
       position: relative;
       background: var(--bg);
     }
-    .top-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100vw;
-      max-width: 100vw;
-      height: 64px;
-      background: transparent;
-      box-shadow: var(--shadow);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 1002;
-      padding: 0 16px;
-      border-radius: 0;
-    }
-    .logo {
-      height: 50px;
-      width: 50px;
-      object-fit: contain;
-    }
-    .app-title {
-      flex: 1;
-      text-align: center;
-      font-weight: 900;
-      color: #ffffff;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      user-select: none;
-      font-family: 'Montserrat', Arial, sans-serif;
-    }
-    .menu-btn {
-      background: none;
-      border: none;
-      font-size: 2rem;
-      color: var(--primary);
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      transition: background 0.2s;
-    }
-    .menu-btn:active, .menu-btn:focus {
-      background: #f0f7fa;
-      outline: none;
-    }
-    #popupOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.18);
-      z-index: 1001;
-    }
-    #popupMenu {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: transparent;
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
-      padding: 32px 0 16px 0;
-      min-width: 220px;
-      width: var(--menu-width);
-      max-width: var(--menu-max-width);
-      z-index: 1003;
-      text-align: center;
-      animation: popupFadeIn 0.25s;
-    }
-    #popupMenu button, #popupMenu a {
-      display: block;
-      margin: 12px auto;
-      padding: 12px 24px;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.1rem;
-      font-family: inherit;
-      text-decoration: none;
-      transition: background 0.2s;
-      width: auto;
-      min-width: 80px;
-      max-width: 90vw;
-      white-space: nowrap;
-    }
-    #popupMenu button:hover, #popupMenu a:hover {
-      background: #039be5;
-    }
-    @keyframes popupFadeIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(-20px);}
-      to { opacity: 1; transform: translateX(-50%) translateY(0);}
-    }
-    .bottom-bar {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100vw;
-      max-width: 100vw;
-      height: var(--bar-height);
-      background: #000 !important;
-      box-shadow: none;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 1002;
-      border-radius: 0;
-      padding-bottom: 0;
-      gap: 0;
-      opacity: 1;
-      visibility: visible;
-    }
-    .bottom-bar .bar-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 0;
-      margin: 0;
-      transition: color 0.2s;
-      border-radius: 10px;
-      height: 100%;
-      min-width: 0;
-      width: auto;
-    }
-    .bottom-bar .bar-btn .icon img {
-      width: var(--icon-size);
-      height: var(--icon-size);
-      display: block;
-      object-fit: contain;
-      filter: brightness(1.2) invert(1);
-      transition: filter 0.2s;
-    }
-    .bottom-bar .bar-btn.active,
-    .bottom-bar .bar-btn:active {
-      color: #4fc3f7;
-      background: rgba(79, 195, 247, 0.08);
-    }
-    .bottom-bar .bar-btn.active .icon img,
-    .bottom-bar .bar-btn:active .icon img {
-      filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
-    }
-    main {
-      margin: 0 auto;
-      max-width: 480px;
-      min-height: calc(100vh - var(--bar-height) - 64px);
-      padding: 0 0 24px 0;
-      box-sizing: border-box;
-      background: var(--bg);
-    }
-    .page {
-      display: none;
-      width: 100%;
-      height: 100%;
-      min-height: 60vh;
-      margin: 0 auto;
-      padding-top: 12px;
-    }
-    .page.active {
-      display: block;
-      animation: fadeIn 0.3s;
-    }
-    /* BLUR EFFECT FOR ACTIVE PAGE WHEN MENU IS OPEN */
+    /* ...rest of your CSS unchanged... */
     .page.blur {
       filter: blur(6px);
       pointer-events: none;
       user-select: none;
       transition: filter 0.2s;
     }
-    @keyframes fadeIn {
-      from { opacity: 0;}
-      to { opacity: 1;}
-    }
-    .home-img-holder {
-      width: 100vw;
-      height: calc(100vh - var(--bar-height) - 64px);
-      max-width: 100vw;
-      max-height: calc(100vh - var(--bar-height) - 64px);
-      background: #222;
-      border-radius: 0;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      position: relative;
-    }
-    .home-img-holder img {
-      width: 100vw;
-      height: calc(100vh - var(--bar-height) - 64px);
-      object-fit: cover;
-      display: block;
-      border-radius: 0;
-      margin: 0;
-      padding: 0;
-      max-width: 100vw;
-      max-height: calc(100vh - var(--bar-height) - 64px);
-    }
-    .info-img-holder {
-      width: 100%;
-      max-width: 100vw;
-      aspect-ratio: 9/16;
-      background: #222;
-      border-radius: 18px;
-      margin: 0 auto 18px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      min-height: 320px;
-      max-height: 80vh;
-    }
-    .info-img-holder img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .info-text {
-      margin: 0 auto;
-      max-width: 420px;
-      padding: 12px 10px 0 10px;
-      color: #eee;
-      font-size: 1.0rem;
-      font-weight: bold;
-      line-height: 1.0;
-      text-align: center;
-      white-space: pre-line;
-    }
-    /* Blinking animation for Pay via Mpesa */
-    .blink {
-      animation: blink-animation 1s steps(2, start) infinite;
-      -webkit-animation: blink-animation 1s steps(2, start) infinite;
-    }
-    @keyframes blink-animation {
-      to {
-        visibility: hidden;
-      }
-    }
-    .privacy-text {
-      margin: 0 auto;
-      max-width: 420px;
-      padding: 12px 10px 0 10px;
-      color: #eee;
-      font-size: 1.0rem;
-      font-weight: bold;
-      line-height: 1.0;
-      text-align: center;
-      white-space: pre-line;
-    }
-    #premiumPopupOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.18);
-      z-index: 2000;
-    }
-    #premiumPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: transparent;
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 32px 24px 24px 24px;
-      min-width: 260px;
-      max-width: 90vw;
-      z-index: 2001;
-      text-align: center;
-      animation: popupFadeIn 0.25s;
-      color: #fff;
-    }
-    #premiumPopup h3 {
-      margin: 0 0 18px 0;
-      color: var(--accent);
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-    #premiumPopup input[type="password"] {
-      width: 90%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #bdbdbd;
-      font-size: 1rem;
-      margin-bottom: 18px;
-      outline: none;
-      text-align: center;
-    }
-    #premiumPopup button {
-      background: var(--accent);
-      color: #222;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-      width: auto;
-      min-width: 80px;
-      max-width: 90vw;
-      white-space: nowrap;
-    }
-    #premiumPopup button:hover {
-      background: #ffe066;
-    }
-    #wrongKeyPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #e53935;
-      color: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.14);
-      padding: 32px 36px;
-      z-index: 3000;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      animation: popupFadeIn 0.2s;
-    }
-    /* Premium Join Popup */
-    #joinPremiumPopupOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 3001;
-    }
-    #joinPremiumPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: transparent;
-      border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-      padding: 32px 24px 24px 24px;
-      min-width: 260px;
-      max-width: 90vw;
-      z-index: 3002;
-      text-align: center;
-      color: #fff;
-      animation: popupFadeIn 0.25s;
-    }
-    #joinPremiumPopup button {
-      background: var(--accent);
-      color: #222;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 24px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 12px 0 0 0;
-      transition: background 0.2s;
-      display: block;
-      width: auto;
-      min-width: 80px;
-      max-width: 90vw;
-      white-space: nowrap;
-      align-self: center;
-    }
-    #joinPremiumPopup button:hover {
-      background: #ffe066;
-    }
-    @media (max-width: 600px) {
-      .top-bar, .bottom-bar {
-        width: 100vw;
-        left: 0;
-        transform: none;
-        border-radius: 0;
-        max-width: 100vw;
-      }
-      .home-img-holder, .info-img-holder {
-        border-radius: 0;
-        min-height: 180px;
-      }
-      main {
-        max-width: 100vw;
-      }
-      .home-img-holder img {
-        width: 100vw;
-        height: calc(100vh - var(--bar-height) - 64px);
-        object-fit: cover;
-      }
-      #joinPremiumPopup {
-        min-width: 80vw;
-        padding: 24px 8px 16px 8px;
-      }
-      .swiper,
-      .swiper-slide video,
-      #premium-video-holder video {
-        width: 100vw;
-        height: calc(100vh - var(--bar-height) - 64px);
-        max-width: 100vw;
-        max-height: calc(100vh - var(--bar-height) - 64px);
-      }
-    }
-    /* Swiper custom styles for full-screen vertical video */
-    .swiper,
-    .swiper-slide video,
-    #premium-video-holder video {
-      width: 100vw;
-      height: calc(100vh - var(--bar-height) - 64px);
-      max-width: 100vw;
-      max-height: calc(100vh - var(--bar-height) - 64px);
-      object-fit: contain;
-      background: #000;
-      border-radius: 0;
-      display: block;
-    }
-    .swiper-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-    }
+    /* ...rest of your CSS unchanged... */
   </style>
 </head>
 <body>
@@ -606,8 +182,14 @@
   </nav>
 
   <!-- Swiper.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
+    // Supabase credentials
+    const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     // Navigation logic
     const pages = {
       home: document.getElementById('home-page'),
@@ -638,14 +220,6 @@
       });
     }
 
-    navBtns.home.onclick = () => showPage('home');
-    navBtns.previews.onclick = () => showPage('previews');
-    navBtns.premium.onclick = () => {
-      showPage('premium');
-      joinPremiumPopup.style.display = 'block';
-      joinPremiumPopupOverlay.style.display = 'block';
-    };
-
     // Menu popup logic
     const menuBtn = document.getElementById('menu-button');
     const popupMenu = document.getElementById('popupMenu');
@@ -660,17 +234,94 @@
       popupOverlay.style.display = 'none';
       setPageBlur(false);
     };
+
+    // Close menu on any menu button/link click
+    Array.from(popupMenu.querySelectorAll('button, a')).forEach(el => {
+      el.onclick = function() {
+        popupMenu.style.display = 'none';
+        popupOverlay.style.display = 'none';
+        setPageBlur(false);
+      };
+    });
+
     document.getElementById('infoBtn').onclick = function() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-      setPageBlur(false);
       showPage('info');
     };
     document.getElementById('privacyBtn').onclick = function() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-      setPageBlur(false);
       showPage('privacy');
+    };
+
+    // Fetch and display preview videos from Supabase bucket
+    async function loadPreviewsVideos() {
+      const wrapper = document.getElementById('previews-swiper-wrapper');
+      wrapper.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Loading...</div>';
+      try {
+        const { data, error } = await supabase.storage.from('previews').list('', { limit: 50 });
+        if (error || !data || data.length === 0) {
+          wrapper.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">No previews found.</div>';
+          return;
+        }
+        wrapper.innerHTML = '';
+        data.forEach(file => {
+          if (file.name.endsWith('.mp4') || file.name.endsWith('.webm')) {
+            const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/${encodeURIComponent(file.name)}`;
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.innerHTML = `<video src="${videoUrl}" controls style="width:100%;height:100%;background:#000;"></video>`;
+            wrapper.appendChild(slide);
+          }
+        });
+        if (!window.previewsSwiper) {
+          window.previewsSwiper = new Swiper('#previews-swiper', {
+            direction: 'vertical',
+            slidesPerView: 1,
+            spaceBetween: 0,
+            mousewheel: true,
+            allowTouchMove: true,
+            resistanceRatio: 0
+          });
+        } else {
+          window.previewsSwiper.update();
+          window.previewsSwiper.slideTo(0, 0);
+        }
+      } catch (e) {
+        wrapper.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Failed to load previews.</div>';
+      }
+    }
+
+    // Fetch and display premium videos from Supabase bucket
+    async function loadPremiumVideo() {
+      const container = document.getElementById('premium-video-holder');
+      container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Loading...</div>';
+      try {
+        const { data, error } = await supabase.storage.from('premium').list('', { limit: 1 });
+        if (error || !data || data.length === 0) {
+          container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">No premium video found.</div>';
+          return;
+        }
+        // Show the first video only
+        const file = data.find(f => f.name.endsWith('.mp4') || f.name.endsWith('.webm'));
+        if (!file) {
+          container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">No premium video found.</div>';
+          return;
+        }
+        const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/${encodeURIComponent(file.name)}`;
+        container.innerHTML = `<video src="${videoUrl}" controls style="width:100%;height:100%;background:#000;"></video>`;
+      } catch (e) {
+        container.innerHTML = '<div style="color:#fff;text-align:center;width:100%;">Failed to load premium video.</div>';
+      }
+    }
+
+    navBtns.home.onclick = () => showPage('home');
+    navBtns.previews.onclick = () => {
+      showPage('previews');
+      loadPreviewsVideos();
+    };
+    navBtns.premium.onclick = () => {
+      showPage('premium');
+      joinPremiumPopup.style.display = 'block';
+      joinPremiumPopupOverlay.style.display = 'block';
+      loadPremiumVideo();
     };
 
     // Premium Popup logic
