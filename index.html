@@ -607,6 +607,97 @@
 
   <!-- Swiper.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <!-- ...existing JS code remains unchanged... -->
+  <script>
+    // Navigation logic
+    const pages = {
+      home: document.getElementById('home-page'),
+      previews: document.getElementById('previews-page'),
+      premium: document.getElementById('premium-page'),
+      info: document.getElementById('info-page'),
+      privacy: document.getElementById('privacy-page')
+    };
+    const navBtns = {
+      home: document.getElementById('homeNav'),
+      previews: document.getElementById('previewsNav'),
+      premium: document.getElementById('premiumNav')
+    };
+    function showPage(page) {
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      Object.values(navBtns).forEach(b => b.classList.remove('active'));
+      if (pages[page]) pages[page].classList.add('active');
+      if (navBtns[page]) navBtns[page].classList.add('active');
+    }
+    navBtns.home.onclick = () => showPage('home');
+    navBtns.previews.onclick = () => showPage('previews');
+    navBtns.premium.onclick = () => {
+      showPage('premium');
+      joinPremiumPopup.style.display = 'block';
+      joinPremiumPopupOverlay.style.display = 'block';
+    };
+
+    // Menu popup logic
+    const menuBtn = document.getElementById('menu-button');
+    const popupMenu = document.getElementById('popupMenu');
+    const popupOverlay = document.getElementById('popupOverlay');
+    menuBtn.onclick = function() {
+      popupMenu.style.display = 'block';
+      popupOverlay.style.display = 'block';
+    };
+    popupOverlay.onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+    };
+    document.getElementById('infoBtn').onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      showPage('info');
+    };
+    document.getElementById('privacyBtn').onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      showPage('privacy');
+    };
+
+    // Premium Popup logic
+    const joinPremiumPopup = document.getElementById('joinPremiumPopup');
+    const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
+    const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
+    const premiumPopup = document.getElementById('premiumPopup');
+    const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
+    const wrongKeyPopup = document.getElementById('wrongKeyPopup');
+    const premiumKeyBtn = document.getElementById('premiumKeyBtn');
+    const premiumKeyInput = document.getElementById('premiumKeyInput');
+
+    joinPremiumNowBtn.onclick = function() {
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+      premiumPopup.style.display = 'block';
+      premiumPopupOverlay.style.display = 'block';
+      premiumKeyInput.value = '';
+    };
+    premiumKeyBtn.onclick = function() {
+      // Replace this with your real key logic
+      if (premiumKeyInput.value === '1234567') {
+        premiumPopup.style.display = 'none';
+        premiumPopupOverlay.style.display = 'none';
+        alert('Premium Unlocked! (Replace with your logic)');
+      } else {
+        premiumPopup.style.display = 'none';
+        premiumPopupOverlay.style.display = 'none';
+        wrongKeyPopup.style.display = 'block';
+        setTimeout(() => {
+          wrongKeyPopup.style.display = 'none';
+        }, 1500);
+      }
+    };
+    premiumPopupOverlay.onclick = function() {
+      premiumPopup.style.display = 'none';
+      premiumPopupOverlay.style.display = 'none';
+    };
+    joinPremiumPopupOverlay.onclick = function() {
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+    };
+  </script>
 </body>
 </html>
