@@ -627,6 +627,17 @@
       if (pages[page]) pages[page].classList.add('active');
       if (navBtns[page]) navBtns[page].classList.add('active');
     }
+
+    function setPageBlur(blur) {
+      Object.values(pages).forEach(p => {
+        if (blur) {
+          p.classList.add('blur');
+        } else {
+          p.classList.remove('blur');
+        }
+      });
+    }
+
     navBtns.home.onclick = () => showPage('home');
     navBtns.previews.onclick = () => showPage('previews');
     navBtns.premium.onclick = () => {
@@ -642,19 +653,23 @@
     menuBtn.onclick = function() {
       popupMenu.style.display = 'block';
       popupOverlay.style.display = 'block';
+      setPageBlur(true);
     };
     popupOverlay.onclick = function() {
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
+      setPageBlur(false);
     };
     document.getElementById('infoBtn').onclick = function() {
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
+      setPageBlur(false);
       showPage('info');
     };
     document.getElementById('privacyBtn').onclick = function() {
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
+      setPageBlur(false);
       showPage('privacy');
     };
 
