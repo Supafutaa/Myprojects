@@ -142,8 +142,8 @@
       width: calc(100vw - 32px);
       max-width: 480px;
       height: 70px;
-      background: transparent;
-      box-shadow: var(--shadow);
+      background: transparent !important;
+      box-shadow: none !important;
       display: flex;
       align-items: center;
       justify-content: space-around;
@@ -480,7 +480,7 @@
     #premium-video-holder video {
       width: 100vw;
       height: 100vh;
-      object-fit: cover;
+      object-fit: contain;
       background: #000;
       border-radius: 0;
       display: block;
