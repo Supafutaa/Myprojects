@@ -384,16 +384,6 @@
     #joinPremiumPopup button:hover {
       background: #ffe066;
     }
-    #joinPremiumPopup .close-btn {
-      background: #7997eb;
-      color: #fff;
-      margin-top: 16px;
-      font-weight: bold;
-      width: 50%;          
-      margin-left: auto;    
-      margin-right: auto;   
-      display: block;
-    }
     @media (max-width: 600px) {
       .top-bar, .bottom-bar {
         width: calc(100vw - 12px);
@@ -479,11 +469,10 @@
     <button id="privacyBtn">Privacy Policy</button>
   </div>
 
-  <!-- Join Premium Popup -->
+  <!-- Join Premium Popup (no close button) -->
   <div id="joinPremiumPopupOverlay"></div>
   <div id="joinPremiumPopup">
     <button id="joinPremiumNowBtn">Click Here to Join Premium</button>
-    <button class="close-btn" id="closeJoinPremiumBtn">Close</button>
   </div>
 
   <!-- Main Content -->
@@ -596,6 +585,9 @@
       premiumPopupOverlay.style.display = 'none';
       // Hide wrong key popup
       wrongKeyPopup.style.display = 'none';
+      // Remove event listeners for join premium popup
+      document.removeEventListener('keydown', joinPremiumExitHandler, true);
+      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
     }
 
     function showPage(page) {
@@ -645,27 +637,48 @@
       window.history.pushState({menu: false, page: 'privacy'}, 'Privacy');
     };
 
-    // Premium Join Popup logic
+    // Premium Join Popup logic (no close button, must click button or exit)
     const joinPremiumPopup = document.getElementById('joinPremiumPopup');
     const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
     const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
-    const closeJoinPremiumBtn = document.getElementById('closeJoinPremiumBtn');
 
     function showJoinPremiumPopup() {
       closeAllPopups();
       joinPremiumPopup.style.display = 'block';
       joinPremiumPopupOverlay.style.display = 'block';
+      // Add event listeners for overlay and keydown to exit to previews page
+      document.addEventListener('keydown', joinPremiumExitHandler, true);
+      document.addEventListener('click', joinPremiumOverlayClickHandler, true);
     }
     function hideJoinPremiumPopup() {
       joinPremiumPopup.style.display = 'none';
       joinPremiumPopupOverlay.style.display = 'none';
+      document.removeEventListener('keydown', joinPremiumExitHandler, true);
+      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
     }
-    joinPremiumNowBtn.onclick = function() {
+    function joinPremiumExitHandler(e) {
+      // Only exit if not clicking the button itself
+      if (document.activeElement === joinPremiumNowBtn) return;
+      hideJoinPremiumPopup();
+      showPage('previews');
+      loadPreviewsVideos();
+    }
+    function joinPremiumOverlayClickHandler(e) {
+      // Only exit if clicking outside the button and popup
+      if (
+        e.target === joinPremiumPopupOverlay ||
+        (e.target !== joinPremiumNowBtn && !joinPremiumPopup.contains(e.target))
+      ) {
+        hideJoinPremiumPopup();
+        showPage('previews');
+        loadPreviewsVideos();
+      }
+    }
+    joinPremiumNowBtn.onclick = function(e) {
+      e.stopPropagation();
       hideJoinPremiumPopup();
       showPremiumPasswordPopup();
     };
-    closeJoinPremiumBtn.onclick = hideJoinPremiumPopup;
-    joinPremiumPopupOverlay.onclick = hideJoinPremiumPopup;
 
     // Premium Popup logic
     const premiumPopup = document.getElementById('premiumPopup');
