@@ -272,11 +272,21 @@
       max-width: 420px;
       padding: 12px 10px 0 10px;
       color: #eee;
-      font-size: 1.0rem;
+      font-size: 1.5rem;
       font-weight: bold;
-      line-height: 1.0;
+      line-height: 1.4;
       text-align: center;
       white-space: pre-line;
+    }
+    /* Blinking animation for Pay via Mpesa */
+    .blink {
+      animation: blink-animation 1s steps(2, start) infinite;
+      -webkit-animation: blink-animation 1s steps(2, start) infinite;
+    }
+    @keyframes blink-animation {
+      to {
+        visibility: hidden;
+      }
     }
     .privacy-text {
       margin: 0 auto;
@@ -533,7 +543,7 @@
       </div>
       <div class="info-text">
           <span style="color:#ffd700; display:block; font-size: 1.5rem; text-align:center;">How to access 4K Premium VIP Content</span><br>
-          <span style="color:#ff0000; display:block; font-size: 2.5rem; text-align:center;">Pay via Mpesa</span><br> 
+          <span class="blink" style="color:#ff0000; display:block; font-size: 2.5rem; text-align:center;">Pay via Mpesa</span><br> 
           <span style="color:#ff0000; display:block; font-size: 1.5rem; text-align:center;">Till No:123456 | Amount: Kshs 99/=</span><br> 
           <span style="color:#ff0000; display:block; font-size: 1.5rem; text-align:center;">Validity: 1 month</span><br>
           After payment, Go to Menu, Click Payment. You will be redirected to WhatsApp.<br> 
