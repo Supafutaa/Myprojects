@@ -615,21 +615,46 @@
       showJoinPremiumPopup();
     };
 
-    // Menu popup logic
-    const menuBtn = document.getElementById('menu-button');
-    const popupMenu = document.getElementById('popupMenu');
-    const popupOverlay = document.getElementById('popupOverlay');
-    function showMenu() {
-      closeAllPopups();
-      popupMenu.style.display = 'block';
-      popupOverlay.style.display = 'block';
-    }
-    function hideMenu() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-    }
-    menuBtn.onclick = showMenu;
-    popupOverlay.onclick = hideMenu;
+      // Menu popup logic
+      const menuBtn = document.getElementById('menu-button');
+      const popupMenu = document.getElementById('popupMenu');
+      const popupOverlay = document.getElementById('popupOverlay');
+
+      let menuOpen = false;
+
+      function showMenu() {
+        if (menuOpen) {
+          hideMenu();
+          return;
+        }
+        closeAllPopups();
+        popupMenu.style.display = 'block';
+        popupOverlay.style.display = 'block';
+        menuOpen = true;
+        setTimeout(() => {
+          document.addEventListener('mousedown', menuGlobalClickHandler, true);
+        }, 0);
+      }
+
+      function hideMenu() {
+        popupMenu.style.display = 'none';
+        popupOverlay.style.display = 'none';
+        menuOpen = false;
+        document.removeEventListener('mousedown', menuGlobalClickHandler, true);
+      }
+
+      function menuGlobalClickHandler(e) {
+        // If click is outside the popupMenu or on the menu button, close the menu
+        if (
+          !popupMenu.contains(e.target) ||
+          e.target === menuBtn
+        ) {
+          hideMenu();
+        }
+      }
+
+      menuBtn.onclick = showMenu;
+      popupOverlay.onclick = hideMenu;
 
     // Menu links logic
     document.getElementById('paymentLink').onclick = function(e) {
