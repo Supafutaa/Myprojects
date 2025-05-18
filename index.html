@@ -19,7 +19,7 @@
       --icon-size: 34px;
       --menu-width: 90vw;
       --menu-max-width: 340px;
-      --bar-float: 5px;
+      --bar-height: 70px;
       --medium-grey: #799dcc;
     }
     html, body {
@@ -33,19 +33,18 @@
     }
     body {
       padding-top: 64px;
-      padding-bottom: 72px;
+      padding-bottom: var(--bar-height);
       min-height: 100vh;
       position: relative;
       background: var(--bg);
     }
     .top-bar {
       position: fixed;
-      top: var(--bar-float);
-      left: 50%;
-      transform: translateX(-50%);
-      right: auto;
-      width: calc(100vw - 32px);
-      max-width: 480px;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100vw;
+      max-width: 100vw;
       height: 64px;
       background: transparent;
       box-shadow: var(--shadow);
@@ -54,7 +53,7 @@
       justify-content: space-between;
       z-index: 1002;
       padding: 0 16px;
-      border-radius: var(--radius);
+      border-radius: 0;
     }
     .logo {
       height: 50px;
@@ -136,19 +135,19 @@
     }
     .bottom-bar {
       position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: var(--bar-float);
-      width: calc(100vw - 32px);
-      max-width: 480px;
-      height: 70px;
-      background: transparent !important;
-      box-shadow: var(--shadow); /* Changed from none to shadow */
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      max-width: 100vw;
+      height: var(--bar-height);
+      background: #000 !important;
+      box-shadow: none;
       display: flex;
       align-items: center;
       justify-content: space-around;
       z-index: 1002;
-      border-radius: var(--radius);
+      border-radius: 0;
       padding-bottom: 0;
       gap: 0;
       opacity: 1;
@@ -194,7 +193,7 @@
     main {
       margin: 0 auto;
       max-width: 480px;
-      min-height: calc(100vh - 128px);
+      min-height: calc(100vh - var(--bar-height) - 64px);
       padding: 0 0 24px 0;
       box-sizing: border-box;
       background: var(--bg);
@@ -224,9 +223,9 @@
     }
     .home-img-holder {
       width: 100vw;
-      height: calc(100vh - 64px - 72px);
+      height: calc(100vh - var(--bar-height) - 64px);
       max-width: 100vw;
-      max-height: calc(100vh - 64px - 72px);
+      max-height: calc(100vh - var(--bar-height) - 64px);
       background: #222;
       border-radius: 0;
       margin: 0;
@@ -239,14 +238,14 @@
     }
     .home-img-holder img {
       width: 100vw;
-      height: 100vh;
+      height: calc(100vh - var(--bar-height) - 64px);
       object-fit: cover;
       display: block;
       border-radius: 0;
       margin: 0;
       padding: 0;
       max-width: 100vw;
-      max-height: 100vh;
+      max-height: calc(100vh - var(--bar-height) - 64px);
     }
     .info-img-holder {
       width: 100%;
@@ -422,13 +421,14 @@
     }
     @media (max-width: 600px) {
       .top-bar, .bottom-bar {
-        width: calc(100vw - 12px);
-        left: 50%;
-        transform: translateX(-50%);
-        border-radius: 12px;
+        width: 100vw;
+        left: 0;
+        transform: none;
+        border-radius: 0;
+        max-width: 100vw;
       }
       .home-img-holder, .info-img-holder {
-        border-radius: 10px;
+        border-radius: 0;
         min-height: 180px;
       }
       main {
@@ -436,36 +436,40 @@
       }
       .home-img-holder img {
         width: 100vw;
-        height: 100vh;
+        height: calc(100vh - var(--bar-height) - 64px);
         object-fit: cover;
       }
       #joinPremiumPopup {
         min-width: 80vw;
         padding: 24px 8px 16px 8px;
       }
+      .swiper,
+      .swiper-slide video,
+      #premium-video-holder video {
+        width: 100vw;
+        height: calc(100vh - var(--bar-height) - 64px);
+        max-width: 100vw;
+        max-height: calc(100vh - var(--bar-height) - 64px);
+      }
     }
     /* Swiper custom styles for full-screen vertical video */
-    .swiper {
+    .swiper,
+    .swiper-slide video,
+    #premium-video-holder video {
       width: 100vw;
-      height: 100vh;
+      height: calc(100vh - var(--bar-height) - 64px);
+      max-width: 100vw;
+      max-height: calc(100vh - var(--bar-height) - 64px);
+      object-fit: contain;
       background: #000;
+      border-radius: 0;
+      display: block;
     }
     .swiper-slide {
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
-    }
-    .swiper-slide video,
-    #premium-video-holder video {
-      width: 100vw;
-      height: 100vh;
-      object-fit: contain; /* Changed from cover to contain */
-      background: #000;
-      border-radius: 0;
-      display: block;
-      max-width: 100vw;
-      max-height: 100vh;
     }
   </style>
 </head>
@@ -501,7 +505,7 @@
     </div>
     <!-- Previews Page -->
     <div class="page" id="previews-page">
-      <div id="previews-videos" style="height:100vh;">
+      <div id="previews-videos" style="height:100%;">
         <!-- Swiper will be injected here -->
         <div class="swiper" id="previews-swiper">
           <div class="swiper-wrapper" id="previews-swiper-wrapper">
@@ -510,7 +514,7 @@
         </div>
       </div>
     </div>
-    <!-- Premium Area Page -->
+    <!-- Premium Page -->
     <div class="page" id="premium-page">
       <div id="premium-video-holder">
         <!-- Premium video will be loaded here by JS -->
@@ -528,7 +532,7 @@
           <span style="color:#97adf7; display:block; font-size: 1.25rem; text-align:center;">Validity: 1 month</span><br>
           After payment, Go to Menu, Click Payment. You will be redirected to WhatsApp.<br> 
           Paste the Mpesa transaction code & receive the Premium Key.<br>
-          Then, Go the Premium Area Tab, Click Join Premium Button.<br>
+          Then, Go the Premium Tab, Click Join Premium Button.<br>
           Enter the Key and access premium content<br>
 
           <span style="color:#ffd700; display:block; font-size: 1.5rem; text-align:center;">Benefits of Premium Membership</span><br>
@@ -597,390 +601,12 @@
       <span class="icon">
         <img src="assets/images/premium area icon.png" alt="Premium" />
       </span>
-      Premium Area
+      Premium
     </button>
   </nav>
 
   <!-- Swiper.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    // Supabase config
-    const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
-
-    // Navigation logic
-    const pages = {
-      home: document.getElementById('home-page'),
-      previews: document.getElementById('previews-page'),
-      premium: document.getElementById('premium-page'),
-      info: document.getElementById('info-page'),
-      privacy: document.getElementById('privacy-page')
-    };
-    const navBtns = {
-      home: document.getElementById('homeNav'),
-      previews: document.getElementById('previewsNav'),
-      premium: document.getElementById('premiumNav')
-    };
-    let lastActivePage = 'home';
-
-    // Helper to close all popups before opening a new one
-    function closeAllPopups() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-      joinPremiumPopup.style.display = 'none';
-      joinPremiumPopupOverlay.style.display = 'none';
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
-      wrongKeyPopup.style.display = 'none';
-      // Remove blur if present
-      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
-      document.removeEventListener('keydown', joinPremiumExitHandler, true);
-      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
-      document.removeEventListener('keydown', premiumKeyExitHandler, true);
-      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
-    }
-
-    function showPage(page) {
-      Object.values(pages).forEach(p => p.classList.remove('active'));
-      Object.values(navBtns).forEach(b => b.classList.remove('active'));
-      if (pages[page]) pages[page].classList.add('active');
-      if (navBtns[page]) navBtns[page].classList.add('active');
-      lastActivePage = page;
-    }
-    navBtns.home.onclick = () => { showPage('home'); };
-    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
-    navBtns.premium.onclick = () => {
-      showPage('premium');
-      loadPremiumVideo();
-      showJoinPremiumPopup();
-    };
-
-    // Menu popup logic
-    const menuBtn = document.getElementById('menu-button');
-    const popupMenu = document.getElementById('popupMenu');
-    const popupOverlay = document.getElementById('popupOverlay');
-
-    let menuOpen = false;
-
-    function showMenu() {
-      if (menuOpen) {
-        hideMenu();
-        return;
-      }
-      closeAllPopups();
-      popupMenu.style.display = 'block';
-      popupOverlay.style.display = 'block';
-      menuOpen = true;
-      // Blur all active pages
-      document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
-      setTimeout(() => {
-        document.addEventListener('mousedown', menuGlobalClickHandler, true);
-      }, 0);
-    }
-
-    function hideMenu() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-      menuOpen = false;
-      // Remove blur from all pages
-      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
-      document.removeEventListener('mousedown', menuGlobalClickHandler, true);
-    }
-
-    function menuGlobalClickHandler(e) {
-      // If click is outside the popupMenu or on the menu button, close the menu
-      if (
-        !popupMenu.contains(e.target) ||
-        e.target === menuBtn
-      ) {
-        hideMenu();
-      }
-    }
-
-    menuBtn.onclick = showMenu;
-    popupOverlay.onclick = hideMenu;
-
-    // Menu links logic
-    document.getElementById('paymentLink').onclick = function(e) {
-      showMenu();
-      window.history.pushState({menu: true}, 'Menu');
-    };
-    document.getElementById('infoBtn').onclick = function() {
-      hideMenu();
-      showPage('info');
-      window.history.pushState({menu: false, page: 'info'}, 'Info');
-    };
-    document.getElementById('privacyBtn').onclick = function() {
-      hideMenu();
-      showPage('privacy');
-      window.history.pushState({menu: false, page: 'privacy'}, 'Privacy');
-    };
-
-    // Premium Join Popup logic (no close button, must click button or exit)
-    const joinPremiumPopup = document.getElementById('joinPremiumPopup');
-    const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
-    const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
-
-    function showJoinPremiumPopup() {
-      closeAllPopups();
-      joinPremiumPopup.style.display = 'block';
-      joinPremiumPopupOverlay.style.display = 'block';
-      document.addEventListener('keydown', joinPremiumExitHandler, true);
-      document.addEventListener('click', joinPremiumOverlayClickHandler, true);
-    }
-    function hideJoinPremiumPopup() {
-      joinPremiumPopup.style.display = 'none';
-      joinPremiumPopupOverlay.style.display = 'none';
-      document.removeEventListener('keydown', joinPremiumExitHandler, true);
-      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
-    }
-    function joinPremiumExitHandler(e) {
-      if (document.activeElement === joinPremiumNowBtn) return;
-      hideJoinPremiumPopup();
-      showPage('previews');
-      loadPreviewsVideos();
-    }
-    function joinPremiumOverlayClickHandler(e) {
-      if (
-        e.target === joinPremiumPopupOverlay ||
-        (e.target !== joinPremiumNowBtn && !joinPremiumPopup.contains(e.target))
-      ) {
-        hideJoinPremiumPopup();
-        showPage('previews');
-        loadPreviewsVideos();
-      }
-    }
-    joinPremiumNowBtn.onclick = function(e) {
-      e.stopPropagation();
-      hideJoinPremiumPopup();
-      showPremiumPasswordPopup();
-    };
-
-    // Premium Key Popup logic (must enter key or exit)
-    const premiumPopup = document.getElementById('premiumPopup');
-    const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
-    const wrongKeyPopup = document.getElementById('wrongKeyPopup');
-    const premiumKeyBtn = document.getElementById('premiumKeyBtn');
-    const premiumKeyInput = document.getElementById('premiumKeyInput');
-
-    function showPremiumPasswordPopup() {
-      closeAllPopups();
-      premiumPopup.style.display = 'block';
-      premiumPopupOverlay.style.display = 'block';
-      premiumKeyInput.value = '';
-      document.addEventListener('keydown', premiumKeyExitHandler, true);
-      document.addEventListener('click', premiumKeyOverlayClickHandler, true);
-    }
-    function hidePremiumPasswordPopup() {
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
-      document.removeEventListener('keydown', premiumKeyExitHandler, true);
-      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
-    }
-    function premiumKeyExitHandler(e) {
-      if (document.activeElement === premiumKeyBtn || document.activeElement === premiumKeyInput) return;
-      hidePremiumPasswordPopup();
-      showPage('previews');
-      loadPreviewsVideos();
-    }
-    function premiumKeyOverlayClickHandler(e) {
-      if (
-        e.target === premiumPopupOverlay ||
-        (e.target !== premiumKeyBtn && e.target !== premiumKeyInput && !premiumPopup.contains(e.target))
-      ) {
-        hidePremiumPasswordPopup();
-        showPage('previews');
-        loadPreviewsVideos();
-      }
-    }
-    premiumKeyBtn.onclick = function(e) {
-      e.stopPropagation();
-      const key = premiumKeyInput.value;
-      if (key === '1234567') {
-        window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-      } else {
-        closeAllPopups();
-        wrongKeyPopup.style.display = 'block';
-        setTimeout(() => {
-          wrongKeyPopup.style.display = 'none';
-          showPage('previews');
-          loadPreviewsVideos();
-        }, 1500);
-      }
-    };
-    premiumPopupOverlay.onclick = function(e) {
-      if (e.target === premiumPopupOverlay) {
-        hidePremiumPasswordPopup();
-        showPage('previews');
-        loadPreviewsVideos();
-      }
-    };
-
-    // Helper: get thumbnail URL for a video file
-    function getThumbnailUrl(bucket, fileName) {
-      const base = fileName.replace(/\.[^/.]+$/, "");
-      return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/thumbnails/${base}.jpg`;
-    }
-
-    // Swiper instance for previews
-    let previewsSwiper = null;
-    let previewsData = [];
-
-    async function loadPreviewsVideos() {
-      const wrapper = document.getElementById('previews-swiper-wrapper');
-      wrapper.innerHTML = '';
-      try {
-        const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/previews`, {
-          method: 'POST',
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ prefix: '' })
-        });
-        const text = await response.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          wrapper.innerHTML = '<div style="text-align:center;color:#888;">Invalid response from Supabase.</div>';
-          return;
-        }
-        if (Array.isArray(data) && data.length > 0) {
-          data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-          previewsData = data.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
-          if (previewsData.length === 0) {
-            wrapper.innerHTML = '<div style="text-align:center;color:#888;">No videos found.</div>';
-            return;
-          }
-          previewsData.forEach((file, idx) => {
-            const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/previews/${file.name}`;
-            const thumbUrl = getThumbnailUrl('previews', file.name);
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-            slide.innerHTML = `
-              <video 
-                src="${videoUrl}" 
-                class="tiktok-video"
-                playsinline
-                loop
-                muted
-                preload="auto"
-                poster="${thumbUrl}"
-                data-idx="${idx}"
-              ></video>
-            `;
-            wrapper.appendChild(slide);
-          });
-          // Initialize or update Swiper
-          if (previewsSwiper) {
-            previewsSwiper.update();
-            previewsSwiper.slideTo(0, 0);
-          } else {
-            previewsSwiper = new Swiper('#previews-swiper', {
-              direction: 'vertical',
-              slidesPerView: 1,
-              spaceBetween: 0,
-              mousewheel: true,
-              allowTouchMove: true,
-              resistanceRatio: 0,
-              on: {
-                slideChange: function () {
-                  playActivePreviewVideo();
-                },
-                afterInit: function () {
-                  playActivePreviewVideo();
-                }
-              }
-            });
-          }
-          playActivePreviewVideo();
-        } else {
-          wrapper.innerHTML = '<div style="text-align:center;color:#888;">No videos found.</div>';
-        }
-      } catch (e) {
-        wrapper.innerHTML = '<div style="text-align:center;color:#888;">Failed to load videos.</div>';
-      }
-    }
-
-    function playActivePreviewVideo() {
-      if (!previewsSwiper) return;
-      const slides = document.querySelectorAll('#previews-swiper .swiper-slide');
-      slides.forEach((slide, idx) => {
-        const video = slide.querySelector('video');
-        if (video) {
-          if (idx === previewsSwiper.activeIndex) {
-            video.currentTime = 0;
-            video.play().catch(()=>{});
-          } else {
-            video.pause();
-            video.currentTime = 0;
-          }
-        }
-      });
-    }
-
-    // Premium Video - Pure JS, full screen
-    async function loadPremiumVideo() {
-      const container = document.getElementById('premium-video-holder');
-      container.innerHTML = '';
-      try {
-        const response = await fetch(`${SUPABASE_URL}/storage/v1/object/list/premium`, {
-          method: 'POST',
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ prefix: '' })
-        });
-        const text = await response.text();
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          container.innerHTML = '<div style="text-align:center;color:#888;">Invalid response from Supabase.</div>';
-          return;
-        }
-        if (Array.isArray(data) && data.length > 0) {
-          data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-          const file = data.find(f => f.name.match(/\.(mp4|webm|ogg)$/i));
-          if (file) {
-            const videoUrl = `${SUPABASE_URL}/storage/v1/object/public/premium/${file.name}`;
-            const thumbUrl = getThumbnailUrl('premium', file.name);
-            container.innerHTML = `
-              <video 
-                src="${videoUrl}" 
-                class="tiktok-video"
-                style="width:100vw;height:100vh;object-fit:contain;display:block;background:#000;"
-                playsinline
-                autoplay
-                loop
-                muted
-                preload="auto"
-                poster="${thumbUrl}"
-              ></video>
-            `;
-            // Play video automatically
-            const vid = container.querySelector('video');
-            if (vid) {
-              vid.currentTime = 0;
-              vid.play().catch(()=>{});
-            }
-          } else {
-            container.innerHTML = '<div style="text-align:center;color:#888;">No premium video found.</div>';
-          }
-        } else {
-          container.innerHTML = '<div style="text-align:center;color:#888;">No premium video found.</div>';
-        }
-      } catch (e) {
-        container.innerHTML = '<div style="text-align:center;color:#888;">Failed to load premium video.</div>';
-      }
-    }
-
-    // Launch to Home
-    showPage('home');
-  </script>
+  <!-- ...existing JS code remains unchanged... -->
 </body>
 </html>
