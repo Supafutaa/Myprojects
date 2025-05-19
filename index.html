@@ -383,13 +383,14 @@
       display: none;
     }
     .blink {
-      animation: blink-animation 1s steps(2, start) infinite;
-      -webkit-animation: blink-animation 1s steps(2, start) infinite;
+      animation: blink-animation 2.2s ease-in-out infinite;
+      -webkit-animation: blink-animation 2.2s ease-in-out infinite;
     }
     @keyframes blink-animation {
-      to {
-        visibility: hidden;
-      }
+      0%   { opacity: 1; }
+      45%  { opacity: 1; }
+      55%  { opacity: 0; }
+      100% { opacity: 1; }
     }
     .privacy-text {
       margin: 0 auto;
