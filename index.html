@@ -694,7 +694,141 @@
   <!-- Swiper.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
-    // ...existing JS code remains unchanged...
+    // --- MENU POPUP LOGIC ---
+    const menuBtn = document.getElementById('menu-button');
+    const popupMenu = document.getElementById('popupMenu');
+    const popupOverlay = document.getElementById('popupOverlay');
+    menuBtn.onclick = function() {
+      popupMenu.style.display = 'flex';
+      popupOverlay.style.display = 'block';
+      document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
+    };
+    popupOverlay.onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+    };
+
+    // --- PAGE NAVIGATION ---
+    const pages = {
+      home: document.getElementById('home-page'),
+      previews: document.getElementById('previews-page'),
+      premium: document.getElementById('premium-page'),
+      info: document.getElementById('info-page'),
+      privacy: document.getElementById('privacy-page')
+    };
+    const navBtns = {
+      home: document.getElementById('homeNav'),
+      previews: document.getElementById('previewsNav'),
+      premium: document.getElementById('premiumNav')
+    };
+    function showPage(page) {
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      Object.values(navBtns).forEach(b => b.classList.remove('active'));
+      if (pages[page]) pages[page].classList.add('active');
+      if (navBtns[page]) navBtns[page].classList.add('active');
+    }
+    navBtns.home.onclick = () => { showPage('home'); };
+    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
+    navBtns.premium.onclick = () => { showPage('premium'); loadPremiumVideo(); };
+
+    // --- MENU LINKS LOGIC ---
+    document.getElementById('infoBtn').onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+      showPage('info');
+    };
+    document.getElementById('privacyBtn').onclick = function() {
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+      showPage('privacy');
+    };
+
+    // --- SWIPER & VIDEO LOGIC ---
+    let previewsSwiper = null;
+    function loadPreviewsVideos() {
+      const wrapper = document.getElementById('previews-swiper-wrapper');
+      wrapper.innerHTML = '';
+      // Example videos (replace with your dynamic loading logic)
+      const videos = [
+        {src: "assets/videos/sample1.mp4", poster: "assets/images/sample1.jpg"},
+        {src: "assets/videos/sample2.mp4", poster: "assets/images/sample2.jpg"}
+      ];
+      videos.forEach((v, idx) => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+        slide.innerHTML = `<video src="${v.src}" poster="${v.poster}" playsinline loop muted preload="auto"></video>`;
+        wrapper.appendChild(slide);
+      });
+      if (previewsSwiper) {
+        previewsSwiper.update();
+        previewsSwiper.slideTo(0, 0);
+      } else {
+        previewsSwiper = new Swiper('#previews-swiper', {
+          direction: 'vertical',
+          slidesPerView: 1,
+          spaceBetween: 0,
+          mousewheel: true,
+          allowTouchMove: true,
+          resistanceRatio: 0,
+          on: {
+            slideChange: function () {
+              playActivePreviewVideo();
+            },
+            afterInit: function () {
+              playActivePreviewVideo();
+            }
+          }
+        });
+      }
+      playActivePreviewVideo();
+    }
+    function playActivePreviewVideo() {
+      if (!previewsSwiper) return;
+      const slides = document.querySelectorAll('#previews-swiper .swiper-slide');
+      slides.forEach((slide, idx) => {
+        const video = slide.querySelector('video');
+        if (video) {
+          if (idx === previewsSwiper.activeIndex) {
+            video.currentTime = 0;
+            video.play().catch(()=>{});
+          } else {
+            video.pause();
+            video.currentTime = 0;
+          }
+        }
+      });
+    }
+
+    function loadPremiumVideo() {
+      const container = document.getElementById('premium-video-holder');
+      container.innerHTML = '';
+      // Example premium video (replace with your dynamic loading logic)
+      const videoUrl = "assets/videos/premium.mp4";
+      const thumbUrl = "assets/images/premium.jpg";
+      container.innerHTML = `
+        <video 
+          src="${videoUrl}" 
+          class="tiktok-video"
+          playsinline
+          autoplay
+          loop
+          muted
+          preload="auto"
+          poster="${thumbUrl}"
+        ></video>
+      `;
+      const vid = container.querySelector('video');
+      if (vid) {
+        vid.currentTime = 0;
+        vid.play().catch(()=>{});
+      }
+    }
+
+    // Show home page on load
+    showPage('home');
   </script>
 </body>
 </html>
