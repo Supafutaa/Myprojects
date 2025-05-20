@@ -580,31 +580,37 @@
     <!-- Privacy Policy Page -->
     <div class="page" id="privacy-page">
       <div class="privacy-text">
-      <span style="color:#ffd700; font-weight: bold; font-size:1.3rem;">PRIVACY POLICY</span><br>
-        <span style="color:#97adf7;">Effective date: 1st January, 2025</span><br><br>
-        <b>1. Introduction</b><br>
-        We value your privacy and are committed to protecting your personal information.<br><br>
-        <b>2. Information We Collect</b><br>
-        We do not collect personal information unless you provide it voluntarily (e.g., through payment or support requests).<br><br>
-        <b>3. Use of Information</b><br>
-        Any information you provide is used solely to process your payment and provide access to premium content.<br><br>
-        <b>4. Data Security</b><br>
-        We implement reasonable security measures to protect your data. Payments are processed securely via Mpesa.<br><br>
-        <b>5. Sharing of Information</b><br>
-        We do not sell, trade, or share your personal information with third parties.<br><br>
-        <b>6. Cookies & Tracking</b><br>
-        We do not use cookies or tracking technologies.<br><br>
-        <b>7. Changes to This Policy</b><br>
-        We may update this policy from time to time. Changes will be posted on this page.<br><br>
-        <b>8. Contact Us</b><br>
-        If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
-        <span style="color:#ffd700;">Thank you for trusting Baddiez!</span>
-
-        <span style="color:transparent;">Copyright@Baddiez!</span>
-
-        <span style="color:#97adf7; display:block; font-size: 0.75rem; text-align:center;">Copyright@Baddiez. All rights reserved</span><br>
-        
-        <span style="color:transparent;">Copyright@Baddiez!</span>
+        <!-- Heading -->
+        <div style="color:#ffd700; font-weight: bold; font-size:1.3rem;">PRIVACY POLICY</div>
+        <div style="color:#97adf7;">Effective date: 1st January, 2025</div>
+        <br>
+        <!-- Dropdown Button -->
+        <button id="privacyDropdownBtn" style="margin: 0 auto 12px auto; display: block; background: #444654; color: #ffd700; border: none; border-radius: 8px; padding: 8px 18px; font-size: 1rem; cursor: pointer;">
+          Show Details ▼
+        </button>
+        <!-- Dropdown Body -->
+        <div id="privacyDropdownBody" style="display: none; margin-top: 8px; text-align: left;">
+          <b>1. Introduction</b><br>
+          We value your privacy and are committed to protecting your personal information.<br><br>
+          <b>2. Information We Collect</b><br>
+          We do not collect personal information unless you provide it voluntarily (e.g., through payment or support requests).<br><br>
+          <b>3. Use of Information</b><br>
+          Any information you provide is used solely to process your payment and provide access to premium content.<br><br>
+          <b>4. Data Security</b><br>
+          We implement reasonable security measures to protect your data. Payments are processed securely via Mpesa.<br><br>
+          <b>5. Sharing of Information</b><br>
+          We do not sell, trade, or share your personal information with third parties.<br><br>
+          <b>6. Cookies & Tracking</b><br>
+          We do not use cookies or tracking technologies.<br><br>
+          <b>7. Changes to This Policy</b><br>
+          We may update this policy from time to time. Changes will be posted on this page.<br><br>
+          <b>8. Contact Us</b><br>
+          If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
+          <span style="color:#ffd700;">Thank you for trusting Baddiez!</span>
+          <span style="color:transparent;">Copyright@Baddiez!</span>
+          <span style="color:#97adf7; display:block; font-size: 0.75rem; text-align:center;">Copyright@Baddiez. All rights reserved</span>
+          <span style="color:transparent;">Copyright@Baddiez!</span>
+        </div>
       </div>
     </div>
   </main>
@@ -1006,6 +1012,27 @@
 
     // Launch to Home
     showPage('home');
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.getElementById('privacyDropdownBtn');
+    const dropdownBody = document.getElementById('privacyDropdownBody');
+    let isOpen = false;
+
+    dropdownBtn.addEventListener('click', function() {
+      // Close all other dropdowns (if you add more in future)
+      document.querySelectorAll('[id$="DropdownBody"]').forEach(function(el) {
+        if (el !== dropdownBody) el.style.display = 'none';
+      });
+      document.querySelectorAll('[id$="DropdownBtn"]').forEach(function(btn) {
+        if (btn !== dropdownBtn) btn.innerHTML = btn.innerHTML.replace('▲', '▼');
+      });
+
+      isOpen = !isOpen;
+      dropdownBody.style.display = isOpen ? 'block' : 'none';
+      dropdownBtn.innerHTML = isOpen ? 'Hide Details ▲' : 'Show Details ▼';
+    });
+  });
   </script>
 </body>
 </html>
