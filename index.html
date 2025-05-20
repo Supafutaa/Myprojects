@@ -1079,8 +1079,9 @@ document.addEventListener('DOMContentLoaded', function() {
     subscribeBtn.onclick = function() {
       subscribePopup.style.display = 'block';
       subscribeOverlay.style.display = 'block';
-      // Blur the active page except the popup
+      // Blur only the active page, NOT the popup
       document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
+      subscribePopup.classList.remove('blur');
     };
     closeSubscribePopup.onclick = function() {
       subscribePopup.style.display = 'none';
