@@ -1079,15 +1079,21 @@ document.addEventListener('DOMContentLoaded', function() {
     subscribeBtn.onclick = function() {
       subscribePopup.style.display = 'block';
       subscribeOverlay.style.display = 'block';
+      // Blur the active page except the popup
+      document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
     };
     closeSubscribePopup.onclick = function() {
       subscribePopup.style.display = 'none';
       subscribeOverlay.style.display = 'none';
+      // Remove blur
+      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
     };
     subscribeOverlay.onclick = function(e) {
       if (e.target === subscribeOverlay) {
         subscribePopup.style.display = 'none';
         subscribeOverlay.style.display = 'none';
+        // Remove blur
+        document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
       }
     };
   }
