@@ -548,33 +548,46 @@
     <!-- Info Page -->
     <div class="page" id="info-page">
       <div class="info-text">
-          <span style="color:#ffd700; display:block; font-weight: bold; font-size: 1.5rem; text-align:center;">Unlock Full Premium Experience</span><br>
-          <span class="blink" style="color: lightgreen; display:block; font-weight: bold; font-size: 2.5rem; text-align:center;">Pay via Mpesa</span><br> 
-          <span style="color:#ffffff; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">Till No:123456 | Amount: Kshs 99/=</span><br> 
-          <span style="color:#ffffff; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">Validity: 1 month</span><br>
-          <span style="color:#97adf7; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">How To Subscribe</span><br>
-          After payment, Go to Menu, Click Payment.<br> 
-          You will be redirected to the App WhatsApp.<br> 
-          Paste the Mpesa transaction code & receive the Premium Key.<br>
-          Then, Go the Premium Tab, Click Join Premium Button.<br>
-          Enter the Key and access premium content<br>
+        <span style="color:#ffd700; display:block; font-weight: bold; font-size: 1.5rem; text-align:center;">Unlock Full Premium Experience</span><br>
+        <span class="blink" style="color: lightgreen; display:block; font-weight: bold; font-size: 2.5rem; text-align:center;">Pay via Mpesa</span><br> 
+        <span style="color:#ffffff; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">Till No:123456 | Amount: Kshs 99/=</span><br> 
+        <span style="color:#ffffff; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">Validity: 1 month</span><br>
+        
+        <!-- How To Subscribe Button -->
+        <button id="howToSubscribeBtn" style="margin: 18px auto 12px auto; display: block; background: #ffd700; color: #222; border: none; border-radius: 12px; padding: 12px 28px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 12px rgba(0,0,0,0.10); transition: background 0.2s;">
+          How To Subscribe
+        </button>
 
-          <span style="color:#ffd700; display:block; font-weight: bold; font-size: 1.5rem; text-align:center;">Benefits of Premium Membership</span><br>
-          <b>Exclusive Videos</b><br>
-          Access 100% exclusive videos not available for free users<br><br>
-          <b>Early Access</b><br>
-          Watch new uploads before anyone else hours or days early.<br><br>
-          <b>Full Length Content</b><br>
-          Enjoy full, uncut scenes with no adds, no limits.<br><br>
-          <b>High Quality Streams</b><br>
-          Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
-          <b>Ad-Free Experience</b><br>
-          Watch without interruption, 100% ad-free viewing<br><br>
-          <b>Priority Support</b><br>
-          Need help. Premium subscribers get priority replies<br><br>
+        <!-- How To Subscribe Popup -->
+        <div id="howToSubscribePopupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.35); z-index:3000;"></div>
+        <div id="howToSubscribePopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#23243a; border-radius:18px; box-shadow:0 4px 24px rgba(0,0,0,0.25); padding:28px 18px 18px 18px; width:90vw; max-width:350px; z-index:3001; text-align:left;">
+          <button id="closeHowToSubscribePopup" style="position:absolute; top:10px; right:18px; background:none; border:none; color:#ffd700; font-size:1.5rem; cursor:pointer;">&times;</button>
+          <div style="color:#ffd700; font-weight:bold; font-size:1.2rem; text-align:center; margin-bottom:12px;">How To Subscribe</div>
+          <ul style="color:#fff; font-size:1rem; line-height:1.6; padding-left:22px; margin:0;">
+            <li>After payment, go to Menu and click Payment.</li>
+            <li>You will be redirected to the App WhatsApp.</li>
+            <li>Paste the Mpesa transaction code & receive the Premium Key.</li>
+            <li>Then, go to the Premium Tab and click Join Premium Button.</li>
+            <li>Enter the Key and access premium content.</li>
+          </ul>
+        </div>
 
-          <span style="color:#97adf7; display:block; font-size: 0.75rem; text-align:center;">Copyright@Baddiez. 2025. All rights reserved</span><br>
-          <span style="color:transparent; display:block; font-size: 1.5rem; text-align:center;">Copyright @ Baddiez</span><br>
+        <span style="color:#ffd700; display:block; font-weight: bold; font-size: 1.5rem; text-align:center;">Benefits of Premium Membership</span><br>
+        <b>Exclusive Videos</b><br>
+        Access 100% exclusive videos not available for free users<br><br>
+        <b>Early Access</b><br>
+        Watch new uploads before anyone else hours or days early.<br><br>
+        <b>Full Length Content</b><br>
+        Enjoy full, uncut scenes with no adds, no limits.<br><br>
+        <b>High Quality Streams</b><br>
+        Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
+        <b>Ad-Free Experience</b><br>
+        Watch without interruption, 100% ad-free viewing<br><br>
+        <b>Priority Support</b><br>
+        Need help. Premium subscribers get priority replies<br><br>
+
+        <span style="color:#97adf7; display:block; font-size: 0.75rem; text-align:center;">Copyright@Baddiez. 2025. All rights reserved</span><br>
+        <span style="color:transparent; display:block; font-size: 1.5rem; text-align:center;">Copyright @ Baddiez</span><br>
       </div>
     </div>
     <!-- Privacy Policy Page -->
