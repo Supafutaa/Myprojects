@@ -1068,5 +1068,30 @@
     });
   });
   </script>
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  const subscribeBtn = document.getElementById('howToSubscribeBtn');
+  const subscribePopup = document.getElementById('howToSubscribePopup');
+  const subscribeOverlay = document.getElementById('howToSubscribePopupOverlay');
+  const closeSubscribePopup = document.getElementById('closeHowToSubscribePopup');
+
+  if (subscribeBtn && subscribePopup && subscribeOverlay && closeSubscribePopup) {
+    subscribeBtn.onclick = function() {
+      subscribePopup.style.display = 'block';
+      subscribeOverlay.style.display = 'block';
+    };
+    closeSubscribePopup.onclick = function() {
+      subscribePopup.style.display = 'none';
+      subscribeOverlay.style.display = 'none';
+    };
+    subscribeOverlay.onclick = function(e) {
+      if (e.target === subscribeOverlay) {
+        subscribePopup.style.display = 'none';
+        subscribeOverlay.style.display = 'none';
+      }
+    };
+  }
+});
+</script>
 </body>
 </html>
