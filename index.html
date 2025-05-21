@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Baddiez</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400&display=swap" />
-  <link rel="stylesheet" href="css/style.css" />
-  <!-- Swiper.js CSS CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
     :root {
@@ -15,176 +13,173 @@
       --bg: #343541;
       --bar-bg: #444654;
       --shadow: 0 4px 24px rgba(0,0,0,0.18);
-      --radius: 18px;
-      --icon-size: 34px;
+      --radius: 1rem;
+      --icon-size: 2rem;
       --menu-width: 90vw;
-      --menu-max-width: 340px;
-      --bar-float: 5px;
+      --menu-max-width: 20rem;
+      --bar-float: 0.3rem;
       --medium-grey: #799dcc;
+      --text-light: #d1d5db;
+      --error-red: #e53935;
+      --dark-bg: #23243a;
+      --white: #ffffff;
+      --light-green: lightgreen;
     }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: 'Montserrat', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       background: var(--bg);
-      height: 100%;
       min-height: 100vh;
-      box-sizing: border-box;
     }
+
     body {
-      padding-top: 64px;
-      padding-bottom: 72px;
-      min-height: 100vh;
+      padding-top: 4rem;
+      padding-bottom: 4.5rem;
       position: relative;
-      background: var(--bg);
     }
+
     .top-bar {
       position: fixed;
       top: var(--bar-float);
       left: 50%;
       transform: translateX(-50%);
-      right: auto;
-      width: calc(100vw - 32px);
-      max-width: 480px;
-      height: 64px;
-      background: transparent;
+      width: calc(100vw - 2rem);
+      max-width: 30rem;
+      height: 4rem;
+      background: var(--bar-bg);
       box-shadow: var(--shadow);
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 1002;
-      padding: 0 16px;
+      padding: 0 1rem;
       border-radius: var(--radius);
     }
+
     .logo {
-      height: 40px;
-      width: 40px;
+      height: 2.5rem;
+      width: 2.5rem;
       object-fit: contain;
     }
+
     .app-title {
       flex: 1;
       text-align: center;
       font-weight: 580;
-      color: #ffffff;
+      color: var(--white);
       font-size: 1.5rem;
-      letter-spacing: 0px;
       user-select: none;
-      font-family: 'Montserrat', Arial, sans-serif;
     }
+
     .menu-btn {
       background: none;
       border: none;
       font-size: 2rem;
       color: var(--primary);
       cursor: pointer;
-      padding: 8px;
+      padding: 0.5rem;
       border-radius: 50%;
       transition: background 0.2s;
     }
-    .menu-btn:active, .menu-btn:focus {
+
+    .menu-btn:hover, .menu-btn:focus {
       background: #f0f7fa;
       outline: none;
     }
 
-    /* Side popup menu styles */
     #popupOverlay {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: rgba(0,0,0,0.25);
       z-index: 1001;
       transition: background 0.2s;
     }
-    #popupMenu.side-popup-menu {
+
+    #popupMenu {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
       height: 90vh;
-      width: 20vw;
-      min-width: 180px;
-      max-width: 320px;
-      background: #444654;
+      width: var(--menu-width);
+      max-width: var(--menu-max-width);
+      background: var(--bar-bg);
       box-shadow: 2px 0 24px rgba(0,0,0,0.18);
       z-index: 1003;
-      border-top-right-radius: 24px;
-      border-bottom-right-radius: 24px;
+      border-top-right-radius: 1.5rem;
+      border-bottom-right-radius: 1.5rem;
       padding: 0;
-      animation: slideInLeft 0.25s;
-      flex-direction: column;
-      align-items: stretch;
-    }
-    @keyframes slideInLeft {
-      from { transform: translateX(-100%);}
-      to { transform: translateX(0);}
-    }
-    .side-popup-header {
+      animation: slideInLeft 0.25s ease-out;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 32px 0 16px 0;
-      background: #343541;
-      border-top-right-radius: 24px;
     }
+
+    @keyframes slideInLeft {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+    @-webkit-keyframes slideInLeft {
+      from { -webkit-transform: translateX(-100%); }
+      to { -webkit-transform: translateX(0); }
+    }
+
+    .side-popup-header {
+      padding: 2rem 0 1rem;
+      background: var(--bg);
+      border-top-right-radius: 1.5rem;
+      text-align: center;
+    }
+
     .side-popup-logo {
-      width: 64px;
-      height: 64px;
+      width: 4rem;
+      height: 4rem;
       object-fit: contain;
-      margin-bottom: 8px;
+      margin-bottom: 0.5rem;
     }
+
     .side-popup-title {
-      color: #ffffff;
+      color: var(--white);
       font-size: 1.5rem;
       font-weight: 580;
-      letter-spacing: 0px;
-      text-align: center;
-      margin-bottom: 8px;
-      font-family: 'Montserrat', Arial, sans-serif;
+      margin-bottom: 0.5rem;
     }
+
     .side-popup-links {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      padding: 32px 24px;
+      gap: 0.75rem;
+      padding: 2rem 1.5rem;
     }
+
     .side-popup-links button,
     .side-popup-links a {
-      display: block;
-      margin: 0;
-      padding: 14px 0;
-      background: #343541;
-      color: #d1d5db;
+      padding: 0.875rem 0 0.875rem 1.125rem;
+      background: var(--bg);
+      color: var(--text-light);
       border: none;
-      border-radius: 8px;
+      border-radius: 0.5rem;
       cursor: pointer;
       font-size: 0.9rem;
       font-family: inherit;
-      font-weight: normal;
       text-decoration: none;
       transition: background 0.18s, color 0.18s;
-      width: 100%;
       text-align: left;
-      padding-left: 18px;
     }
+
     .side-popup-links button:hover,
     .side-popup-links a:hover {
-      background: #ffd700;
+      background: var(--accent);
       color: #181c23;
-    }
-    @media (max-width: 600px) {
-      #popupMenu.side-popup-menu {
-        width: 70vw;
-        min-width: 0;
-        max-width: 90vw;
-        border-top-right-radius: 16px;
-        border-bottom-right-radius: 16px;
-      }
-      .side-popup-header {
-        padding: 24px 0 12px 0;
-      }
-      .side-popup-links {
-        padding: 24px 12px;
-      }
     }
 
     .bottom-bar {
@@ -193,304 +188,209 @@
       right: 0;
       bottom: 0;
       width: 100vw;
-      max-width: 100vw;
-      height: 70px;
-      background: #444654 !important;
-      box-shadow: none;
+      height: 4.5rem;
+      background: var(--bar-bg);
       display: flex;
       align-items: center;
       justify-content: space-around;
       z-index: 1002;
-      border-radius: 0 !important;
       padding-bottom: 0;
       gap: 0;
-      opacity: 1;
-      visibility: visible;
-      transform: none;
     }
-    @media (max-width: 600px) {
-      .bottom-bar {
-        width: 100vw !important;
-        left: 0 !important;
-        transform: none !important;
-        border-radius: 0 !important;
-      }
-      .bottom-bar .bar-btn {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: none;
-        border: none;
-        color: #ffffff;
-        font-size: 0.75rem;
-        font-weight: 450;
-        cursor: pointer;
-        padding: 0;
-        margin: 0;
-        transition: color 0.2s;
-        border-radius: 10px;
-        height: 100%;
-        min-width: 0;
-        width: auto;
-      }
-      .bottom-bar .bar-btn .icon img {
-        width: var(--icon-size);
-        height: var(--icon-size);
-        display: block;
-        object-fit: contain;
-        filter: brightness(1.2) invert(1);
-        transition: filter 0.2s;
-      }
-      .bottom-bar .bar-btn.active,
-      .bottom-bar .bar-btn:active {
-        color: #66c6f3;
-        background: rgba(79, 195, 247, 0.08);
-      }
-      .bottom-bar .bar-btn.active .icon img,
-      .bottom-bar .bar-btn:active .icon img {
-        filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
-      }
+
+    .bottom-bar .bar-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 450;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s, background 0.2s;
+      border-radius: 0.625rem;
+      height: 100%;
     }
+
+    .bottom-bar .bar-btn .icon img {
+      width: var(--icon-size);
+      height: var(--icon-size);
+      object-fit: contain;
+      filter: brightness(1.2) invert(1);
+      transition: filter 0.2s;
+    }
+
+    .bottom-bar .bar-btn.active,
+    .bottom-bar .bar-btn:hover {
+      color: var(--primary);
+      background: rgba(79, 195, 247, 0.08);
+    }
+
+    .bottom-bar .bar-btn.active .icon img,
+    .bottom-bar .bar-btn:hover .icon img {
+      filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
+    }
+
     main {
       margin: 0 auto;
-      max-width: 480px;
-      min-height: calc(100vh - 128px);
-      padding: 0 0 24px 0;
-      box-sizing: border-box;
+      max-width: 30rem;
+      min-height: calc(100vh - 8.5rem);
+      padding: 0 0 1.5rem;
       background: var(--bg);
     }
+
     .page {
       display: none;
       width: 100%;
-      height: 100%;
       min-height: 60vh;
-      margin: 0 auto;
-      padding-top: 12px;
+      padding-top: 0.75rem;
     }
+
     .page.active {
       display: block;
       animation: fadeIn 0.3s;
     }
+
     .page.blur {
       filter: blur(6px);
       pointer-events: none;
       user-select: none;
       transition: filter 0.2s;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0;}
-      to { opacity: 1;}
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
+
     .home-img-holder {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      max-width: 100vw;
-      max-height: 100vh;
       background: #222;
-      border-radius: 0;
-      margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       z-index: 1;
     }
+
     .home-img-holder img {
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      display: block;
-      border-radius: 0;
-      margin: 0;
-      padding: 0;
       max-width: 100vw;
       max-height: 100vh;
     }
-    /* Remove .info-img-holder styles if not used */
+
     .info-text {
       margin: 0 auto;
-      max-width: 420px;
-      padding: 12px 10px 0 10px;
-      color: #d1d5db;
+      max-width: 26.25rem;
+      padding: 0.75rem 0.625rem 0;
+      color: var(--text-light);
       font-size: 0.9rem;
-      font-weight: normal;
-      line-height: 1.0;
-      text-align: center;
-      white-space: pre-line;
-    }
-    .blink {
-      animation: blink-animation 2.2s ease-in-out infinite;
-      -webkit-animation: blink-animation 2.2s ease-in-out infinite;
-    }
-    @keyframes blink-animation {
-      0%   { opacity: 1; }
-      45%  { opacity: 1; }
-      55%  { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    .privacy-text {
-      margin: 0 auto;
-      max-width: 420px;
-      padding: 12px 10px 0 10px;
-      color: #d1d5db;
-      font-size: 0.9rem;
-      font-weight: normal;
       line-height: 1.2;
       text-align: center;
       white-space: pre-line;
     }
-    #premiumPopupOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.18);
-      z-index: 2000;
+
+    .info-text .logo {
+      width: 8rem;
+      height: 8rem;
+      margin-bottom: 0.75rem;
     }
-    #premiumPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: transparent;
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 32px 24px 24px 24px;
-      min-width: 260px;
-      max-width: 90vw;
-      z-index: 2001;
-      text-align: center;
-      animation: popupFadeIn 0.25s;
-      color: #fff;
+
+    .info-text .small-logo {
+      width: 4rem;
+      height: 4rem;
+      margin-top: 0;
     }
-    #premiumPopup h3 {
-      margin: 0 0 18px 0;
+
+    .info-text .highlight {
       color: var(--accent);
-      font-size: 1.2rem;
       font-weight: bold;
-    }
-    #premiumPopup input[type="password"] {
-      width: 90%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #bdbdbd;
-      font-size: 1rem;
-      margin-bottom: 18px;
-      outline: none;
-      text-align: center;
-    }
-    #premiumPopup button {
-      background: var(--accent);
-      color: #222;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-      width: auto;
-      min-width: 80px;
-      max-width: 90vw;
-      white-space: nowrap;
-    }
-    #premiumPopup button:hover {
-      background: #ffe066;
-    }
-    #wrongKeyPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #e53935;
-      color: #ffffff;
-      border-radius: 14px;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.14);
-      padding: 32px 36px;
-      z-index: 3000;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      animation: popupFadeIn 0.2s;
-    }
-    #joinPremiumPopupOverlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 3001;
-    }
-    #joinPremiumPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: transparent;
-      border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-      padding: 32px 24px 24px 24px;
-      min-width: 260px;
-      max-width: 90vw;
-      z-index: 3002;
-      text-align: center;
-      color: #fff;
-      animation: popupFadeIn 0.25s;
-    }
-    #joinPremiumPopup button {
-      background: var(--accent);
-      color: #222;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 24px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin: 12px 0 0 0;
-      transition: background 0.2s;
+      font-size: 1.5rem;
       display: block;
-      width: auto;
-      min-width: 80px;
-      max-width: 90vw;
-      white-space: nowrap;
-      align-self: center;
+      text-align: center;
     }
-    #joinPremiumPopup button:hover {
-      background: #ffe066;
+
+    .info-text .blink {
+      color: var(--light-green);
+      font-size: 2.5rem;
+      animation: blink-animation 2.2s ease-in-out infinite;
+      will-change: opacity;
     }
-    .swiper {
-      width: 100vw;
-      height: calc(100vh - 64px - 70px);
-      max-width: 100vw;
-      max-height: calc(100vh - 64px - 70px);
-      background: #000;
+
+    @keyframes blink-animation {
+      0% { opacity: 1; }
+      45% { opacity: 1; }
+      55% { opacity: 0; }
+      100% { opacity: 1; }
     }
-    .swiper-slide {
+    @-webkit-keyframes blink-animation {
+      0% { opacity: 1; }
+      45% { opacity: 1; }
+      55% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .info-text .subscribe-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #000;
-    }
-    .swiper-slide video,
-    #premium-video-holder video {
-      width: 100vw;
-      height: calc(100vh - 64px - 70px);
-      object-fit: contain;
-      background: #000;
-      border-radius: 0;
-      display: block;
-      max-width: 100vw;
-      max-height: calc(100vh - 64px - 70px);
+      background: var(--accent);
+      color: #666;
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      transition: background 0.2s;
+      margin: 0.5rem auto;
+      height: 2.5rem;
+      min-width: 7.5rem;
     }
 
-    /* Auth Popup styles */
-    #authPopup {
+    .info-text .subscribe-btn:hover {
+      background: #ffe066;
+    }
+
+    .privacy-text {
+      margin: 0 auto;
+      max-width: 26.25rem;
+      padding: 0.75rem 0.625rem 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.2;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .privacy-text .dropdown-btn {
+      margin: 0 auto 0.75rem;
+      background: var(--bar-bg);
+      color: var(--white);
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1.125rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .privacy-text .dropdown-body {
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    #premiumPopupOverlay, #howToSubscribePopupOverlay, #authPopup {
       display: none;
       position: fixed;
       top: 0;
@@ -498,190 +398,299 @@
       right: 0;
       bottom: 0;
       background: rgba(0,0,0,0.45);
-      z-index: 4000;
-      justify-content: center;
-      align-items: center;
+      z-index: 2000;
     }
-    #authPopup > div {
-      background: #23243a;
-      border-radius: 18px;
-      padding: 32px 24px;
-      max-width: 340px;
-      margin: auto;
+
+    #premiumPopup, #howToSubscribePopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--dark-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem 1.5rem 1.5rem;
+      min-width: 16.25rem;
+      max-width: 90vw;
+      z-index: 2001;
+      text-align: center;
+      color: var(--white);
+      animation: popupFadeIn 0.25s;
+    }
+
+    #premiumPopup h3, #authPopup h3 {
+      margin: 0 0 1.125rem;
+      color: var(--accent);
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    #premiumPopup input[type="password"], #authPopup input {
+      width: 90%;
+      padding: 0.625rem;
+      border-radius: 0.5rem;
+      border: 1px solid #bdbdbd;
+      font-size: 1rem;
+      margin-bottom: 1.125rem;
+      outline: none;
       text-align: center;
     }
-    #authPopup h3 {
-      color: #ffd700;
-      margin-bottom: 16px;
-    }
-    #authPopup input {
-      width: 90%;
-      padding: 8px;
-      margin-bottom: 12px;
-      border-radius: 8px;
-      border: none;
-    }
-    #authPopup button {
-      background: #ffd700;
+
+    #premiumPopup button, #authPopup button {
+      background: var(--accent);
       color: #222;
       border: none;
-      border-radius: 8px;
-      padding: 10px 24px;
+      border-radius: 0.5rem;
+      padding: 0.625rem 1.5rem;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.2s;
+      min-width: 5rem;
     }
-    #authPopup button:hover {
+
+    #premiumPopup button:hover, #authPopup button:hover {
       background: #ffe066;
+    }
+
+    #wrongKeyPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--error-red);
+      color: var(--white);
+      border-radius: 0.875rem;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.14);
+      padding: 2rem 2.25rem;
+      z-index: 3000;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+      animation: popupFadeIn 0.2s;
+    }
+
+    #howToSubscribePopup .close-btn {
+      position: absolute;
+      top: 0.625rem;
+      right: 1.125rem;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    #authPopup {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 4000;
+    }
+
+    #authPopup > div {
+      background: var(--dark-bg);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      max-width: 21.25rem;
+      margin: auto;
+      text-align: center;
+    }
+
+    #authPopup .error {
+      color: var(--error-red);
+      margin-top: 0.5rem;
+    }
+
+    #loading {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--white);
+      z-index: 5000;
+      font-size: 1.2rem;
+    }
+
+    .swiper {
+      width: 100vw;
+      height: calc(100vh - 4rem - 4.5rem);
+      background: #000;
+      position: relative;
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    .swiper-slide video,
+    #premium-video-holder video {
+      width: 100vw;
+      height: calc(100vh - 4rem - 4.5rem);
+      object-fit: contain;
+      background: #000;
+      max-width: 100vw;
+      max-height: calc(100vh - 4rem - 4.5rem);
+    }
+
+    .swiper-pagination {
+      bottom: 10px;
+    }
+
+    .swiper-pagination-bullet {
+      background: var(--white);
+      opacity: 0.7;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--primary);
+      opacity: 1;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      color: var(--primary);
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+      font-size: 20px;
+    }
+
+    @media (max-width: 600px) {
+      #popupMenu {
+        width: 70vw;
+        max-width: 90vw;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+
+      .side-popup-header {
+        padding: 1.5rem 0 0.75rem;
+      }
+
+      .side-popup-links {
+        padding: 1.5rem 0.75rem;
+      }
+    }
+
+    @media (min-width: 601px) {
+      .top-bar {
+        max-width: 37.5rem;
+      }
+
+      #popupMenu {
+        width: 25vw;
+        max-width: 25rem;
+      }
     }
   </style>
 </head>
 <body>
   <!-- Top Bar -->
   <header class="top-bar">
-    <img src="assets/images/logo.png" class="logo" alt="S Logo" />
+    <img src="assets/images/logo.png" class="logo" alt="Supafutaa Logo" />
     <span class="app-title">supafutaa</span>
-    <button class="menu-btn" id="menu-button">&#8942;</button>
+    <button class="menu-btn" id="menu-button" aria-label="Open menu">⋮</button>
   </header>
 
   <!-- Side Popup overlay and menu -->
   <div id="popupOverlay"></div>
   <aside id="popupMenu" class="side-popup-menu">
     <div class="side-popup-header">
-      <img src="assets/images/logo.png" alt="Logo" class="side-popup-logo" />
+      <img src="assets/images/logo.png" alt="Supafutaa Logo" class="side-popup-logo" />
       <div class="side-popup-title">Baddiez</div>
-      <div style="color:#97adf7; font-size:0.8rem; text-align:center; margin-top:4px;">
-        Copyright@2025 - T&C Apply</div>
+      <div style="color: var(--medium-grey); font-size: 0.8rem; text-align: center; margin-top: 0.25rem;">
+        Copyright © 2025 - T&C Apply
+      </div>
     </div>
     <nav class="side-popup-links">
-      <button id="infoBtn">Info</button>
-      <a href="https://wa.me/254720047018" target="_blank" id="paymentLink">Payment</a>
-      <button id="privacyBtn">Privacy Policy</button>
+      <button id="infoBtn" aria-label="View information">Info</button>
+      <a href="https://wa.me/254720047018" target="_blank" id="paymentLink" aria-label="Make payment">Payment</a>
+      <button id="privacyBtn" aria-label="View privacy policy">Privacy Policy</button>
     </nav>
   </aside>
-
-  <!-- Join Premium Popup (no close button) -->
-  <div id="joinPremiumPopupOverlay"></div>
-  <div id="joinPremiumPopup">
-    <button id="joinPremiumNowBtn">Unlock Full Premium Experience</button>
-  </div>
-
-  <!-- Auth Popup -->
-  <div id="authPopup" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.45); z-index:4000; justify-content:center; align-items:center;">
-    <div style="background:#23243a; border-radius:18px; padding:32px 24px; max-width:340px; margin:auto; text-align:center;">
-      <h3 style="color:#ffd700;">Sign In</h3>
-      <input id="authEmail" type="email" placeholder="Email" style="width:90%;padding:8px;margin-bottom:12px;border-radius:8px;border:none;" /><br>
-      <input id="authPassword" type="password" placeholder="Password" style="width:90%;padding:8px;margin-bottom:12px;border-radius:8px;border:none;" /><br>
-      <button id="authSignInBtn" style="background:#ffd700;color:#222;border:none;border-radius:8px;padding:10px 24px;font-weight:bold;">Sign In / Sign Up</button>
-      <div id="authError" style="color:#e53935;margin-top:8px;"></div>
-    </div>
-  </div>
 
   <!-- Main Content -->
   <main>
     <!-- Home Page -->
     <div class="page active" id="home-page">
       <div class="home-img-holder">
-        <img src="assets/images/home image.jpg" alt="Home" />
+        <img src="assets/images/home image.jpg" alt="Home background" />
       </div>
     </div>
     <!-- Previews Page -->
     <div class="page" id="previews-page">
-      <div id="previews-videos" style="height:100vh;">
-        <!-- Swiper will be injected here -->
+      <div id="previews-videos">
         <div class="swiper" id="previews-swiper">
-          <div class="swiper-wrapper" id="previews-swiper-wrapper">
-            <!-- Slides will be injected by JS -->
-          </div>
+          <div class="swiper-wrapper" id="previews-swiper-wrapper"></div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
         </div>
       </div>
     </div>
     <!-- Premium Page -->
     <div class="page" id="premium-page">
-      <div id="premium-video-holder">
-        <!-- Premium video will be loaded here by JS -->
-      </div>
+      <div id="premium-video-holder"></div>
     </div>
     <!-- Info Page -->
     <div class="page" id="info-page">
       <div class="info-text">
-        <!-- Top logo -->
-        <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 12px;">
-          <img src="assets/images/logo.png" alt="Baddiez Logo" style="width: 128px; height: 128px; object-fit: contain;" />
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <img src="assets/images/logo.png" alt="Supafutaa Logo" class="logo" />
         </div>
-        <span style="color:#ffd700; display:block; font-weight: bold; font-size: 1.5rem; text-align:center;">Unlock Full Premium Experience</span><br>
-        <span class="blink" style="color: lightgreen; display:block; font-weight: bold; font-size: 2.5rem; text-align:center;">Pay via Mpesa</span><br> 
-        <span style="color:#ffffff; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">Till No:123456 | Amount: Kshs 99/=</span><br> 
-        <span style="color:#ffffff; display:block; font-weight: bold; font-size: 1.25rem; text-align:center;">Validity: 1 month</span><br>
-        <!-- How To Subscribe Button -->
-        <button id="howToSubscribeBtn"
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #ffd700;
-            color: gray;
-            border: none;
-            border-radius: 12px;
-            padding: 8px 24px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-            transition: background 0.2s;
-            margin: 8px auto;
-            height: 40px;
-            min-width: 120px;
-          ">Subscribe Here
-        </button>
-        <!-- How To Subscribe Popup -->
-        <div id="howToSubscribePopupOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.35); z-index:3000;"></div>
-        <div id="howToSubscribePopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#23243a; border-radius:18px; box-shadow:0 4px 24px rgba(0,0,0,0.25); padding:28px 18px 18px 18px; width:90vw; max-width:350px; z-index:3001; text-align:left;">
-          <button id="closeHowToSubscribePopup" style="position:absolute; top:10px; right:18px; background:none; border:none; color:#ffd700; font-size:1.5rem; cursor:pointer;">&times;</button>
-          <div style="color:#ffd700; font-weight:bold; font-size:1.2rem; text-align:center; margin-bottom:12px;">Steps on How To Subscribe</div>
-          <ul style="color:#fff; font-size:1rem; line-height:1.6; padding-left:22px; margin:0;">
-            <li>After payment, go to Menu and click the Payment.</li>
-            <li>You will be redirected to the App WhatsApp.</li>
-            <li>Paste the Mpesa transaction code & receive the Premium Key.</li>
-            <li>Then, go to the Premium Tab and click the Unlock Premium experience Button.</li>
-            <li>Enter the Key and access premium content.</li>
-          </ul>
-        </div>
-        <span style="color:#ffd700; display:block; font-weight: bold; font-size: 1.5rem; text-align:center;">Benefits of Premium Membership</span><br>
+        <span class="highlight">Unlock Full Premium Experience</span>
+        <span class="blink">Pay via Mpesa</span>
+        <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
+          Till No: 123456 | Amount: Kshs 99/=
+        </span>
+        <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
+          Validity: 1 month
+        </span>
+        <button id="howToSubscribeBtn" class="subscribe-btn" aria-label="Learn how to subscribe">Subscribe Here</button>
+        <span class="highlight">Benefits of Premium Membership</span>
         <b>Exclusive Videos</b><br>
         Access 100% exclusive videos not available for free users<br><br>
         <b>Early Access</b><br>
         Watch new uploads before anyone else hours or days early.<br><br>
         <b>Full Length Content</b><br>
-        Enjoy full, uncut scenes with no adds, no limits.<br><br>
+        Enjoy full, uncut scenes with no ads, no limits.<br><br>
         <b>High Quality Streams</b><br>
         Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
         <b>Ad-Free Experience</b><br>
         Watch without interruption, 100% ad-free viewing<br><br>
         <b>Priority Support</b><br>
-        Need help. Premium subscribers get priority replies<br><br>
-        <span style="color:#97adf7; display:block; font-size: 0.75rem; text-align:center;">Copyright@Baddiez. 2025. All rights reserved</span><br>
-        <!-- Bottom logo -->
-        <div style="display: flex; justify-content: center; align-items: center; margin-top: 0px;">
-          <img src="assets/images/logo2.png" alt="Baddiez Logo" style="width: 64px; height: 64px; object-fit: contain;" />
-
-          
+        Need help? Premium subscribers get priority replies<br><br>
+        <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
+          Copyright © Baddiez. 2025. All rights reserved
+        </span>
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <img src="assets/images/logo2.png" alt="Supafutaa Secondary Logo" class="small-logo" />
         </div>
       </div>
     </div>
     <!-- Privacy Policy Page -->
     <div class="page" id="privacy-page">
       <div class="privacy-text">
-        <!-- Heading -->
-        <div style="color:#ffd700; font-weight: bold; font-size:1.3rem;">PRIVACY POLICY</div>
-        <div style="color:#97adf7;">Effective date: 1st January, 2025</div>
+        <div style="color: var(--accent); font-weight: bold; font-size: 1.3rem;">PRIVACY POLICY</div>
+        <div style="color: var(--medium-grey);">Effective date: 1st January, 2025</div>
         <br>
-        <!-- Dropdown Button -->
-        <button id="privacyDropdownBtn" style="margin: 0 auto 12px auto; display: block; background: #444654; color: #ffffff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 1rem; cursor: pointer;">
-          Show Details ▼
-        </button>
-        <!-- Dropdown Body -->
-        <div id="privacyDropdownBody" style="display: none; margin-top: 8px; text-align: center;">
+        <button id="privacyDropdownBtn" class="dropdown-btn" aria-label="Toggle privacy policy details">Show Details ▼</button>
+        <div id="privacyDropdownBody" class="dropdown-body" style="display: none;">
           <b>1. Introduction</b><br>
           We value your privacy and are committed to protecting your personal information.<br><br>
           <b>2. Information We Collect</b><br>
@@ -698,13 +707,10 @@
           We may update this policy from time to time. Changes will be posted on this page.<br><br>
           <b>8. Contact Us</b><br>
           If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
-          <span style="color:#ffd700;">Thank you for trusting Baddiez!</span>
-
-          <span style="color:transparent;">Copyright@Baddiez!</span>
-          <span style="color:#97adf7; display:block; font-size: 0.75rem; text-align:center;">Copyright@Baddiez. 2025 All rights reserved</span>
-
-
-          <span style="color:transparent;">Copyright@Baddiez!</span>
+          <span style="color: var(--accent);">Thank you for trusting Baddiez!</span>
+          <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
+            Copyright © Baddiez. 2025 All rights reserved
+          </span>
         </div>
       </div>
     </div>
@@ -714,336 +720,463 @@
   <div id="premiumPopupOverlay"></div>
   <div id="premiumPopup">
     <h3>Enter Premium Key To Access</h3>
-    <input type="password" id="premiumKeyInput" placeholder="Enter Premium Key" maxlength="16" />
-    <br />
-    <button id="premiumKeyBtn">Unlock</button>
+    <input type="password" id="premiumKeyInput" placeholder="Enter Premium Key" maxlength="16" aria-label="Premium key input" />
+    <button id="premiumKeyBtn" aria-label="Unlock premium content">Unlock</button>
   </div>
+
   <!-- Wrong Key Popup -->
-  <div id="wrongKeyPopup">Wrong Key</div>
+  <div id="wrongKeyPopup" aria-live="polite">Wrong Key</div>
+
+  <!-- Auth Popup -->
+  <div id="authPopup">
+    <div>
+      <h3>Sign In</h3>
+      <input id="authEmail" type="email" placeholder="Email" aria-label="Email input" />
+      <input id="authPassword" type="password" placeholder="Password" aria-label="Password input" />
+      <button id="authSignInBtn" aria-label="Sign in or sign up">Sign In / Sign Up</button>
+      <div id="authError" class="error"></div>
+    </div>
+  </div>
+
+  <!-- How to Subscribe Popup -->
+  <div id="howToSubscribePopupOverlay"></div>
+  <div id="howToSubscribePopup">
+    <button id="closeHowToSubscribePopup" class="close-btn" aria-label="Close subscription instructions">×</button>
+    <div style="color: var(--accent); font-weight: bold; font-size: 1.2rem; text-align: center; margin-bottom: 0.75rem;">
+      Steps on How To Subscribe
+    </div>
+    <ul style="color: var(--white); font-size: 1rem; line-height: 1.6; padding-left: 1.375rem; margin: 0;">
+      <li>After payment, go to Menu and click the Payment.</li>
+      <li>You will be redirected to the App WhatsApp.</li>
+      <li>Paste the Mpesa transaction code & receive the Premium Key.</li>
+      <li>Then, go to the Premium Tab and click the Unlock Premium experience Button.</li>
+      <li>Enter the Key and access premium content.</li>
+    </ul>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div id="loading" aria-live="polite">Loading...</div>
 
   <!-- Bottom Bar -->
   <nav class="bottom-bar" id="bottomBar">
-    <button class="bar-btn" id="previewsNav">
+    <button class="bar-btn" id="previewsNav" aria-label="View previews">
       <span class="icon">
-        <img src="assets/images/previews icon.png" alt="Previews" />
+        <img src="assets/images/previews icon.png" alt="Previews icon" />
       </span>
       Previews
     </button>
-    <button class="bar-btn active" id="homeNav">
+    <button class="bar-btn active" id="homeNav" aria-label="View home">
       <span class="icon">
-        <img src="assets/images/home icon.png" alt="Home" />
+        <img src="assets/images/home icon.png" alt="Home icon" />
       </span>
       Home
     </button>
-    <button class="bar-btn" id="premiumNav">
+    <button class="bar-btn" id="premiumNav" aria-label="View premium content">
       <span class="icon">
-        <img src="assets/images/premium icon.png" alt="Premium" />
+        <img src="assets/images/premium icon.png" alt="Premium icon" />
       </span>
       Premium
     </button>
   </nav>
 
-  <!-- Swiper.js CDN -->
+  <!-- External Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // Supabase config
-    const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
-    const supabase = supabase.createClient('https://dvicmtexrtfbxqomndxh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU');
-
-    // Navigation logic
-    const pages = {
-      home: document.getElementById('home-page'),
-      previews: document.getElementById('previews-page'),
-      premium: document.getElementById('premium-page'),
-      info: document.getElementById('info-page'),
-      privacy: document.getElementById('privacy-page')
-    };
-    const navBtns = {
-      home: document.getElementById('homeNav'),
-      previews: document.getElementById('previewsNav'),
-      premium: document.getElementById('premiumNav')
-    };
-    let lastActivePage = 'home';
-
-    // Helper to close all popups before opening a new one
-    function closeAllPopups() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-      joinPremiumPopup.style.display = 'none';
-      joinPremiumPopupOverlay.style.display = 'none';
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
-      wrongKeyPopup.style.display = 'none';
-      // Remove blur if present
-      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
-      document.removeEventListener('keydown', joinPremiumExitHandler, true);
-      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
-      document.removeEventListener('keydown', premiumKeyExitHandler, true);
-      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
-    }
-
-    function showPage(page) {
-      Object.values(pages).forEach(p => p.classList.remove('active'));
-      Object.values(navBtns).forEach(b => b.classList.remove('active'));
-      if (pages[page]) pages[page].classList.add('active');
-      if (navBtns[page]) navBtns[page].classList.add('active');
-      lastActivePage = page;
-    }
-    navBtns.home.onclick = () => { showPage('home'); };
-    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
-    navBtns.premium.onclick = () => {
-      showPage('premium');
-      loadPremiumVideo();
-      // Do NOT call showJoinPremiumPopup() here
-    };
-
-    // --- Popup Elements ---
-const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
-const joinPremiumPopup = document.getElementById('joinPremiumPopup');
-const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
-const authPopup = document.getElementById('authPopup');
-const authSignInBtn = document.getElementById('authSignInBtn');
-const authEmail = document.getElementById('authEmail');
-const authPassword = document.getElementById('authPassword');
-const authError = document.getElementById('authError');
-const premiumPopup = document.getElementById('premiumPopup');
-const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
-const premiumKeyInput = document.getElementById('premiumKeyInput');
-const premiumKeyBtn = document.getElementById('premiumKeyBtn');
-const wrongKeyPopup = document.getElementById('wrongKeyPopup');
-
-    // --- Show Join Premium Popup ---
-    joinPremiumNowBtn.onclick = function(e) {
-  e.stopPropagation();
-  joinPremiumPopup.style.display = 'block';
-  joinPremiumPopupOverlay.style.display = 'block';
-};
-
-    // --- Hide Join Premium Popup and Show Auth Popup ---
-    joinPremiumPopupOverlay.onclick = function(e) {
-  if (e.target === joinPremiumPopupOverlay) {
-    joinPremiumPopup.style.display = 'none';
-    joinPremiumPopupOverlay.style.display = 'none';
-  }
-};
-joinPremiumNowBtn.onclick = function(e) {
-  e.stopPropagation();
-  joinPremiumPopup.style.display = 'none';
-  joinPremiumPopupOverlay.style.display = 'none';
-  authPopup.style.display = 'flex';
-};
-
-    // --- Auth Popup Logic ---
-    authSignInBtn.onclick = async function() {
-  authError.textContent = '';
-  const email = authEmail.value.trim();
-  const password = authPassword.value.trim();
-  if (!email || !password) {
-    authError.textContent = 'Please enter email and password.';
-    return;
-  }
-  // Sign in or sign up
-  let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error && error.message.includes('Invalid login credentials')) {
-    ({ user, error } = await supabase.auth.signUp({ email, password }));
-  }
-  if (error) {
-    authError.textContent = error.message;
-    return;
-  }
-  // Success: ask for premium key
-  authPopup.style.display = 'none';
-  premiumPopup.style.display = 'block';
-  premiumPopupOverlay.style.display = 'block';
-  premiumKeyInput.value = '';
-};
-
-    // --- Hide Premium Popup on Overlay Click ---
-    premiumPopupOverlay.onclick = function(e) {
-  if (e.target === premiumPopupOverlay) {
-    premiumPopup.style.display = 'none';
-    premiumPopupOverlay.style.display = 'none';
-  }
-};
-
-    // --- Premium Key Logic ---
-    premiumKeyBtn.onclick = async function(e) {
-  e.stopPropagation();
-  const key = premiumKeyInput.value.trim();
-  const { data, error } = await supabase
-    .from('premium_keys')
-    .select('*')
-    .eq('key', key)
-    .single();
-
-  if (data && !data.used) {
-    // Link code to user and mark as used
-    const user = await supabase.auth.getUser();
-    await supabase
-      .from('premium_keys')
-      .update({ used: true, user_id: user.data.user.id })
-      .eq('key', key);
-    // Redirect to Telegram
-    window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-  } else if (data && data.used) {
-    const user = await supabase.auth.getUser();
-    if (data.user_id === user.data.user.id) {
-      window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-    } else {
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
-      wrongKeyPopup.textContent = 'Code already used.';
-      wrongKeyPopup.style.display = 'block';
-      setTimeout(() => {
-        wrongKeyPopup.style.display = 'none';
-      }, 1500);
-    }
-  } else {
-    premiumPopup.style.display = 'none';
-    premiumPopupOverlay.style.display = 'none';
-    wrongKeyPopup.textContent = 'Invalid code.';
-    wrongKeyPopup.style.display = 'block';
-    setTimeout(() => {
-      wrongKeyPopup.style.display = 'none';
-    }, 1500);
-  }
-};
-    premiumPopupOverlay.onclick = function(e) {
-      if (e.target === premiumPopupOverlay) {
-        hidePremiumPasswordPopup();
-        showPage('previews');
-        loadPreviewsVideos();
+    document.addEventListener('DOMContentLoaded', () => {
+      // Supabase initialization
+      const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
+      if (!window.supabase) {
+        console.error('Supabase library not loaded.');
+        document.getElementById('wrongKeyPopup').textContent = 'Failed to initialize Supabase library.';
+        document.getElementById('wrongKeyPopup').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('wrongKeyPopup').style.display = 'none';
+        }, 4000);
+        return;
       }
-    };
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Auth popup logic
-    const authPopup = document.getElementById('authPopup');
-    const authSignInBtn = document.getElementById('authSignInBtn');
-    const authEmail = document.getElementById('authEmail');
-    const authPassword = document.getElementById('authPassword');
-    const authError = document.getElementById('authError');
+      // Supabase RLS Policy (apply in Supabase dashboard):
+      /*
+      -- Enable RLS on tables
+      ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE premium_videos ENABLE ROW LEVEL SECURITY;
+      ALTER TABLE premium_keys ENABLE ROW LEVEL SECURITY;
 
-    authSignInBtn.onclick = async function() {
-  authError.textContent = '';
-  const email = authEmail.value.trim();
-  const password = authPassword.value.trim();
-  if (!email || !password) {
-    authError.textContent = 'Please enter email and password.';
-    return;
-  }
-  // Sign in or sign up
-  let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error && error.message.includes('Invalid login credentials')) {
-    ({ user, error } = await supabase.auth.signUp({ email, password }));
-  }
-  if (error) {
-    authError.textContent = error.message;
-    return;
-  }
-  // Success: ask for premium key
-  authPopup.style.display = 'none';
-  premiumPopup.style.display = 'block';
-  premiumPopupOverlay.style.display = 'block';
-  premiumKeyInput.value = '';
-};
+      -- Policies
+      CREATE POLICY "Allow public read access to videos" ON videos
+      FOR SELECT TO public
+      USING (true);
+      CREATE POLICY "Allow authenticated read access to premium_videos" ON premium_videos
+      FOR SELECT TO authenticated
+      USING (auth.uid() IS NOT NULL);
+      CREATE POLICY "Restrict access to premium_keys" ON premium_keys
+      FOR ALL TO authenticated
+      USING (auth.uid() = user_id OR user_id IS NULL);
+      */
 
-    function showPremiumKeyInput() {
-      // Show your premium key popup (reuse your existing one)
-      showPremiumPasswordPopup();
-    }
+      // DOM references
+      const popupMenu = document.getElementById('popupMenu');
+      const popupOverlay = document.getElementById('popupOverlay');
+      const menuButton = document.getElementById('menu-button');
+      const premiumPopup = document.getElementById('premiumPopup');
+      const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
+      const wrongKeyPopup = document.getElementById('wrongKeyPopup');
+      const premiumKeyInput = document.getElementById('premiumKeyInput');
+      const premiumKeyBtn = document.getElementById('premiumKeyBtn');
+      const authPopup = document.getElementById('authPopup');
+      const authSignInBtn = document.getElementById('authSignInBtn');
+      const authEmail = document.getElementById('authEmail');
+      const authPassword = document.getElementById('authPassword');
+      const authError = document.getElementById('authError');
+      const howToSubscribeBtn = document.getElementById('howToSubscribeBtn');
+      const howToSubscribePopup = document.getElementById('howToSubscribePopup');
+      const howToSubscribePopupOverlay = document.getElementById('howToSubscribePopupOverlay');
+      const closeHowToSubscribePopup = document.getElementById('closeHowToSubscribePopup');
+      const loading = document.getElementById('loading');
+      const infoBtn = document.getElementById('infoBtn');
+      const privacyBtn = document.getElementById('privacyBtn');
+      const previewsSwiperWrapper = document.getElementById('previews-swiper-wrapper');
+      const premiumVideoHolder = document.getElementById('premium-video-holder');
+      const pages = {
+        home: document.getElementById('home-page'),
+        previews: document.getElementById('previews-page'),
+        premium: document.getElementById('premium-page'),
+        info: document.getElementById('info-page'),
+        privacy: document.getElementById('privacy-page')
+      };
+      const navBtns = {
+        home: document.getElementById('homeNav'),
+        previews: document.getElementById('previewsNav'),
+        premium: document.getElementById('premiumNav')
+      };
 
-    // Premium key logic (replace your premiumKeyBtn.onclick)
-    premiumKeyBtn.onclick = async function(e) {
-      e.stopPropagation();
-      const key = premiumKeyInput.value.trim();
-      const { data, error } = await supabase
-        .from('premium_keys')
-        .select('*')
-        .eq('key', key)
-        .single();
+      let lastActivePage = 'home';
+      let swiperInstance = null;
 
-      if (data && !data.used) {
-        // Link code to user and mark as used
-        const user = await supabase.auth.getUser();
-        await supabase
-          .from('premium_keys')
-          .update({ used: true, user_id: user.data.user.id })
-          .eq('key', key);
-        // Redirect to Telegram
-        window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-      } else if (data && data.used) {
-        const user = await supabase.auth.getUser();
-        if (data.user_id === user.data.user.id) {
-          window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-        } else {
-          closeAllPopups();
-          wrongKeyPopup.textContent = 'Code already used.';
+      // Initialize Swiper for previews
+      function initSwiper() {
+        if (swiperInstance) {
+          swiperInstance.destroy(true, true);
+        }
+        swiperInstance = new Swiper('#previews-swiper', {
+          slidesPerView: 1,
+          spaceBetween: 0,
+          loop: true,
+          pagination: { el: '.swiper-pagination', clickable: true },
+          navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+        });
+      }
+
+      // Check if table exists (requires 'service_role' key for pg_tables access, use anon for testing)
+      async function checkTableExists(tableName) {
+        try {
+          const { data, error } = await supabase
+            .from('pg_tables')
+            .select('tablename')
+            .eq('schemaname', 'public')
+            .eq('tablename', tableName)
+            .single();
+
+          if (error) {
+            console.warn(`Error checking table ${tableName} existence:`, error);
+            return false;
+          }
+          return !!data;
+        } catch (err) {
+          console.error(`Unexpected error checking table ${tableName}:`, err);
+          return false;
+        }
+      }
+
+      // Load preview videos from Supabase
+      async function loadPreviewsVideos() {
+        loading.style.display = 'block';
+        try {
+          // Check if videos table exists
+          const tableExists = await checkTableExists('videos');
+          if (!tableExists) {
+            console.error('Videos table does not exist in the database.');
+            wrongKeyPopup.textContent = 'Error: Videos table not found in database.';
+            wrongKeyPopup.style.display = 'block';
+            setTimeout(() => {
+              wrongKeyPopup.style.display = 'none';
+            }, 5000);
+            previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Videos table not found.</p>';
+            return;
+          }
+
+          // Skip connectivity test and go directly to main query
+          const { data, error } = await supabase
+            .from('videos')
+            .select('url')
+            .eq('is_preview', true);
+
+          if (error) {
+            console.error('Supabase error fetching preview videos:', error, { code: error.code, details: error.details, hint: error.hint });
+            wrongKeyPopup.textContent = `Failed to load previews: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`;
+            wrongKeyPopup.style.display = 'block';
+            setTimeout(() => {
+              wrongKeyPopup.style.display = 'none';
+            }, 5000);
+            previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
+            return;
+          }
+
+          previewsSwiperWrapper.innerHTML = '';
+          if (data && data.length > 0) {
+            data.forEach(video => {
+              if (video.url) {
+                const slide = document.createElement('div');
+                slide.className = 'swiper-slide';
+                slide.innerHTML = `<video src="${video.url}" controls aria-label="Preview video"></video>`;
+                previewsSwiperWrapper.appendChild(slide);
+              }
+            });
+            initSwiper();
+          } else {
+            console.warn('No preview videos found in videos table.');
+            previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
+          }
+        } catch (err) {
+          console.error('Unexpected error in loadPreviewsVideos:', err);
+          wrongKeyPopup.textContent = `Unexpected error: ${err.message || 'Unknown error'}`;
           wrongKeyPopup.style.display = 'block';
           setTimeout(() => {
             wrongKeyPopup.style.display = 'none';
-            showPage('previews');
-            loadPreviewsVideos();
-          }, 1500);
+          }, 5000);
+          previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
+        } finally {
+          loading.style.display = 'none';
         }
-      } else {
+      }
+
+      // Load premium video from Supabase
+      async function loadPremiumVideo() {
+        loading.style.display = 'block';
+        try {
+          const userResponse = await supabase.auth.getUser();
+          if (userResponse.error || !userResponse.data.user) {
+            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Please sign in to access premium content.</p>';
+            return;
+          }
+
+          // Check if premium_videos table exists
+          const tableExists = await checkTableExists('premium_videos');
+          if (!tableExists) {
+            console.error('Premium_videos table does not exist in the database.');
+            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Premium videos table not found.</p>';
+            return;
+          }
+
+          const { data, error } = await supabase
+            .from('premium_videos')
+            .select('url')
+            .limit(1)
+            .single();
+
+          if (error) {
+            console.error('Supabase error fetching premium video:', error, { code: error.code, details: error.details, hint: error.hint });
+            premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium content: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})</p>`;
+            return;
+          }
+
+          premiumVideoHolder.innerHTML = '';
+          if (data && data.url) {
+            const videoElement = document.createElement('video');
+            videoElement.src = data.url;
+            videoElement.controls = true;
+            videoElement.setAttribute('aria-label', 'Premium video');
+            premiumVideoHolder.appendChild(videoElement);
+          } else {
+            console.warn('No premium videos found in premium_videos table.');
+            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium video available.</p>';
+          }
+        } catch (err) {
+          console.error('Unexpected error in loadPremiumVideo:', err);
+          premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Unexpected error: ${err.message || 'Unknown error'}</p>`;
+        } finally {
+          loading.style.display = 'none';
+        }
+      }
+
+      // Helper to close all popups
+      function closeAllPopups() {
+        popupMenu.style.display = 'none';
+        popupOverlay.style.display = 'none';
+        premiumPopup.style.display = 'none';
+        premiumPopupOverlay.style.display = 'none';
+        authPopup.style.display = 'none';
+        howToSubscribePopup.style.display = 'none';
+        howToSubscribePopupOverlay.style.display = 'none';
+        wrongKeyPopup.style.display = 'none';
+        loading.style.display = 'none';
+        document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+      }
+
+      // Show specific page
+      function showPage(page) {
         closeAllPopups();
-        wrongKeyPopup.textContent = 'Invalid code.';
-        wrongKeyPopup.style.display = 'block';
-        setTimeout(() => {
-          wrongKeyPopup.style.display = 'none';
-          showPage('previews');
-          loadPreviewsVideos();
-        }, 1500);
+        Object.values(pages).forEach(p => p.classList.remove('active'));
+        Object.values(navBtns).forEach(b => b.classList.remove('active'));
+        if (pages[page]) pages[page].classList.add('active');
+        if (navBtns[page]) navBtns[page].classList.add('active');
+        lastActivePage = page;
       }
-    };
-    </script>
-    <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const dropdownBtn = document.getElementById('privacyDropdownBtn');
-    const dropdownBody = document.getElementById('privacyDropdownBody');
-    let isOpen = false;
 
-    dropdownBtn.addEventListener('click', function() {
-      // Close all other dropdowns (if you add more in future)
-      document.querySelectorAll('[id$="DropdownBody"]').forEach(function(el) {
-        if (el !== dropdownBody) el.style.display = 'none';
-      });
-      document.querySelectorAll('[id$="DropdownBtn"]').forEach(function(btn) {
-        if (btn !== dropdownBtn) btn.innerHTML = btn.innerHTML.replace('▲', '▼');
-      });
+      // Navigation handler
+      function handleNavigation(page) {
+        showPage(page);
+        if (page === 'previews') loadPreviewsVideos();
+        if (page === 'premium') {
+          loadPremiumVideo();
+          authPopup.style.display = 'flex';
+        }
+      }
 
-      isOpen = !isOpen;
-      dropdownBody.style.display = isOpen ? 'block' : 'none';
-      dropdownBtn.innerHTML = isOpen ? 'Hide Details ▲' : 'Show Details ▼';
+      // Menu toggle
+      menuButton.onclick = () => {
+        const isOpen = popupMenu.style.display === 'flex';
+        closeAllPopups();
+        if (!isOpen) {
+          popupMenu.style.display = 'flex';
+          popupOverlay.style.display = 'block';
+          pages[lastActivePage].classList.add('blur');
+        }
+      };
+
+      popupOverlay.onclick = () => closeAllPopups();
+
+      // Navigation buttons
+      navBtns.home.onclick = () => handleNavigation('home');
+      navBtns.previews.onclick = () => handleNavigation('previews');
+      navBtns.premium.onclick = () => handleNavigation('premium');
+      infoBtn.onclick = () => handleNavigation('info');
+      privacyBtn.onclick = () => handleNavigation('privacy');
+
+      // Auth popup logic
+      async function handleAuth() {
+        authError.textContent = '';
+        loading.style.display = 'block';
+        const email = authEmail.value.trim();
+        const password = authPassword.value.trim();
+        if (!email || !password) {
+          authError.textContent = 'Please enter email and password.';
+          loading.style.display = 'none';
+          return;
+        }
+        let { user, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error && error.message.includes('Invalid login credentials')) {
+          ({ user, error } = await supabase.auth.signUp({ email, password }));
+        }
+        loading.style.display = 'none';
+        if (error) {
+          authError.textContent = error.message;
+          return;
+        }
+        authPopup.style.display = 'none';
+        premiumPopup.style.display = 'block';
+        premiumPopupOverlay.style.display = 'block';
+        premiumKeyInput.value = '';
+      }
+
+      authSignInBtn.onclick = async () => {
+        await handleAuth();
+      };
+
+      // Premium key validation
+      async function validatePremiumKey() {
+        loading.style.display = 'block';
+        try {
+          const key = premiumKeyInput.value.trim();
+          const { data, error } = await supabase
+            .from('premium_keys')
+            .select('*')
+            .eq('key', key)
+            .single();
+
+          if (error) {
+            console.error('Supabase error validating key:', error, { code: error.code, details: error.details, hint: error.hint });
+            throw new Error(`Error validating key: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`);
+          }
+
+          const userResponse = await supabase.auth.getUser();
+          if (userResponse.error || !userResponse.data.user) {
+            throw new Error('No user logged in.');
+          }
+
+          const user = userResponse.data.user;
+          if (data && !data.used) {
+            await supabase
+              .from('premium_keys')
+              .update({ used: true, user_id: user.id })
+              .eq('key', key);
+            window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
+          } else if (data && data.used) {
+            if (data.user_id === user.id) {
+              window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
+            } else {
+              throw new Error('Code already used.');
+            }
+          } else {
+            throw new Error('Invalid code.');
+          }
+        } catch (err) {
+          console.error('Error in validatePremiumKey:', err);
+          wrongKeyPopup.textContent = err.message || 'Unexpected error validating key.';
+          wrongKeyPopup.style.display = 'block';
+          setTimeout(() => {
+            wrongKeyPopup.style.display = 'none';
+            handleNavigation('previews');
+          }, 5000);
+        } finally {
+          loading.style.display = 'none';
+        }
+      }
+
+      premiumKeyBtn.onclick = async (e) => {
+        e.stopPropagation();
+        await validatePremiumKey();
+      };
+
+      premiumPopupOverlay.onclick = (e) => {
+        if (e.target === premiumPopupOverlay) {
+          closeAllPopups();
+          handleNavigation('previews');
+        }
+      };
+
+      // How to Subscribe popup
+      howToSubscribeBtn.onclick = () => {
+        closeAllPopups();
+        howToSubscribePopup.style.display = 'block';
+        howToSubscribePopupOverlay.style.display = 'block';
+        pages[lastActivePage].classList.add('blur');
+      };
+
+      closeHowToSubscribePopup.onclick = () => {
+        closeAllPopups();
+      };
+
+      howToSubscribePopupOverlay.onclick = (e) => {
+        if (e.target === howToSubscribePopupOverlay) {
+          closeAllPopups();
+        }
+      };
+
+      // Privacy dropdown
+      const dropdownBtn = document.getElementById('privacyDropdownBtn');
+      const dropdownBody = document.getElementById('privacyDropdownBody');
+      let isDropdownOpen = false;
+
+      dropdownBtn.addEventListener('click', () => {
+        isDropdownOpen = !isDropdownOpen;
+        dropdownBody.style.display = isDropdownOpen ? 'block' : 'none';
+        dropdownBtn.innerHTML = isDropdownOpen ? 'Hide Details ▲' : 'Show Details ▼';
+      });
     });
-  });
   </script>
-  <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const subscribeBtn = document.getElementById('howToSubscribeBtn');
-  const subscribePopup = document.getElementById('howToSubscribePopup');
-  const subscribeOverlay = document.getElementById('howToSubscribePopupOverlay');
-  const closeSubscribePopup = document.getElementById('closeHowToSubscribePopup');
-
-  if (subscribeBtn && subscribePopup && subscribeOverlay && closeSubscribePopup) {
-    subscribeBtn.onclick = function() {
-      subscribePopup.style.display = 'block';
-      subscribeOverlay.style.display = 'block';
-    };
-    closeSubscribePopup.onclick = function() {
-      subscribePopup.style.display = 'none';
-      subscribeOverlay.style.display = 'none';
-    };
-    subscribeOverlay.onclick = function(e) {
-      if (e.target === subscribeOverlay) {
-        subscribePopup.style.display = 'none';
-        subscribeOverlay.style.display = 'none';
-      }
-    };
-  }
-});
-</script>
 </body>
 </html>
