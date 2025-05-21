@@ -796,129 +796,50 @@
     navBtns.premium.onclick = () => {
       showPage('premium');
       loadPremiumVideo();
-      showJoinPremiumPopup();
+      // Do NOT call showJoinPremiumPopup() here
     };
 
-    // Side Menu popup logic
-    const menuBtn = document.getElementById('menu-button');
-    const popupMenu = document.getElementById('popupMenu');
-    const popupOverlay = document.getElementById('popupOverlay');
-
-    function showMenu() {
-      popupMenu.style.display = 'flex';
-      popupOverlay.style.display = 'block';
-      // Blur the active page when menu is open
-      document.querySelectorAll('.page.active').forEach(p => p.classList.add('blur'));
-      setTimeout(() => {
-        document.addEventListener('mousedown', menuGlobalClickHandler, true);
-      }, 0);
-    }
-    function hideMenu() {
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-      // Remove blur when menu closes
-      document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
-      document.removeEventListener('mousedown', menuGlobalClickHandler, true);
-    }
-    function menuGlobalClickHandler(e) {
-      if (!popupMenu.contains(e.target) || e.target === menuBtn) {
-        hideMenu();
-      }
-    }
-    menuBtn.onclick = showMenu;
-    popupOverlay.onclick = hideMenu;
-
-    // Menu links logic
-    document.getElementById('paymentLink').onclick = function(e) {
-      showMenu();
-      window.history.pushState({menu: true}, 'Menu');
-    };
-    document.getElementById('infoBtn').onclick = function() {
-      hideMenu();
-      showPage('info');
-      window.history.pushState({menu: false, page: 'info'}, 'Info');
-    };
-    document.getElementById('privacyBtn').onclick = function() {
-      hideMenu();
-      showPage('privacy');
-      window.history.pushState({menu: false, page: 'privacy'}, 'Privacy');
-    };
-
-    // Premium Join Popup logic (no close button, must click button or exit)
-    const joinPremiumPopup = document.getElementById('joinPremiumPopup');
-    const joinPremiumPopupOverlay = document.getElementById('joinPremiumPopupOverlay');
-    const joinPremiumNowBtn = document.getElementById('joinPremiumNowBtn');
-
-    function showJoinPremiumPopup() {
-      closeAllPopups();
+    // Show Join Premium Popup when user clicks the button
+    joinPremiumNowBtn.onclick = function(e) {
+      e.stopPropagation();
       joinPremiumPopup.style.display = 'block';
       joinPremiumPopupOverlay.style.display = 'block';
-      document.addEventListener('keydown', joinPremiumExitHandler, true);
-      document.addEventListener('click', joinPremiumOverlayClickHandler, true);
-    }
-    function hideJoinPremiumPopup() {
+    };
+
+    // Show Auth Popup when user clicks "Unlock Full Premium Experience"
+    joinPremiumNowBtn.onclick = function(e) {
+      e.stopPropagation();
       joinPremiumPopup.style.display = 'none';
       joinPremiumPopupOverlay.style.display = 'none';
-      document.removeEventListener('keydown', joinPremiumExitHandler, true);
-      document.removeEventListener('click', joinPremiumOverlayClickHandler, true);
-    }
-    function joinPremiumExitHandler(e) {
-      if (document.activeElement === joinPremiumNowBtn) return;
-      hideJoinPremiumPopup();
-      showPage('previews');
-      loadPreviewsVideos();
-    }
-    function joinPremiumOverlayClickHandler(e) {
-      if (
-        e.target === joinPremiumPopupOverlay ||
-        (e.target !== joinPremiumNowBtn && !joinPremiumPopup.contains(e.target))
-      ) {
-        hideJoinPremiumPopup();
-        showPage('previews');
-        loadPreviewsVideos();
-      }
-    }
-    joinPremiumNowBtn.onclick = function(e) {
-  e.stopPropagation();
-  document.getElementById('authPopup').style.display = 'flex';
-};
-    // Premium Key Popup logic (must enter key or exit)
-    const premiumPopup = document.getElementById('premiumPopup');
-    const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
-    const wrongKeyPopup = document.getElementById('wrongKeyPopup');
-    const premiumKeyBtn = document.getElementById('premiumKeyBtn');
-    const premiumKeyInput = document.getElementById('premiumKeyInput');
+      authPopup.style.display = 'flex';
+    };
 
-    function showPremiumPasswordPopup() {
-      closeAllPopups();
+    // Auth popup logic
+    authSignInBtn.onclick = async function() {
+      authError.textContent = '';
+      const email = authEmail.value.trim();
+      const password = authPassword.value.trim();
+      if (!email || !password) {
+        authError.textContent = 'Please enter email and password.';
+        return;
+      }
+      // Sign in or sign up
+      let { user, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error && error.message.includes('Invalid login credentials')) {
+        ({ user, error } = await supabase.auth.signUp({ email, password }));
+      }
+      if (error) {
+        authError.textContent = error.message;
+        return;
+      }
+      // Success: ask for premium key
+      authPopup.style.display = 'none';
       premiumPopup.style.display = 'block';
       premiumPopupOverlay.style.display = 'block';
       premiumKeyInput.value = '';
-      document.addEventListener('keydown', premiumKeyExitHandler, true);
-      document.addEventListener('click', premiumKeyOverlayClickHandler, true);
-    }
-    function hidePremiumPasswordPopup() {
-      premiumPopup.style.display = 'none';
-      premiumPopupOverlay.style.display = 'none';
-      document.removeEventListener('keydown', premiumKeyExitHandler, true);
-      document.removeEventListener('click', premiumKeyOverlayClickHandler, true);
-    }
-    function premiumKeyExitHandler(e) {
-      if (document.activeElement === premiumKeyBtn || document.activeElement === premiumKeyInput) return;
-      hidePremiumPasswordPopup();
-      showPage('previews');
-      loadPreviewsVideos();
-    }
-    function premiumKeyOverlayClickHandler(e) {
-      if (
-        e.target === premiumPopupOverlay ||
-        (e.target !== premiumKeyBtn && e.target !== premiumKeyInput && !premiumPopup.contains(e.target))
-      ) {
-        hidePremiumPasswordPopup();
-        showPage('previews');
-        loadPreviewsVideos();
-      }
-    }
+    };
+
+    // Premium Key logic (only one assignment!)
     premiumKeyBtn.onclick = async function(e) {
       e.stopPropagation();
       const key = premiumKeyInput.value.trim();
@@ -942,7 +863,8 @@
         if (data.user_id === user.data.user.id) {
           window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
         } else {
-          closeAllPopups();
+          premiumPopup.style.display = 'none';
+          premiumPopupOverlay.style.display = 'none';
           wrongKeyPopup.textContent = 'Code already used.';
           wrongKeyPopup.style.display = 'block';
           setTimeout(() => {
@@ -952,7 +874,104 @@
           }, 1500);
         }
       } else {
-        closeAllPopups();
+        premiumPopup.style.display = 'none';
+        premiumPopupOverlay.style.display = 'none';
+        wrongKeyPopup.textContent = 'Invalid code.';
+        wrongKeyPopup.style.display = 'block';
+        setTimeout(() => {
+          wrongKeyPopup.style.display = 'none';
+          showPage('previews');
+          loadPreviewsVideos();
+        }, 1500);
+      }
+    };
+
+    // Navigation logic (fix: don't call showJoinPremiumPopup on nav click, let user click button)
+    navBtns.home.onclick = () => { showPage('home'); };
+    navBtns.previews.onclick = () => { showPage('previews'); loadPreviewsVideos(); };
+    navBtns.premium.onclick = () => {
+      showPage('premium');
+      loadPremiumVideo();
+      // Do NOT call showJoinPremiumPopup() here
+    };
+
+    // Show Join Premium Popup when user clicks the button
+    joinPremiumNowBtn.onclick = function(e) {
+      e.stopPropagation();
+      joinPremiumPopup.style.display = 'block';
+      joinPremiumPopupOverlay.style.display = 'block';
+    };
+
+    // Show Auth Popup when user clicks "Unlock Full Premium Experience"
+    joinPremiumNowBtn.onclick = function(e) {
+      e.stopPropagation();
+      joinPremiumPopup.style.display = 'none';
+      joinPremiumPopupOverlay.style.display = 'none';
+      authPopup.style.display = 'flex';
+    };
+
+    // Auth popup logic
+    authSignInBtn.onclick = async function() {
+      authError.textContent = '';
+      const email = authEmail.value.trim();
+      const password = authPassword.value.trim();
+      if (!email || !password) {
+        authError.textContent = 'Please enter email and password.';
+        return;
+      }
+      // Sign in or sign up
+      let { user, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error && error.message.includes('Invalid login credentials')) {
+        ({ user, error } = await supabase.auth.signUp({ email, password }));
+      }
+      if (error) {
+        authError.textContent = error.message;
+        return;
+      }
+      // Success: ask for premium key
+      authPopup.style.display = 'none';
+      premiumPopup.style.display = 'block';
+      premiumPopupOverlay.style.display = 'block';
+      premiumKeyInput.value = '';
+    };
+
+    // Premium Key logic (only one assignment!)
+    premiumKeyBtn.onclick = async function(e) {
+      e.stopPropagation();
+      const key = premiumKeyInput.value.trim();
+      const { data, error } = await supabase
+        .from('premium_keys')
+        .select('*')
+        .eq('key', key)
+        .single();
+
+      if (data && !data.used) {
+        // Link code to user and mark as used
+        const user = await supabase.auth.getUser();
+        await supabase
+          .from('premium_keys')
+          .update({ used: true, user_id: user.data.user.id })
+          .eq('key', key);
+        // Redirect to Telegram
+        window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
+      } else if (data && data.used) {
+        const user = await supabase.auth.getUser();
+        if (data.user_id === user.data.user.id) {
+          window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
+        } else {
+          premiumPopup.style.display = 'none';
+          premiumPopupOverlay.style.display = 'none';
+          wrongKeyPopup.textContent = 'Code already used.';
+          wrongKeyPopup.style.display = 'block';
+          setTimeout(() => {
+            wrongKeyPopup.style.display = 'none';
+            showPage('previews');
+            loadPreviewsVideos();
+          }, 1500);
+        }
+      } else {
+        premiumPopup.style.display = 'none';
+        premiumPopupOverlay.style.display = 'none';
         wrongKeyPopup.textContent = 'Invalid code.';
         wrongKeyPopup.style.display = 'block';
         setTimeout(() => {
@@ -996,7 +1015,9 @@
   }
   // Success: ask for premium key
   authPopup.style.display = 'none';
-  showPremiumPasswordPopup();
+  premiumPopup.style.display = 'block';
+  premiumPopupOverlay.style.display = 'block';
+  premiumKeyInput.value = '';
 };
 
     function showPremiumKeyInput() {
