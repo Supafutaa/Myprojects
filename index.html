@@ -249,6 +249,7 @@
       display: none;
       width: 100%;
       min-height: calc(100vh - 8.5rem);
+      padding-top: 0.75rem;
     }
 
     .page.active {
@@ -518,16 +519,17 @@
     }
 
     #previews-videos {
-      position: fixed;
-      top: 4rem;
-      bottom: 4.5rem;
       width: var(--video-width);
-      left: 50%;
-      transform: translateX(-50%);
+      height: calc(100vh - 8.5rem);
+      margin: 0 auto;
       overflow-y: auto;
       scroll-snap-type: y mandatory;
       background: #000;
-      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: calc((100vh - 8.5rem - var(--video-height)) / 2) 0;
+      position: relative;
     }
 
     .video-container {
@@ -535,21 +537,12 @@
       height: var(--video-height);
       scroll-snap-align: center;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #000;
       overflow: hidden;
-      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    }
-
-    .video-container.active {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 11;
-      width: var(--video-width);
-      height: var(--video-height);
-      max-width: 100vw;
-      max-height: calc(100vh - 8.5rem);
+      transition: transform 0.5s ease-in-out;
     }
 
     .video-container video {
@@ -560,34 +553,23 @@
       top: 0;
       left: 0;
       z-index: 1;
-      background: #000;
+      background: #000; /* Black background before load */
     }
 
     .video-container video:not([src]) {
-      background: #000;
+      background: #000; /* Ensure black screen when no src */
     }
 
     #premium-video-holder {
-      position: fixed;
-      top: 4rem;
-      bottom: 4.5rem;
       width: var(--video-width);
-      left: 50%;
-      transform: translateX(-50%);
+      height: var(--video-height);
+      margin: 0 auto;
       background: #000;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      z-index: 10;
-    }
-
-    #premium-video-holder .video-container {
-      position: relative;
-      width: var(--video-width);
-      height: var(--video-height);
-      max-width: 100vw;
-      max-height: calc(100vh - 8.5rem);
     }
 
     #premium-video-holder video {
@@ -650,19 +632,8 @@
         --video-height: calc(100vw * 16 / 9);
       }
 
-      #previews-videos, #premium-video-holder {
-        width: 100vw;
-      }
-
-      .video-container.active {
-        width: 100vw;
-        height: calc(100vw * 16 / 9);
-        max-height: calc(100vh - 8.5rem);
-      }
-
-      #premium-video-holder .video-container {
-        width: 100vw;
-        height: calc(100vw * 16 / 9);
+      #previews-videos {
+        padding: calc((100vh - 8.5rem - var(--video-height)) / 2) 0;
       }
     }
 
@@ -861,6 +832,9 @@
       }
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+      // Black poster image (1x1 black pixel, base64)
+      const blackPoster = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
       // DOM references
       const popupMenu = document.getElementById('popupMenu');
       const popupOverlay = document.getElementById('popupOverlay');
@@ -895,7 +869,6 @@
       let lastActivePage = 'home';
       let currentPremiumVideo = null;
       let observer = null;
-      const blackPoster = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
       // Ensure menu is hidden on load
       popupMenu.style.display = 'none';
@@ -943,6 +916,7 @@
                 video.playsinline = true;
                 video.loop = true;
                 video.controls = true;
+                video.autoplay = true;
                 video.setAttribute('aria-label', 'Preview video');
                 video.dataset.lowSrc = publicUrlData.publicUrl;
                 video.dataset.highSrc = publicUrlData.publicUrl;
@@ -969,7 +943,7 @@
               }
             });
 
-            // Setup IntersectionObserver for auto-play and fixed positioning
+            // Setup IntersectionObserver for auto-play and source loading
             if (observer) {
               observer.disconnect();
             }
@@ -977,14 +951,12 @@
               (entries) => {
                 entries.forEach(entry => {
                   const video = entry.target.querySelector('video');
-                  const container = entry.target;
                   if (entry.isIntersecting) {
-                    container.classList.add('active');
                     if (!video.src) {
                       video.src = video.dataset.lowSrc;
                     }
                     gsap.fromTo(
-                      container,
+                      entry.target,
                       { transform: 'rotateY(90deg)', opacity: 0 },
                       { transform: 'rotateY(0deg)', opacity: 1, duration: 0.5, ease: 'power2.out' }
                     );
@@ -993,14 +965,13 @@
                       video.controls = true;
                     });
                   } else {
-                    container.classList.remove('active');
                     gsap.to(
-                      container,
+                      entry.target,
                       { transform: 'rotateY(-90deg)', opacity: 0, duration: 0.5, ease: 'power2.in' }
                     );
                     video.pause();
                     video.currentTime = 0;
-                    video.src = '';
+                    video.src = ''; // Clear source to show black poster
                     video.poster = blackPoster;
                   }
                 });
@@ -1035,11 +1006,15 @@
       async function loadPremiumVideo() {
         loading.style.display = 'block';
         try {
+          // Pause current video if exists
           if (currentPremiumVideo) {
             currentPremiumVideo.pause();
             currentPremiumVideo.currentTime = 0;
+            currentPremiumVideo.src = '';
+            currentPremiumVideo.poster = blackPoster;
           }
 
+          // List files in the 'premium' bucket
           const { data: files, error } = await supabase.storage
             .from('premium')
             .list('', { limit: 100 });
@@ -1059,9 +1034,11 @@
               return;
             }
 
+            // Use public URL for unauthenticated playback (temporary for demo)
             const firstVideo = videoFiles[0];
             let videoUrl = supabase.storage.from('premium').getPublicUrl(firstVideo.name).data.publicUrl;
 
+            // If public URL fails, try signed URL
             if (!videoUrl) {
               const { data: signedUrlData, error: signedError } = await supabase.storage
                 .from('premium')
@@ -1115,6 +1092,7 @@
                 video.controls = true;
               });
 
+              // Check authentication after loading video
               const userResponse = await supabase.auth.getUser();
               if (userResponse.error || !userResponse.data.user) {
                 authPopup.style.display = 'flex';
