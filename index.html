@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Baddiez</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400&display=swap" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <style>
     :root {
       --primary: #4fc3f7;
@@ -24,6 +23,8 @@
       --dark-bg: #23243a;
       --white: #ffffff;
       --light-green: lightgreen;
+      --video-width: 360px;
+      --video-height: 640px;
     }
 
     *, *::before, *::after {
@@ -36,6 +37,7 @@
       font-family: 'Montserrat', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       background: var(--bg);
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     body {
@@ -237,7 +239,7 @@
 
     main {
       margin: 0 auto;
-      max-width: 30rem;
+      max-width: var(--video-width);
       min-height: calc(100vh - 8.5rem);
       padding: 0 0 1.5rem;
       background: var(--bg);
@@ -515,59 +517,83 @@
       font-size: 1.2rem;
     }
 
-    .swiper {
-      width: 100vw;
-      height: calc(100vh - 4rem - 4.5rem);
+    #previews-videos {
+      width: var(--video-width);
+      height: var(--video-height);
+      margin: 0 auto;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
       background: #000;
       position: relative;
     }
 
-    .swiper-slide {
+    .video-container {
+      width: var(--video-width);
+      height: var(--video-height);
+      scroll-snap-align: start;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
+      overflow: hidden;
+      transition: transform 0.5s ease-in-out;
     }
 
-    .swiper-slide video,
-    #premium-video-holder video {
-      width: 100vw;
-      height: calc(100vh - 4rem - 4.5rem);
+    .video-container video {
+      width: 100%;
+      height: 100%;
       object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    #premium-video-holder {
+      width: var(--video-width);
+      height: var(--video-height);
+      margin: 0 auto;
       background: #000;
-      max-width: 100vw;
-      max-height: calc(100vh - 4rem - 4.5rem);
-    }
-
-    .swiper-pagination {
-      bottom: 10px;
-    }
-
-    .swiper-pagination-bullet {
-      background: var(--white);
-      opacity: 0.7;
-    }
-
-    .swiper-pagination-bullet-active {
-      background: var(--primary);
-      opacity: 1;
-    }
-
-    .swiper-button-prev,
-    .swiper-button-next {
-      color: var(--primary);
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
 
-    .swiper-button-prev:after,
-    .swiper-button-next:after {
-      font-size: 20px;
+    #premium-video-holder video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .resolution-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--white);
+      border: none;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .flip-enter {
+      transform: rotateY(90deg);
+      opacity: 0;
+    }
+
+    .flip-exit {
+      transform: rotateY(-90deg);
+      opacity: 0;
     }
 
     @media (max-width: 600px) {
@@ -584,6 +610,11 @@
 
       .side-popup-links {
         padding: 1.5rem 0.75rem;
+      }
+
+      :root {
+        --video-width: 100vw;
+        --video-height: calc(100vw * 16 / 9);
       }
     }
 
@@ -634,14 +665,7 @@
     </div>
     <!-- Previews Page -->
     <div class="page" id="previews-page">
-      <div id="previews-videos">
-        <div class="swiper" id="previews-swiper">
-          <div class="swiper-wrapper" id="previews-swiper-wrapper"></div>
-          <div class="swiper-pagination"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
-      </div>
+      <div id="previews-videos"></div>
     </div>
     <!-- Premium Page -->
     <div class="page" id="premium-page">
@@ -771,8 +795,8 @@
   </nav>
 
   <!-- External Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Supabase initialization
@@ -805,7 +829,7 @@
       const loading = document.getElementById('loading');
       const infoBtn = document.getElementById('infoBtn');
       const privacyBtn = document.getElementById('privacyBtn');
-      const previewsSwiperWrapper = document.getElementById('previews-swiper-wrapper');
+      const previewsVideos = document.getElementById('previews-videos');
       const premiumVideoHolder = document.getElementById('premium-video-holder');
       const pages = {
         home: document.getElementById('home-page'),
@@ -821,71 +845,118 @@
       };
 
       let lastActivePage = 'home';
-      let swiperInstance = null;
+      let currentPremiumVideo = null;
+      let observer = null;
 
       // Ensure menu is hidden on load
       popupMenu.style.display = 'none';
       popupOverlay.style.display = 'none';
 
-      // Initialize Swiper for previews
-      function initSwiper() {
-        if (swiperInstance) {
-          swiperInstance.destroy(true, true);
-        }
-        swiperInstance = new Swiper('#previews-swiper', {
-          slidesPerView: 1,
-          spaceBetween: 0,
-          loop: true,
-          pagination: { el: '.swiper-pagination', clickable: true },
-          navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
-        });
-      }
-
       // Load preview videos from Supabase Storage
       async function loadPreviewsVideos() {
         loading.style.display = 'block';
         try {
-          // List files in the 'previews' bucket
           const { data: files, error } = await supabase.storage
             .from('previews')
             .list('', { limit: 100 });
 
           if (error) {
-            console.error('Error fetching preview videos from storage:', error);
+            console.error('Error fetching preview videos:', error);
             document.getElementById('wrongKeyPopup').textContent = `Failed to load previews: ${error.message || 'Unknown error'}`;
             document.getElementById('wrongKeyPopup').style.display = 'block';
             setTimeout(() => {
               document.getElementById('wrongKeyPopup').style.display = 'none';
             }, 5000);
-            previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
+            previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
             return;
           }
 
-          previewsSwiperWrapper.innerHTML = '';
+          previewsVideos.innerHTML = '';
           if (files && files.length > 0) {
             const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
             if (videoFiles.length === 0) {
               console.warn('No video files found in previews bucket.');
-              previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
+              previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
               return;
             }
 
-            for (const file of videoFiles) {
+            videoFiles.forEach(file => {
               const { data: publicUrlData } = supabase.storage
                 .from('previews')
                 .getPublicUrl(file.name);
 
               if (publicUrlData && publicUrlData.publicUrl) {
-                const slide = document.createElement('div');
-                slide.className = 'swiper-slide';
-                slide.innerHTML = `<video src="${publicUrlData.publicUrl}" controls aria-label="Preview video"></video>`;
-                previewsSwiperWrapper.appendChild(slide);
+                const container = document.createElement('div');
+                container.className = 'video-container';
+                const video = document.createElement('video');
+                video.src = publicUrlData.publicUrl;
+                video.muted = true;
+                video.playsinline = true;
+                video.loop = true;
+                video.controls = true;
+                video.setAttribute('aria-label', 'Preview video');
+                video.dataset.lowSrc = publicUrlData.publicUrl; // Default (assumed original quality)
+                video.dataset.highSrc = publicUrlData.publicUrl; // Same for now, no separate 360p file
+
+                const select = document.createElement('select');
+                select.className = 'resolution-selector';
+                select.innerHTML = `
+                  <option value="360p">360p</option>
+                  <option value="max">Max</option>
+                `;
+                select.addEventListener('change', () => {
+                  const currentTime = video.currentTime;
+                  const wasPlaying = !video.paused;
+                  video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
+                  video.currentTime = currentTime;
+                  if (wasPlaying) {
+                    video.play().catch(err => console.warn('Auto-play failed:', err));
+                  }
+                });
+
+                container.appendChild(video);
+                container.appendChild(select);
+                previewsVideos.appendChild(container);
               }
+            });
+
+            // Setup IntersectionObserver for auto-play
+            if (observer) {
+              observer.disconnect();
             }
-            initSwiper();
+            observer = new IntersectionObserver(
+              (entries) => {
+                entries.forEach(entry => {
+                  const video = entry.target.querySelector('video');
+                  if (entry.isIntersecting) {
+                    gsap.fromTo(
+                      entry.target,
+                      { transform: 'rotateY(90deg)', opacity: 0 },
+                      { transform: 'rotateY(0deg)', opacity: 1, duration: 0.5, ease: 'power2.out' }
+                    );
+                    video.play().catch(err => {
+                      console.warn('Auto-play failed:', err);
+                      video.controls = true; // Fallback to manual play
+                    });
+                  } else {
+                    gsap.to(
+                      entry.target,
+                      { transform: 'rotateY(-90deg)', opacity: 0, duration: 0.5, ease: 'power2.in' }
+                    );
+                    video.pause();
+                    video.currentTime = 0;
+                  }
+                });
+              },
+              { threshold: 0.8 }
+            );
+
+            document.querySelectorAll('.video-container').forEach(container => {
+              observer.observe(container);
+            });
           } else {
             console.warn('No files found in previews bucket.');
-            previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
+            previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
           }
         } catch (err) {
           console.error('Unexpected error in loadPreviewsVideos:', err);
@@ -894,7 +965,7 @@
           setTimeout(() => {
             document.getElementById('wrongKeyPopup').style.display = 'none';
           }, 5000);
-          previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
+          previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
         } finally {
           loading.style.display = 'none';
         }
@@ -912,13 +983,17 @@
             return;
           }
 
-          // List files in the 'premium' bucket
+          if (currentPremiumVideo) {
+            currentPremiumVideo.pause();
+            currentPremiumVideo.currentTime = 0;
+          }
+
           const { data: files, error } = await supabase.storage
             .from('premium')
             .list('', { limit: 100 });
 
           if (error) {
-            console.error('Error fetching premium videos from storage:', error);
+            console.error('Error fetching premium videos:', error);
             premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium content: ${error.message || 'Unknown error'}</p>`;
             return;
           }
@@ -932,24 +1007,55 @@
               return;
             }
 
-            // Get signed URL for the first video
             const firstVideo = videoFiles[0];
             const { data: signedUrlData, error: signedError } = await supabase.storage
               .from('premium')
-              .createSignedUrl(firstVideo.name, 3600); // URL valid for 1 hour
+              .createSignedUrl(firstVideo.name, 3600);
 
             if (signedError) {
-              console.error('Error creating signed URL for premium video:', signedError);
+              console.error('Error creating signed URL:', signedError);
               premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
               return;
             }
 
             if (signedUrlData && signedUrlData.signedUrl) {
-              const videoElement = document.createElement('video');
-              videoElement.src = signedUrlData.signedUrl;
-              videoElement.controls = true;
-              videoElement.setAttribute('aria-label', 'Premium video');
-              premiumVideoHolder.appendChild(videoElement);
+              const container = document.createElement('div');
+              container.className = 'video-container';
+              const video = document.createElement('video');
+              video.src = signedUrlData.signedUrl;
+              video.muted = true;
+              video.playsinline = true;
+              video.loop = true;
+              video.controls = true;
+              video.setAttribute('aria-label', 'Premium video');
+              video.dataset.lowSrc = signedUrlData.signedUrl;
+              video.dataset.highSrc = signedUrlData.signedUrl;
+
+              const select = document.createElement('select');
+              select.className = 'resolution-selector';
+              select.innerHTML = `
+                <option value="360p">360p</option>
+                <option value="max">Max</option>
+              `;
+              select.addEventListener('change', () => {
+                const currentTime = video.currentTime;
+                const wasPlaying = !video.paused;
+                video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
+                video.currentTime = currentTime;
+                if (wasPlaying) {
+                  video.play().catch(err => console.warn('Auto-play failed:', err));
+                }
+              });
+
+              container.appendChild(video);
+              container.appendChild(select);
+              premiumVideoHolder.appendChild(container);
+              currentPremiumVideo = video;
+
+              video.play().catch(err => {
+                console.warn('Auto-play failed:', err);
+                video.controls = true;
+              });
             } else {
               premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load premium video.</p>';
             }
@@ -1042,7 +1148,6 @@
         await handleAuth();
       };
 
-      // Close auth popup on overlay click and navigate to previews
       authPopup.onclick = (e) => {
         if (e.target === authPopup) {
           closeAllPopups();
