@@ -165,7 +165,7 @@
 
     .side-popup-links button,
     .side-popup-links a {
-      padding: 0.875rem 0 0.875rem 1.125rem;
+      padding: 0.875rem silt0 0.875rem 1.125rem;
       background: var(--bg);
       color: var(--text-light);
       border: none;
@@ -426,6 +426,7 @@
       justify-content: center;
       align-items: center;
       z-index: 4000;
+      background: rgba(0,0,0,0.3); /* Slightly transparent to show video */
     }
 
     #authPopup > div {
@@ -894,9 +895,10 @@
                 video.playsinline = true;
                 video.loop = true;
                 video.controls = true;
+                video.autoplay = true;
                 video.setAttribute('aria-label', 'Preview video');
-                video.dataset.lowSrc = publicUrlData.publicUrl; // Default (assumed original quality)
-                video.dataset.highSrc = publicUrlData.publicUrl; // Same for now, no separate 360p file
+                video.dataset.lowSrc = publicUrlData.publicUrl;
+                video.dataset.highSrc = publicUrlData.publicUrl;
 
                 const select = document.createElement('select');
                 select.className = 'resolution-selector';
@@ -936,7 +938,7 @@
                     );
                     video.play().catch(err => {
                       console.warn('Auto-play failed:', err);
-                      video.controls = true; // Fallback to manual play
+                      video.controls = true;
                     });
                   } else {
                     gsap.to(
@@ -975,19 +977,13 @@
       async function loadPremiumVideo() {
         loading.style.display = 'block';
         try {
-          const userResponse = await supabase.auth.getUser();
-          if (userResponse.error || !userResponse.data.user) {
-            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Please sign in to access premium content.</p>';
-            authPopup.style.display = 'flex';
-            pages.premium.classList.add('blur');
-            return;
-          }
-
+          // Pause current video if exists
           if (currentPremiumVideo) {
             currentPremiumVideo.pause();
             currentPremiumVideo.currentTime = 0;
           }
 
+          // List files in the 'premium' bucket
           const { data: files, error } = await supabase.storage
             .from('premium')
             .list('', { limit: 100 });
@@ -1007,29 +1003,36 @@
               return;
             }
 
+            // Use public URL for unauthenticated playback (temporary for demo)
             const firstVideo = videoFiles[0];
-            const { data: signedUrlData, error: signedError } = await supabase.storage
-              .from('premium')
-              .createSignedUrl(firstVideo.name, 3600);
+            let videoUrl = supabase.storage.from('premium').getPublicUrl(firstVideo.name).data.publicUrl;
 
-            if (signedError) {
-              console.error('Error creating signed URL:', signedError);
-              premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
-              return;
+            // If public URL fails, try signed URL
+            if (!videoUrl) {
+              const { data: signedUrlData, error: signedError } = await supabase.storage
+                .from('premium')
+                .createSignedUrl(firstVideo.name, 3600);
+              if (signedError) {
+                console.error('Error creating signed URL:', signedError);
+                premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
+                return;
+              }
+              videoUrl = signedUrlData.signedUrl;
             }
 
-            if (signedUrlData && signedUrlData.signedUrl) {
+            if (videoUrl) {
               const container = document.createElement('div');
               container.className = 'video-container';
               const video = document.createElement('video');
-              video.src = signedUrlData.signedUrl;
+              video.src = videoUrl;
               video.muted = true;
               video.playsinline = true;
               video.loop = true;
               video.controls = true;
+              video.autoplay = true;
               video.setAttribute('aria-label', 'Premium video');
-              video.dataset.lowSrc = signedUrlData.signedUrl;
-              video.dataset.highSrc = signedUrlData.signedUrl;
+              video.dataset.lowSrc = videoUrl;
+              video.dataset.highSrc = videoUrl;
 
               const select = document.createElement('select');
               select.className = 'resolution-selector';
@@ -1056,6 +1059,13 @@
                 console.warn('Auto-play failed:', err);
                 video.controls = true;
               });
+
+              // Check authentication after loading video
+              const userResponse = await supabase.auth.getUser();
+              if (userResponse.error || !userResponse.data.user) {
+                authPopup.style.display = 'flex';
+                pages.premium.classList.add('blur');
+              }
             } else {
               premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load premium video.</p>';
             }
@@ -1141,6 +1151,7 @@
           return;
         }
         authPopup.style.display = 'none';
+        pages.premium.classList.remove('blur');
         window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
       }
 
