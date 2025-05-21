@@ -921,11 +921,39 @@
     }
     premiumKeyBtn.onclick = async function(e) {
       e.stopPropagation();
-      const key = premiumKeyInput.value;
-      if (key === '1234567') {
+      const key = premiumKeyInput.value.trim();
+      const { data, error } = await supabase
+        .from('premium_keys')
+        .select('*')
+        .eq('key', key)
+        .single();
+
+      if (data && !data.used) {
+        // Link code to user and mark as used
+        const user = await supabase.auth.getUser();
+        await supabase
+          .from('premium_keys')
+          .update({ used: true, user_id: user.data.user.id })
+          .eq('key', key);
+        // Redirect to Telegram
         window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
+      } else if (data && data.used) {
+        const user = await supabase.auth.getUser();
+        if (data.user_id === user.data.user.id) {
+          window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
+        } else {
+          closeAllPopups();
+          wrongKeyPopup.textContent = 'Code already used.';
+          wrongKeyPopup.style.display = 'block';
+          setTimeout(() => {
+            wrongKeyPopup.style.display = 'none';
+            showPage('previews');
+            loadPreviewsVideos();
+          }, 1500);
+        }
       } else {
         closeAllPopups();
+        wrongKeyPopup.textContent = 'Invalid code.';
         wrongKeyPopup.style.display = 'block';
         setTimeout(() => {
           wrongKeyPopup.style.display = 'none';
@@ -950,26 +978,26 @@
     const authError = document.getElementById('authError');
 
     authSignInBtn.onclick = async function() {
-      authError.textContent = '';
-      const email = authEmail.value.trim();
-      const password = authPassword.value.trim();
-      if (!email || !password) {
-        authError.textContent = 'Please enter email and password.';
-        return;
-      }
-      // Sign in or sign up
-      let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error && error.message.includes('Invalid login credentials')) {
-        ({ user, error } = await supabase.auth.signUp({ email, password }));
-      }
-      if (error) {
-        authError.textContent = error.message;
-        return;
-      }
-      // Success: ask for premium key
-      authPopup.style.display = 'none';
-      showPremiumPasswordPopup(); // <--- This shows the premium key popup
-    };
+  authError.textContent = '';
+  const email = authEmail.value.trim();
+  const password = authPassword.value.trim();
+  if (!email || !password) {
+    authError.textContent = 'Please enter email and password.';
+    return;
+  }
+  // Sign in or sign up
+  let { user, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error && error.message.includes('Invalid login credentials')) {
+    ({ user, error } = await supabase.auth.signUp({ email, password }));
+  }
+  if (error) {
+    authError.textContent = error.message;
+    return;
+  }
+  // Success: ask for premium key
+  authPopup.style.display = 'none';
+  showPremiumPasswordPopup();
+};
 
     function showPremiumKeyInput() {
       // Show your premium key popup (reuse your existing one)
@@ -988,7 +1016,7 @@
 
       if (data && !data.used) {
         // Link code to user and mark as used
-        const user = supabase.auth.getUser();
+        const user = await supabase.auth.getUser();
         await supabase
           .from('premium_keys')
           .update({ used: true, user_id: user.data.user.id })
@@ -996,8 +1024,7 @@
         // Redirect to Telegram
         window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
       } else if (data && data.used) {
-        // Check if it's the same user
-        const user = supabase.auth.getUser();
+        const user = await supabase.auth.getUser();
         if (data.user_id === user.data.user.id) {
           window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
         } else {
