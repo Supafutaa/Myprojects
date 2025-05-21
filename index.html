@@ -878,12 +878,10 @@
         loadPreviewsVideos();
       }
     }
-    joinPremiumNowBtn.onclick = async function(e) {
-      e.stopPropagation();
-      // Show auth popup
-      document.getElementById('authPopup').style.display = 'flex';
-    };
-
+    joinPremiumNowBtn.onclick = function(e) {
+  e.stopPropagation();
+  document.getElementById('authPopup').style.display = 'flex';
+};
     // Premium Key Popup logic (must enter key or exit)
     const premiumPopup = document.getElementById('premiumPopup');
     const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
@@ -962,7 +960,6 @@
       // Sign in or sign up
       let { user, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error && error.message.includes('Invalid login credentials')) {
-        // Try sign up
         ({ user, error } = await supabase.auth.signUp({ email, password }));
       }
       if (error) {
@@ -971,7 +968,7 @@
       }
       // Success: ask for premium key
       authPopup.style.display = 'none';
-      showPremiumKeyInput();
+      showPremiumPasswordPopup(); // <--- This shows the premium key popup
     };
 
     function showPremiumKeyInput() {
