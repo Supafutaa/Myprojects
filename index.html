@@ -89,7 +89,7 @@
     }
 
     .menu-btn:hover, .menu-btn:focus {
-      background: transparent;
+      background: #f0f7fa;
       outline: none;
     }
 
@@ -120,6 +120,7 @@
       border-bottom-right-radius: 1.5rem;
       padding: 0;
       animation: slideInLeft 0.25s ease-out;
+      display: flex;
       flex-direction: column;
     }
 
@@ -788,19 +789,6 @@
       }
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // Supabase RLS Policy (apply in Supabase dashboard):
-      /*
-      ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE premium_videos ENABLE ROW LEVEL SECURITY;
-
-      CREATE POLICY "Allow public read access to videos" ON videos
-      FOR SELECT TO public
-      USING (true);
-      CREATE POLICY "Allow authenticated read access to premium_videos" ON premium_videos
-      FOR SELECT TO authenticated
-      USING (auth.uid() IS NOT NULL);
-      */
-
       // DOM references
       const popupMenu = document.getElementById('popupMenu');
       const popupOverlay = document.getElementById('popupOverlay');
@@ -853,51 +841,18 @@
         });
       }
 
-      // Check if table exists
-      async function checkTableExists(tableName) {
-        try {
-          const { data, error } = await supabase
-            .from('pg_tables')
-            .select('tablename')
-            .eq('schemaname', 'public')
-            .eq('tablename', tableName)
-            .single();
-
-          if (error) {
-            console.warn(`Error checking table ${tableName} existence:`, error);
-            return false;
-          }
-          return !!data;
-        } catch (err) {
-          console.error(`Unexpected error checking table ${tableName}:`, err);
-          return false;
-        }
-      }
-
-      // Load preview videos from Supabase
+      // Load preview videos from Supabase Storage
       async function loadPreviewsVideos() {
         loading.style.display = 'block';
         try {
-          const tableExists = await checkTableExists('videos');
-          if (!tableExists) {
-            console.error('Videos table does not exist in the database.');
-            document.getElementById('wrongKeyPopup').textContent = 'Error: Videos table not found in database.';
-            document.getElementById('wrongKeyPopup').style.display = 'block';
-            setTimeout(() => {
-              document.getElementById('wrongKeyPopup').style.display = 'none';
-            }, 5000);
-            previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Videos table not found.</p>';
-            return;
-          }
-
-          const { data, error } = await supabase
-            .from('videos')
-            .select('url')
-            .eq('is_preview', true);
+          // List files in the 'previews' bucket
+          const { data: files, error } = await supabase.storage
+            .from('previews')
+            .list('', { limit: 100 });
 
           if (error) {
-            console.error('Supabase error fetching preview videos:', error, { code: error.code, details: error.details, hint: error.hint });
-            document.getElementById('wrongKeyPopup').textContent = `Failed to load previews: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`;
+            console.error('Error fetching preview videos from storage:', error);
+            document.getElementById('wrongKeyPopup').textContent = `Failed to load previews: ${error.message || 'Unknown error'}`;
             document.getElementById('wrongKeyPopup').style.display = 'block';
             setTimeout(() => {
               document.getElementById('wrongKeyPopup').style.display = 'none';
@@ -907,18 +862,29 @@
           }
 
           previewsSwiperWrapper.innerHTML = '';
-          if (data && data.length > 0) {
-            data.forEach(video => {
-              if (video.url) {
+          if (files && files.length > 0) {
+            const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
+            if (videoFiles.length === 0) {
+              console.warn('No video files found in previews bucket.');
+              previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
+              return;
+            }
+
+            for (const file of videoFiles) {
+              const { data: publicUrlData } = supabase.storage
+                .from('previews')
+                .getPublicUrl(file.name);
+
+              if (publicUrlData && publicUrlData.publicUrl) {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
-                slide.innerHTML = `<video src="${video.url}" controls aria-label="Preview video"></video>`;
+                slide.innerHTML = `<video src="${publicUrlData.publicUrl}" controls aria-label="Preview video"></video>`;
                 previewsSwiperWrapper.appendChild(slide);
               }
-            });
+            }
             initSwiper();
           } else {
-            console.warn('No preview videos found in videos table.');
+            console.warn('No files found in previews bucket.');
             previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
           }
         } catch (err) {
@@ -934,7 +900,7 @@
         }
       }
 
-      // Load premium video from Supabase
+      // Load premium video from Supabase Storage
       async function loadPremiumVideo() {
         loading.style.display = 'block';
         try {
@@ -946,35 +912,50 @@
             return;
           }
 
-          const tableExists = await checkTableExists('premium_videos');
-          if (!tableExists) {
-            console.error('Premium_videos table does not exist in the database.');
-            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Premium videos table not found.</p>';
-            return;
-          }
-
-          const { data, error } = await supabase
-            .from('premium_videos')
-            .select('url')
-            .limit(1)
-            .single();
+          // List files in the 'premium' bucket
+          const { data: files, error } = await supabase.storage
+            .from('premium')
+            .list('', { limit: 100 });
 
           if (error) {
-            console.error('Supabase error fetching premium video:', error, { code: error.code, details: error.details, hint: error.hint });
-            premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium content: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})</p>`;
+            console.error('Error fetching premium videos from storage:', error);
+            premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium content: ${error.message || 'Unknown error'}</p>`;
             return;
           }
 
           premiumVideoHolder.innerHTML = '';
-          if (data && data.url) {
-            const videoElement = document.createElement('video');
-            videoElement.src = data.url;
-            videoElement.controls = true;
-            videoElement.setAttribute('aria-label', 'Premium video');
-            premiumVideoHolder.appendChild(videoElement);
+          if (files && files.length > 0) {
+            const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
+            if (videoFiles.length === 0) {
+              console.warn('No video files found in premium bucket.');
+              premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium videos available.</p>';
+              return;
+            }
+
+            // Get signed URL for the first video
+            const firstVideo = videoFiles[0];
+            const { data: signedUrlData, error: signedError } = await supabase.storage
+              .from('premium')
+              .createSignedUrl(firstVideo.name, 3600); // URL valid for 1 hour
+
+            if (signedError) {
+              console.error('Error creating signed URL for premium video:', signedError);
+              premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
+              return;
+            }
+
+            if (signedUrlData && signedUrlData.signedUrl) {
+              const videoElement = document.createElement('video');
+              videoElement.src = signedUrlData.signedUrl;
+              videoElement.controls = true;
+              videoElement.setAttribute('aria-label', 'Premium video');
+              premiumVideoHolder.appendChild(videoElement);
+            } else {
+              premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load premium video.</p>';
+            }
           } else {
-            console.warn('No premium videos found in premium_videos table.');
-            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium video available.</p>';
+            console.warn('No files found in premium bucket.');
+            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium videos available.</p>';
           }
         } catch (err) {
           console.error('Unexpected error in loadPremiumVideo:', err);
@@ -1010,9 +991,7 @@
       function handleNavigation(page) {
         showPage(page);
         if (page === 'previews') loadPreviewsVideos();
-        if (page === 'premium') {
-          loadPremiumVideo();
-        }
+        if (page === 'premium') loadPremiumVideo();
       }
 
       // Menu toggle
