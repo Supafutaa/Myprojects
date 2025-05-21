@@ -120,7 +120,6 @@
       border-bottom-right-radius: 1.5rem;
       padding: 0;
       animation: slideInLeft 0.25s ease-out;
-      display: flex;
       flex-direction: column;
     }
 
@@ -835,6 +834,10 @@
 
       let lastActivePage = 'home';
       let swiperInstance = null;
+
+      // Ensure menu is hidden on load
+      popupMenu.style.display = 'none';
+      popupOverlay.style.display = 'none';
 
       // Initialize Swiper for previews
       function initSwiper() {
