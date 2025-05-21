@@ -390,7 +390,7 @@
       text-align: center;
     }
 
-    #premiumPopupOverlay, #howToSubscribePopupOverlay, #authPopup {
+    #howToSubscribePopupOverlay, #authPopup {
       display: none;
       position: fixed;
       top: 0;
@@ -401,7 +401,7 @@
       z-index: 2000;
     }
 
-    #premiumPopup, #howToSubscribePopup {
+    #howToSubscribePopup {
       display: none;
       position: fixed;
       top: 50%;
@@ -419,14 +419,30 @@
       animation: popupFadeIn 0.25s;
     }
 
-    #premiumPopup h3, #authPopup h3 {
+    #authPopup {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 4000;
+    }
+
+    #authPopup > div {
+      background: var(--dark-bg);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      max-width: 21.25rem;
+      margin: auto;
+      text-align: center;
+    }
+
+    #authPopup h3 {
       margin: 0 0 1.125rem;
       color: var(--accent);
       font-size: 1.2rem;
       font-weight: bold;
     }
 
-    #premiumPopup input[type="password"], #authPopup input {
+    #authPopup input {
       width: 90%;
       padding: 0.625rem;
       border-radius: 0.5rem;
@@ -437,7 +453,7 @@
       text-align: center;
     }
 
-    #premiumPopup button, #authPopup button {
+    #authPopup button {
       background: var(--accent);
       color: #222;
       border: none;
@@ -450,8 +466,13 @@
       min-width: 5rem;
     }
 
-    #premiumPopup button:hover, #authPopup button:hover {
+    #authPopup button:hover {
       background: #ffe066;
+    }
+
+    #authPopup .error {
+      color: var(--error-red);
+      margin-top: 0.5rem;
     }
 
     #wrongKeyPopup {
@@ -481,27 +502,6 @@
       color: var(--accent);
       font-size: 1.5rem;
       cursor: pointer;
-    }
-
-    #authPopup {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 4000;
-    }
-
-    #authPopup > div {
-      background: var(--dark-bg);
-      border-radius: var(--radius);
-      padding: 2rem 1.5rem;
-      max-width: 21.25rem;
-      margin: auto;
-      text-align: center;
-    }
-
-    #authPopup .error {
-      color: var(--error-red);
-      margin-top: 0.5rem;
     }
 
     #loading {
@@ -716,17 +716,6 @@
     </div>
   </main>
 
-  <!-- Premium Popup -->
-  <div id="premiumPopupOverlay"></div>
-  <div id="premiumPopup">
-    <h3>Enter Premium Key To Access</h3>
-    <input type="password" id="premiumKeyInput" placeholder="Enter Premium Key" maxlength="16" aria-label="Premium key input" />
-    <button id="premiumKeyBtn" aria-label="Unlock premium content">Unlock</button>
-  </div>
-
-  <!-- Wrong Key Popup -->
-  <div id="wrongKeyPopup" aria-live="polite">Wrong Key</div>
-
   <!-- Auth Popup -->
   <div id="authPopup">
     <div>
@@ -738,6 +727,9 @@
     </div>
   </div>
 
+  <!-- Wrong Key Popup -->
+  <div id="wrongKeyPopup" aria-live="polite">Error</div>
+
   <!-- How to Subscribe Popup -->
   <div id="howToSubscribePopupOverlay"></div>
   <div id="howToSubscribePopup">
@@ -748,9 +740,8 @@
     <ul style="color: var(--white); font-size: 1rem; line-height: 1.6; padding-left: 1.375rem; margin: 0;">
       <li>After payment, go to Menu and click the Payment.</li>
       <li>You will be redirected to the App WhatsApp.</li>
-      <li>Paste the Mpesa transaction code & receive the Premium Key.</li>
-      <li>Then, go to the Premium Tab and click the Unlock Premium experience Button.</li>
-      <li>Enter the Key and access premium content.</li>
+      <li>Paste the Mpesa transaction code & receive access instructions.</li>
+      <li>Then, go to the Premium Tab and sign in to access premium content.</li>
     </ul>
   </div>
 
@@ -800,32 +791,21 @@
 
       // Supabase RLS Policy (apply in Supabase dashboard):
       /*
-      -- Enable RLS on tables
       ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
       ALTER TABLE premium_videos ENABLE ROW LEVEL SECURITY;
-      ALTER TABLE premium_keys ENABLE ROW LEVEL SECURITY;
 
-      -- Policies
       CREATE POLICY "Allow public read access to videos" ON videos
       FOR SELECT TO public
       USING (true);
       CREATE POLICY "Allow authenticated read access to premium_videos" ON premium_videos
       FOR SELECT TO authenticated
       USING (auth.uid() IS NOT NULL);
-      CREATE POLICY "Restrict access to premium_keys" ON premium_keys
-      FOR ALL TO authenticated
-      USING (auth.uid() = user_id OR user_id IS NULL);
       */
 
       // DOM references
       const popupMenu = document.getElementById('popupMenu');
       const popupOverlay = document.getElementById('popupOverlay');
       const menuButton = document.getElementById('menu-button');
-      const premiumPopup = document.getElementById('premiumPopup');
-      const premiumPopupOverlay = document.getElementById('premiumPopupOverlay');
-      const wrongKeyPopup = document.getElementById('wrongKeyPopup');
-      const premiumKeyInput = document.getElementById('premiumKeyInput');
-      const premiumKeyBtn = document.getElementById('premiumKeyBtn');
       const authPopup = document.getElementById('authPopup');
       const authSignInBtn = document.getElementById('authSignInBtn');
       const authEmail = document.getElementById('authEmail');
@@ -870,7 +850,7 @@
         });
       }
 
-      // Check if table exists (requires 'service_role' key for pg_tables access, use anon for testing)
+      // Check if table exists
       async function checkTableExists(tableName) {
         try {
           const { data, error } = await supabase
@@ -895,20 +875,18 @@
       async function loadPreviewsVideos() {
         loading.style.display = 'block';
         try {
-          // Check if videos table exists
           const tableExists = await checkTableExists('videos');
           if (!tableExists) {
             console.error('Videos table does not exist in the database.');
-            wrongKeyPopup.textContent = 'Error: Videos table not found in database.';
-            wrongKeyPopup.style.display = 'block';
+            document.getElementById('wrongKeyPopup').textContent = 'Error: Videos table not found in database.';
+            document.getElementById('wrongKeyPopup').style.display = 'block';
             setTimeout(() => {
-              wrongKeyPopup.style.display = 'none';
+              document.getElementById('wrongKeyPopup').style.display = 'none';
             }, 5000);
             previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Videos table not found.</p>';
             return;
           }
 
-          // Skip connectivity test and go directly to main query
           const { data, error } = await supabase
             .from('videos')
             .select('url')
@@ -916,10 +894,10 @@
 
           if (error) {
             console.error('Supabase error fetching preview videos:', error, { code: error.code, details: error.details, hint: error.hint });
-            wrongKeyPopup.textContent = `Failed to load previews: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`;
-            wrongKeyPopup.style.display = 'block';
+            document.getElementById('wrongKeyPopup').textContent = `Failed to load previews: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`;
+            document.getElementById('wrongKeyPopup').style.display = 'block';
             setTimeout(() => {
-              wrongKeyPopup.style.display = 'none';
+              document.getElementById('wrongKeyPopup').style.display = 'none';
             }, 5000);
             previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
             return;
@@ -942,10 +920,10 @@
           }
         } catch (err) {
           console.error('Unexpected error in loadPreviewsVideos:', err);
-          wrongKeyPopup.textContent = `Unexpected error: ${err.message || 'Unknown error'}`;
-          wrongKeyPopup.style.display = 'block';
+          document.getElementById('wrongKeyPopup').textContent = `Unexpected error: ${err.message || 'Unknown error'}`;
+          document.getElementById('wrongKeyPopup').style.display = 'block';
           setTimeout(() => {
-            wrongKeyPopup.style.display = 'none';
+            document.getElementById('wrongKeyPopup').style.display = 'none';
           }, 5000);
           previewsSwiperWrapper.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
         } finally {
@@ -960,10 +938,11 @@
           const userResponse = await supabase.auth.getUser();
           if (userResponse.error || !userResponse.data.user) {
             premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Please sign in to access premium content.</p>';
+            authPopup.style.display = 'flex';
+            pages.premium.classList.add('blur');
             return;
           }
 
-          // Check if premium_videos table exists
           const tableExists = await checkTableExists('premium_videos');
           if (!tableExists) {
             console.error('Premium_videos table does not exist in the database.');
@@ -1006,12 +985,10 @@
       function closeAllPopups() {
         popupMenu.style.display = 'none';
         popupOverlay.style.display = 'none';
-        premiumPopup.style.display = 'none';
-        premiumPopupOverlay.style.display = 'none';
         authPopup.style.display = 'none';
         howToSubscribePopup.style.display = 'none';
         howToSubscribePopupOverlay.style.display = 'none';
-        wrongKeyPopup.style.display = 'none';
+        document.getElementById('wrongKeyPopup').style.display = 'none';
         loading.style.display = 'none';
         document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
       }
@@ -1032,7 +1009,6 @@
         if (page === 'previews') loadPreviewsVideos();
         if (page === 'premium') {
           loadPremiumVideo();
-          authPopup.style.display = 'flex';
         }
       }
 
@@ -1077,72 +1053,16 @@
           return;
         }
         authPopup.style.display = 'none';
-        premiumPopup.style.display = 'block';
-        premiumPopupOverlay.style.display = 'block';
-        premiumKeyInput.value = '';
+        window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
       }
 
       authSignInBtn.onclick = async () => {
         await handleAuth();
       };
 
-      // Premium key validation
-      async function validatePremiumKey() {
-        loading.style.display = 'block';
-        try {
-          const key = premiumKeyInput.value.trim();
-          const { data, error } = await supabase
-            .from('premium_keys')
-            .select('*')
-            .eq('key', key)
-            .single();
-
-          if (error) {
-            console.error('Supabase error validating key:', error, { code: error.code, details: error.details, hint: error.hint });
-            throw new Error(`Error validating key: ${error.message || 'Unknown error'} (Code: ${error.code || 'N/A'})`);
-          }
-
-          const userResponse = await supabase.auth.getUser();
-          if (userResponse.error || !userResponse.data.user) {
-            throw new Error('No user logged in.');
-          }
-
-          const user = userResponse.data.user;
-          if (data && !data.used) {
-            await supabase
-              .from('premium_keys')
-              .update({ used: true, user_id: user.id })
-              .eq('key', key);
-            window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-          } else if (data && data.used) {
-            if (data.user_id === user.id) {
-              window.location.href = "https://t.me/+BzdnBVoE76EzNWZk";
-            } else {
-              throw new Error('Code already used.');
-            }
-          } else {
-            throw new Error('Invalid code.');
-          }
-        } catch (err) {
-          console.error('Error in validatePremiumKey:', err);
-          wrongKeyPopup.textContent = err.message || 'Unexpected error validating key.';
-          wrongKeyPopup.style.display = 'block';
-          setTimeout(() => {
-            wrongKeyPopup.style.display = 'none';
-            handleNavigation('previews');
-          }, 5000);
-        } finally {
-          loading.style.display = 'none';
-        }
-      }
-
-      premiumKeyBtn.onclick = async (e) => {
-        e.stopPropagation();
-        await validatePremiumKey();
-      };
-
-      premiumPopupOverlay.onclick = (e) => {
-        if (e.target === premiumPopupOverlay) {
+      // Close auth popup on overlay click and navigate to previews
+      authPopup.onclick = (e) => {
+        if (e.target === authPopup) {
           closeAllPopups();
           handleNavigation('previews');
         }
