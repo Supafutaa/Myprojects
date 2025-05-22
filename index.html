@@ -40,28 +40,20 @@
       overflow-x: hidden;
     }
 
-    body {
-      padding-top: 4rem;
-      padding-bottom: 4.5rem;
-      position: relative;
-    }
-
     .top-bar {
       position: fixed;
-      top: var(--bar-float);
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100vw - 2rem);
-      max-width: 30rem;
+      top: 0;
+      left: 0;
+      width: 100vw;
       height: 4rem;
-      background: transparent;
+      background: var(--bar-bg);
       box-shadow: var(--shadow);
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 1002;
       padding: 0 1rem;
-      border-radius: var(--radius);
+      border-radius: 0;
     }
 
     .logo {
@@ -165,7 +157,7 @@
 
     .side-popup-links button,
     .side-popup-links a {
-      padding: 0.875rem silt0 0.875rem 1.125rem;
+      padding: 0.875rem 0 0.875rem 1.125rem;
       background: var(--bg);
       color: var(--text-light);
       border: none;
@@ -237,11 +229,21 @@
       filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
     }
 
+    .content-wrapper {
+      position: fixed;
+      top: 4rem;
+      bottom: 4.5rem;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      background: var(--bg);
+      z-index: 1;
+    }
+
     main {
       margin: 0 auto;
       max-width: var(--video-width);
-      min-height: calc(100vh - 8.5rem);
-      padding: 0 0 1.5rem;
+      padding: 0;
       background: var(--bg);
     }
 
@@ -426,7 +428,7 @@
       justify-content: center;
       align-items: center;
       z-index: 4000;
-      background: rgba(0,0,0,0.3); /* Slightly transparent to show video */
+      background: rgba(0,0,0,0.3);
     }
 
     #authPopup > div {
@@ -520,7 +522,7 @@
 
     #previews-videos {
       width: var(--video-width);
-      height: var(--video-height);
+      height: 100%;
       margin: 0 auto;
       overflow-y: auto;
       scroll-snap-type: y mandatory;
@@ -553,7 +555,7 @@
 
     #premium-video-holder {
       width: var(--video-width);
-      height: var(--video-height);
+      height: 100%;
       margin: 0 auto;
       background: #000;
       position: relative;
@@ -620,10 +622,6 @@
     }
 
     @media (min-width: 601px) {
-      .top-bar {
-        max-width: 37.5rem;
-      }
-
       #popupMenu {
         width: 25vw;
         max-width: 25rem;
@@ -657,89 +655,91 @@
   </aside>
 
   <!-- Main Content -->
-  <main>
-    <!-- Home Page -->
-    <div class="page active" id="home-page">
-      <div class="home-img-holder">
-        <img src="assets/images/home image.jpg" alt="Home background" />
-      </div>
-    </div>
-    <!-- Previews Page -->
-    <div class="page" id="previews-page">
-      <div id="previews-videos"></div>
-    </div>
-    <!-- Premium Page -->
-    <div class="page" id="premium-page">
-      <div id="premium-video-holder"></div>
-    </div>
-    <!-- Info Page -->
-    <div class="page" id="info-page">
-      <div class="info-text">
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="assets/images/logo.png" alt="Supafutaa Logo" class="logo" />
-        </div>
-        <span class="highlight">Unlock Full Premium Experience</span>
-        <span class="blink">Pay via Mpesa</span>
-        <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
-          Till No: 123456 | Amount: Kshs 99/=
-        </span>
-        <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
-          Validity: 1 month
-        </span>
-        <button id="howToSubscribeBtn" class="subscribe-btn" aria-label="Learn how to subscribe">Subscribe Here</button>
-        <span class="highlight">Benefits of Premium Membership</span>
-        <b>Exclusive Videos</b><br>
-        Access 100% exclusive videos not available for free users<br><br>
-        <b>Early Access</b><br>
-        Watch new uploads before anyone else hours or days early.<br><br>
-        <b>Full Length Content</b><br>
-        Enjoy full, uncut scenes with no ads, no limits.<br><br>
-        <b>High Quality Streams</b><br>
-        Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
-        <b>Ad-Free Experience</b><br>
-        Watch without interruption, 100% ad-free viewing<br><br>
-        <b>Priority Support</b><br>
-        Need help? Premium subscribers get priority replies<br><br>
-        <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
-          Copyright © Baddiez. 2025. All rights reserved
-        </span>
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="assets/images/logo2.png" alt="Supafutaa Secondary Logo" class="small-logo" />
+  <div class="content-wrapper">
+    <main>
+      <!-- Home Page -->
+      <div class="page active" id="home-page">
+        <div class="home-img-holder">
+          <img src="assets/images/home image.jpg" alt="Home background" />
         </div>
       </div>
-    </div>
-    <!-- Privacy Policy Page -->
-    <div class="page" id="privacy-page">
-      <div class="privacy-text">
-        <div style="color: var(--accent); font-weight: bold; font-size: 1.3rem;">PRIVACY POLICY</div>
-        <div style="color: var(--medium-grey);">Effective date: 1st January, 2025</div>
-        <br>
-        <button id="privacyDropdownBtn" class="dropdown-btn" aria-label="Toggle privacy policy details">Show Details ▼</button>
-        <div id="privacyDropdownBody" class="dropdown-body" style="display: none;">
-          <b>1. Introduction</b><br>
-          We value your privacy and are committed to protecting your personal information.<br><br>
-          <b>2. Information We Collect</b><br>
-          We do not collect personal information unless you provide it voluntarily (e.g., through payment or support requests).<br><br>
-          <b>3. Use of Information</b><br>
-          Any information you provide is used solely to process your payment and provide access to premium content.<br><br>
-          <b>4. Data Security</b><br>
-          We implement reasonable security measures to protect your data. Payments are processed securely via Mpesa.<br><br>
-          <b>5. Sharing of Information</b><br>
-          We do not sell, trade, or share your personal information with third parties.<br><br>
-          <b>6. Cookies & Tracking</b><br>
-          We do not use cookies or tracking technologies.<br><br>
-          <b>7. Changes to This Policy</b><br>
-          We may update this policy from time to time. Changes will be posted on this page.<br><br>
-          <b>8. Contact Us</b><br>
-          If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
-          <span style="color: var(--accent);">Thank you for trusting Baddiez!</span>
-          <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
-            Copyright © Baddiez. 2025 All rights reserved
+      <!-- Previews Page -->
+      <div class="page" id="previews-page">
+        <div id="previews-videos"></div>
+      </div>
+      <!-- Premium Page -->
+      <div class="page" id="premium-page">
+        <div id="premium-video-holder"></div>
+      </div>
+      <!-- Info Page -->
+      <div class="page" id="info-page">
+        <div class="info-text">
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="assets/images/logo.png" alt="Supafutaa Logo" class="logo" />
+          </div>
+          <span class="highlight">Unlock Full Premium Experience</span>
+          <span class="blink">Pay via Mpesa</span>
+          <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
+            Till No: 123456 | Amount: Kshs 99/=
           </span>
+          <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
+            Validity: 1 month
+          </span>
+          <button id="howToSubscribeBtn" class="subscribe-btn" aria-label="Learn how to subscribe">Subscribe Here</button>
+          <span class="highlight">Benefits of Premium Membership</span>
+          <b>Exclusive Videos</b><br>
+          Access 100% exclusive videos not available for free users<br><br>
+          <b>Early Access</b><br>
+          Watch new uploads before anyone else hours or days early.<br><br>
+          <b>Full Length Content</b><br>
+          Enjoy full, uncut scenes with no ads, no limits.<br><br>
+          <b>High Quality Streams</b><br>
+          Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
+          <b>Ad-Free Experience</b><br>
+          Watch without interruption, 100% ad-free viewing<br><br>
+          <b>Priority Support</b><br>
+          Need help? Premium subscribers get priority replies<br><br>
+          <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
+            Copyright © Baddiez. 2025. All rights reserved
+          </span>
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="assets/images/logo2.png" alt="Supafutaa Secondary Logo" class="small-logo" />
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+      <!-- Privacy Policy Page -->
+      <div class="page" id="privacy-page">
+        <div class="privacy-text">
+          <div style="color: var(--accent); font-weight: bold; font-size: 1.3rem;">PRIVACY POLICY</div>
+          <div style="color: var(--medium-grey);">Effective date: 1st January, 2025</div>
+          <br>
+          <button id="privacyDropdownBtn" class="dropdown-btn" aria-label="Toggle privacy policy details">Show Details ▼</button>
+          <div id="privacyDropdownBody" class="dropdown-body" style="display: none;">
+            <b>1. Introduction</b><br>
+            We value your privacy and are committed to protecting your personal information.<br><br>
+            <b>2. Information We Collect</b><br>
+            We do not collect personal information unless you provide it voluntarily (e.g., through payment or support requests).<br><br>
+            <b>3. Use of Information</b><br>
+            Any information you provide is used solely to process your payment and provide access to premium content.<br><br>
+            <b>4. Data Security</b><br>
+            We implement reasonable security measures to protect your data. Payments are processed securely via Mpesa.<br><br>
+            <b>5. Sharing of Information</b><br>
+            We do not sell, trade, or share your personal information with third parties.<br><br>
+            <b>6. Cookies & Tracking</b><br>
+            We do not use cookies or tracking technologies.<br><br>
+            <b>7. Changes to This Policy</b><br>
+            We may update this policy from time to time. Changes will be posted on this page.<br><br>
+            <b>8. Contact Us</b><br>
+            If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
+            <span style="color: var(--accent);">Thank you for trusting Baddiez!</span>
+            <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
+              Copyright © Baddiez. 2025 All rights reserved
+            </span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 
   <!-- Auth Popup -->
   <div id="authPopup">
