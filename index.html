@@ -890,54 +890,58 @@
               return;
             }
 
-            videoFiles.forEach(file => {
-              const { data: publicUrlData } = supabase.storage
+            for (const file of videoFiles) {
+              const { data: signedUrlData, error: signedError } = await supabase.storage
                 .from('previews')
-                .getPublicUrl(file.name);
-
-              if (publicUrlData && publicUrlData.publicUrl) {
-                const container = document.createElement('div');
-                container.className = 'video-container';
-                const video = document.createElement('video');
-                video.src = publicUrlData.publicUrl;
-                video.muted = true;
-                video.playsinline = true;
-                video.loop = true;
-                video.controls = true;
-                video.autoplay = true;
-                video.setAttribute('aria-label', 'Preview video');
-                video.dataset.lowSrc = publicUrlData.publicUrl;
-                video.dataset.highSrc = publicUrlData.publicUrl;
-
-                const select = document.createElement('select');
-                select.className = 'resolution-selector';
-                select.innerHTML = `
-                  <option value="360p">360p</option>
-                  <option value="max">Max</option>
-                `;
-                select.addEventListener('change', () => {
-                  const currentTime = video.currentTime;
-                  const wasPlaying = !video.paused;
-                  video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
-                  video.currentTime = currentTime;
-                  if (wasPlaying) {
-                    video.play().catch(err => console.warn('Auto-play failed:', err));
-                  }
-                });
-
-                container.appendChild(video);
-                container.appendChild(select);
-                previewsVideos.appendChild(container);
+                .createSignedUrl(file.name, 3600);
+              if (signedError) {
+                console.warn(`Failed to get signed URL for ${file.name}:`, signedError);
+                continue;
               }
-            });
 
-            // Setup IntersectionObserver for auto-play and flip transition
+              const videoUrl = signedUrlData.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+              const container = document.createElement('div');
+              container.className = 'video-container';
+              const video = document.createElement('video');
+              video.src = videoUrl;
+              video.muted = true;
+              video.playsinline = true;
+              video.loop = true;
+              video.controls = true;
+              video.autoplay = true;
+              video.setAttribute('aria-label', 'Preview video');
+              video.dataset.lowSrc = videoUrl;
+              video.dataset.highSrc = videoUrl;
+
+              const select = document.createElement('select');
+              select.className = 'resolution-selector';
+              select.innerHTML = `
+                <option value="360p">360p</option>
+                <option value="max">Max</option>
+              `;
+              select.addEventListener('change', () => {
+                const currentTime = video.currentTime;
+                const wasPlaying = !video.paused;
+                video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
+                video.currentTime = currentTime;
+                if (wasPlaying) {
+                  video.play().catch(err => console.warn('Auto-play failed:', err));
+                }
+              });
+
+              container.appendChild(video);
+              container.appendChild(select);
+              previewsVideos.appendChild(container);
+            }
+
+            // Setup IntersectionObserver
             if (observer) {
               observer.disconnect();
             }
             observer = new IntersectionObserver(
               (entries) => {
                 entries.forEach(entry => {
+                  console.log('Intersecting:', entry.isIntersecting, entry.target);
                   const video = entry.target.querySelector('video');
                   if (entry.isIntersecting) {
                     gsap.fromTo(
@@ -959,7 +963,7 @@
                   }
                 });
               },
-              { threshold: 0.5 }
+              { threshold: 0.3 }
             );
 
             document.querySelectorAll('.video-container').forEach(container => {
@@ -1011,67 +1015,59 @@
             }
 
             const firstVideo = videoFiles[0];
-            let videoUrl = supabase.storage.from('premium').getPublicUrl(firstVideo.name).data.publicUrl;
-
-            if (!videoUrl) {
-              const { data: signedUrlData, error: signedError } = await supabase.storage
-                .from('premium')
-                .createSignedUrl(firstVideo.name, 3600);
-              if (signedError) {
-                console.error('Error creating signed URL:', signedError);
-                premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
-                return;
-              }
-              videoUrl = signedUrlData.signedUrl;
+            const { data: signedUrlData, error: signedError } = await supabase.storage
+              .from('premium')
+              .createSignedUrl(firstVideo.name, 3600);
+            if (signedError) {
+              console.error('Error creating signed URL:', signedError);
+              premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
+              return;
             }
 
-            if (videoUrl) {
-              const container = document.createElement('div');
-              container.className = 'video-container';
-              const video = document.createElement('video');
-              video.src = videoUrl;
-              video.muted = true;
-              video.playsinline = true;
-              video.loop = true;
-              video.controls = true;
-              video.autoplay = true;
-              video.setAttribute('aria-label', 'Premium video');
-              video.dataset.lowSrc = videoUrl;
-              video.dataset.highSrc = videoUrl;
+            const videoUrl = signedUrlData.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+            const container = document.createElement('div');
+            container.className = 'video-container';
+            const video = document.createElement('video');
+            video.src = videoUrl;
+            video.muted = true;
+            video.playsinline = true;
+            video.loop = true;
+            video.controls = true;
+            video.autoplay = true;
+            video.setAttribute('aria-label', 'Premium video');
+            video.dataset.lowSrc = videoUrl;
+            video.dataset.highSrc = videoUrl;
 
-              const select = document.createElement('select');
-              select.className = 'resolution-selector';
-              select.innerHTML = `
-                <option value="360p">360p</option>
-                <option value="max">Max</option>
-              `;
-              select.addEventListener('change', () => {
-                const currentTime = video.currentTime;
-                const wasPlaying = !video.paused;
-                video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
-                video.currentTime = currentTime;
-                if (wasPlaying) {
-                  video.play().catch(err => console.warn('Auto-play failed:', err));
-                }
-              });
-
-              container.appendChild(video);
-              container.appendChild(select);
-              premiumVideoHolder.appendChild(container);
-              currentPremiumVideo = video;
-
-              video.play().catch(err => {
-                console.warn('Auto-play failed:', err);
-                video.controls = true;
-              });
-
-              const userResponse = await supabase.auth.getUser();
-              if (userResponse.error || !userResponse.data.user) {
-                authPopup.style.display = 'flex';
-                pages.premium.classList.add('blur');
+            const select = document.createElement('select');
+            select.className = 'resolution-selector';
+            select.innerHTML = `
+              <option value="360p">360p</option>
+              <option value="max">Max</option>
+            `;
+            select.addEventListener('change', () => {
+              const currentTime = video.currentTime;
+              const wasPlaying = !video.paused;
+              video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
+              video.currentTime = currentTime;
+              if (wasPlaying) {
+                video.play().catch(err => console.warn('Auto-play failed:', err));
               }
-            } else {
-              premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load premium video.</p>';
+            });
+
+            container.appendChild(video);
+            container.appendChild(select);
+            premiumVideoHolder.appendChild(container);
+            currentPremiumVideo = video;
+
+            video.play().catch(err => {
+              console.warn('Auto-play failed:', err);
+              video.controls = true;
+            });
+
+            const userResponse = await supabase.auth.getUser();
+            if (userResponse.error || !userResponse.data.user) {
+              authPopup.style.display = 'flex';
+              pages.premium.classList.add('blur');
             }
           } else {
             console.warn('No files found in premium bucket.');
