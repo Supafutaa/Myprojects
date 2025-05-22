@@ -3,1197 +3,1189 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baddiez</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400&display=swap" />
+  <title>VibeSphere - Premium Video Vibes</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" />
   <style>
+    /* Base Styles */
     :root {
-      --primary: #4fc3f7;
-      --accent: #ffd700;
-      --bg: #343541;
-      --bar-bg: #444654;
-      --shadow: 0 4px 24px rgba(0,0,0,0.18);
-      --radius: 1rem;
-      --icon-size: 2rem;
-      --menu-width: 90vw;
-      --menu-max-width: 20rem;
-      --bar-float: 0.3rem;
-      --medium-grey: #799dcc;
-      --text-light: #d1d5db;
-      --error-red: #e53935;
-      --dark-bg: #23243a;
-      --white: #ffffff;
-      --light-green: lightgreen;
-      --video-width: 360px;
-      --video-height: 640px;
+      --background: #0f0f0f;
+      --surface: #1c1c1c;
+      --text: #f5f5f5;
+      --text-secondary: #b0b0b0;
+      --primary: #00f7ff;
+      --accent: #ff00ff;
+      --error: #ff4b4b;
+      --success: #00cc00;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --radius: 0.5rem;
+      --transition: 0.3s ease;
+      --video-aspect: 9 / 16;
     }
 
     *, *::before, *::after {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      background: var(--bg);
+      font-family: 'Poppins', system-ui, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.5;
       min-height: 100vh;
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
 
-    body {
-      padding-top: 4rem;
-      padding-bottom: 4.5rem;
-      position: relative;
-    }
-
-    .top-bar {
+    /* Preloader */
+    #preloader {
       position: fixed;
-      top: var(--bar-float);
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100vw - 2rem);
-      max-width: 30rem;
-      height: 4rem;
-      background: transparent;
-      box-shadow: var(--shadow);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--background);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.5s;
+    }
+
+    #preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader {
+      border: 4px solid var(--primary);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(28, 28, 28, 0.9);
+      backdrop-filter: blur(8px);
+      padding: 0.75rem 1rem;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      z-index: 1002;
-      padding: 0 1rem;
-      border-radius: var(--radius);
     }
 
     .logo {
-      height: 2.5rem;
-      width: 2.5rem;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
     }
 
     .app-title {
-      flex: 1;
-      text-align: center;
-      font-weight: 580;
-      color: var(--white);
-      font-size: 1.5rem;
-      user-select: none;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
     }
 
     .menu-btn {
       background: none;
       border: none;
-      font-size: 2rem;
-      color: var(--primary);
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 50%;
-      transition: background 0.2s;
-    }
-
-    .menu-btn:hover, .menu-btn:focus {
-      background: #f0f7fa;
-      outline: none;
-    }
-
-    #popupOverlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.25);
-      z-index: 1001;
-      transition: background 0.2s;
-    }
-
-    #popupMenu {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 90vh;
-      width: var(--menu-width);
-      max-width: var(--menu-max-width);
-      background: var(--bar-bg);
-      box-shadow: 2px 0 24px rgba(0,0,0,0.18);
-      z-index: 1003;
-      border-top-right-radius: 1.5rem;
-      border-bottom-right-radius: 1.5rem;
-      padding: 0;
-      animation: slideInLeft 0.25s ease-out;
-      display: flex;
-      flex-direction: column;
-    }
-
-    @keyframes slideInLeft {
-      from { transform: translateX(-100%); }
-      to { transform: translateX(0); }
-    }
-    @-webkit-keyframes slideInLeft {
-      from { -webkit-transform: translateX(-100%); }
-      to { -webkit-transform: translateX(0); }
-    }
-
-    .side-popup-header {
-      padding: 2rem 0 1rem;
-      background: var(--bg);
-      border-top-right-radius: 1.5rem;
-      text-align: center;
-    }
-
-    .side-popup-logo {
-      width: 4rem;
-      height: 4rem;
-      object-fit: contain;
-      margin-bottom: 0.5rem;
-    }
-
-    .side-popup-title {
-      color: var(--white);
+      color: var(--text);
       font-size: 1.5rem;
-      font-weight: 580;
-      margin-bottom: 0.5rem;
-    }
-
-    .side-popup-links {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      padding: 2rem 1.5rem;
-    }
-
-    .side-popup-links button,
-    .side-popup-links a {
-      padding: 0.875rem silt0 0.875rem 1.125rem;
-      background: var(--bg);
-      color: var(--text-light);
-      border: none;
-      border-radius: 0.5rem;
       cursor: pointer;
-      font-size: 0.9rem;
-      font-family: inherit;
-      text-decoration: none;
-      transition: background 0.18s, color 0.18s;
-      text-align: left;
     }
 
-    .side-popup-links button:hover,
-    .side-popup-links a:hover {
-      background: var(--accent);
-      color: #181c23;
-    }
-
-    .bottom-bar {
+    /* Sidebar (Desktop) */
+    #sidebar {
       position: fixed;
+      top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100vw;
-      height: 4.5rem;
-      background: var(--bar-bg);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 1002;
-      padding-bottom: 0;
-      gap: 0;
+      width: min(80vw, 220px);
+      height: 100vh;
+      background: var(--surface);
+      transform: translateX(-100%);
+      transition: transform var(--transition);
+      z-index: 1001;
+      padding: 1rem;
+      display: none;
     }
 
-    .bottom-bar .bar-btn {
-      flex: 1;
+    @media (min-width: 1024px) {
+      #sidebar {
+        display: block;
+        transform: translateX(0);
+        width: 240px;
+      }
+    }
+
+    #sidebar.open {
+      transform: translateX(0);
+      display: block;
+    }
+
+    .sidebar-nav {
       display: flex;
       flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .sidebar-nav button {
+      display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
       background: none;
       border: none;
-      color: var(--white);
-      font-size: 0.75rem;
-      font-weight: 450;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
       cursor: pointer;
-      padding: 0;
-      transition: color 0.2s, background 0.2s;
-      border-radius: 0.625rem;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+
+    .sidebar-nav button:hover,
+    .sidebar-nav button.active {
+      background: var(--primary);
+      color: #000;
+    }
+
+    .sidebar-nav img {
+      width: 20px;
+      height: 20px;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
     }
 
-    .bottom-bar .bar-btn .icon img {
-      width: var(--icon-size);
-      height: var(--icon-size);
-      object-fit: contain;
-      filter: brightness(1.2) invert(1);
-      transition: filter 0.2s;
+    #overlay.active {
+      display: block;
     }
 
-    .bottom-bar .bar-btn.active,
-    .bottom-bar .bar-btn:hover {
-      color: var(--primary);
-      background: rgba(79, 195, 247, 0.08);
+    /* Content */
+    .content {
+      padding: 4.5rem 0 4rem;
     }
 
-    .bottom-bar .bar-btn.active .icon img,
-    .bottom-bar .bar-btn:hover .icon img {
-      filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
-    }
-
-    main {
-      margin: 0 auto;
-      max-width: var(--video-width);
-      min-height: calc(100vh - 8.5rem);
-      padding: 0 0 1.5rem;
-      background: var(--bg);
+    @media (min-width: 1024px) {
+      .content {
+        margin-left: 240px;
+        padding: 5rem 1rem;
+      }
     }
 
     .page {
       display: none;
-      width: 100%;
-      min-height: 60vh;
-      padding-top: 0.75rem;
+      animation: fadeIn 0.4s ease;
     }
 
     .page.active {
       display: block;
-      animation: fadeIn 0.3s;
-    }
-
-    .page.blur {
-      filter: blur(6px);
-      pointer-events: none;
-      user-select: none;
-      transition: filter 0.2s;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .home-img-holder {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #222;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .home-img-holder img {
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      max-width: 100vw;
-      max-height: 100vh;
-    }
-
-    .info-text {
-      margin: 0 auto;
-      max-width: 26.25rem;
-      padding: 0.75rem 0.625rem 0;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      line-height: 1.2;
-      text-align: center;
-      white-space: pre-line;
-    }
-
-    .info-text .logo {
-      width: 8rem;
-      height: 8rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .info-text .small-logo {
-      width: 4rem;
-      height: 4rem;
-      margin-top: 0;
-    }
-
-    .info-text .highlight {
-      color: var(--accent);
-      font-weight: bold;
-      font-size: 1.5rem;
-      display: block;
-      text-align: center;
-    }
-
-    .info-text .blink {
-      color: var(--light-green);
-      font-size: 2.5rem;
-      animation: blink-animation 2.2s ease-in-out infinite;
-      will-change: opacity;
-    }
-
-    @keyframes blink-animation {
-      0% { opacity: 1; }
-      45% { opacity: 1; }
-      55% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    @-webkit-keyframes blink-animation {
-      0% { opacity: 1; }
-      45% { opacity: 1; }
-      55% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    .info-text .subscribe-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--accent);
-      color: #666;
-      border: none;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1.5rem;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-      transition: background 0.2s;
-      margin: 0.5rem auto;
-      height: 2.5rem;
-      min-width: 7.5rem;
-    }
-
-    .info-text .subscribe-btn:hover {
-      background: #ffe066;
-    }
-
-    .privacy-text {
-      margin: 0 auto;
-      max-width: 26.25rem;
-      padding: 0.75rem 0.625rem 0;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      line-height: 1.2;
-      text-align: center;
-      white-space: pre-line;
-    }
-
-    .privacy-text .dropdown-btn {
-      margin: 0 auto 0.75rem;
-      background: var(--bar-bg);
-      color: var(--white);
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.5rem 1.125rem;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .privacy-text .dropdown-body {
-      margin-top: 0.5rem;
-      text-align: center;
-    }
-
-    #howToSubscribePopupOverlay, #authPopup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 2000;
-    }
-
-    #howToSubscribePopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--dark-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2rem 1.5rem 1.5rem;
-      min-width: 16.25rem;
-      max-width: 90vw;
-      z-index: 2001;
-      text-align: center;
-      color: var(--white);
-      animation: popupFadeIn 0.25s;
-    }
-
-    #authPopup {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 4000;
-      background: rgba(0,0,0,0.3); /* Slightly transparent to show video */
-    }
-
-    #authPopup > div {
-      background: var(--dark-bg);
-      border-radius: var(--radius);
-      padding: 2rem 1.5rem;
-      max-width: 21.25rem;
-      margin: auto;
-      text-align: center;
-    }
-
-    #authPopup h3 {
-      margin: 0 0 1.125rem;
-      color: var(--accent);
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
-    #authPopup input {
-      width: 90%;
-      padding: 0.625rem;
-      border-radius: 0.5rem;
-      border: 1px solid #bdbdbd;
-      font-size: 1rem;
-      margin-bottom: 1.125rem;
-      outline: none;
-      text-align: center;
-    }
-
-    #authPopup button {
-      background: var(--accent);
-      color: #222;
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.625rem 1.5rem;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-      min-width: 5rem;
-    }
-
-    #authPopup button:hover {
-      background: #ffe066;
-    }
-
-    #authPopup .error {
-      color: var(--error-red);
-      margin-top: 0.5rem;
-    }
-
-    #wrongKeyPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--error-red);
-      color: var(--white);
-      border-radius: 0.875rem;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.14);
-      padding: 2rem 2.25rem;
-      z-index: 3000;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      animation: popupFadeIn 0.2s;
-    }
-
-    #howToSubscribePopup .close-btn {
-      position: absolute;
-      top: 0.625rem;
-      right: 1.125rem;
-      background: none;
-      border: none;
-      color: var(--accent);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    #loading {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--white);
-      z-index: 5000;
-      font-size: 1.2rem;
-    }
-
-    #previews-videos {
-      width: var(--video-width);
-      height: var(--video-height);
-      margin: 0 auto;
+    /* Video Feed (Home) */
+    .video-feed {
+      height: calc(100vh - 8.5rem);
       overflow-y: auto;
       scroll-snap-type: y mandatory;
-      background: #000;
-      position: relative;
     }
 
     .video-container {
-      width: var(--video-width);
-      height: var(--video-height);
-      scroll-snap-align: start;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
+      height: 100%;
+      scroll-snap-align: start;
       background: #000;
-      overflow: hidden;
-      transition: transform 0.5s ease-in-out;
     }
 
     .video-container video {
       width: 100%;
       height: 100%;
       object-fit: contain;
+    }
+
+    .video-overlay {
       position: absolute;
       top: 0;
       left: 0;
-      z-index: 1;
-    }
-
-    #premium-video-holder {
-      width: var(--video-width);
-      height: var(--video-height);
-      margin: 0 auto;
-      background: #000;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    #premium-video-holder video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+      pointer-events: none;
     }
 
-    .resolution-selector {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.7);
-      color: var(--white);
-      border: none;
-      border-radius: 0.25rem;
-      padding: 0.25rem 0.5rem;
+    .video-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      pointer-events: auto;
+      max-width: 80%;
+    }
+
+    .creator-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .video-title {
       font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .video-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+      pointer-events: auto;
+    }
+
+    .action-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      color: var(--text);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      pointer-events: auto;
+      transition: transform var(--transition);
+    }
+
+    .action-btn img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .video-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 4px solid var(--primary);
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Premium Page */
+    .premium-page .video-feed {
+      height: calc(100vh - 8.5rem);
+    }
+
+    .premium-locked {
+      text-align: center;
+      padding: 2rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .premium-locked h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .premium-locked button {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .premium-locked button:hover {
+      background: var(--accent);
+    }
+
+    /* Admin Panel */
+    .admin-page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .admin-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .admin-form h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .admin-form input,
+    .admin-form select {
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--background);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .admin-form button {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .admin-form button:hover {
+      background: var(--accent);
+    }
+
+    .admin-error {
+      color: var(--error);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    /* Auth Page */
+    .auth-page {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .auth-form h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .auth-form input {
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--background);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .auth-form button {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .auth-form button:hover {
+      background: var(--accent);
+    }
+
+    .auth-error {
+      color: var(--error);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .social-btn {
+      background: var(--background);
+      color: var(--text);
+      border: 1px solid var(--text-secondary);
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .social-btn:hover {
+      background: var(--surface);
+    }
+
+    /* Profile Page */
+    .profile-page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-email {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .profile-status {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .profile-btn {
+      background: var(--primary);
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .profile-btn:hover {
+      background: var(--accent);
+    }
+
+    .profile-section {
+      margin-bottom: 2rem;
+    }
+
+    .profile-section h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .liked-videos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      display: none;
+    }
+
+    .modal-overlay.active {
+      display: block;
+    }
+
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      max-width: min(90vw, 400px);
+      z-index: 2001;
+      color: var(--text);
+      display: none;
+      box-shadow: var(--shadow);
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.25rem;
       cursor: pointer;
     }
 
-    .flip-enter {
-      transform: rotateY(90deg);
-      opacity: 0;
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
     }
 
-    .flip-exit {
-      transform: rotateY(-90deg);
-      opacity: 0;
+    .modal-content {
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 600px) {
-      #popupMenu {
-        width: 70vw;
-        max-width: 90vw;
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-      }
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--error);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      z-index: 3000;
+      display: none;
+      font-size: 0.9rem;
+      max-width: min(90vw, 360px);
+      text-align: center;
+    }
 
-      .side-popup-header {
-        padding: 1.5rem 0 0.75rem;
-      }
+    #toast.active {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
 
-      .side-popup-links {
-        padding: 1.5rem 0.75rem;
-      }
+    @keyframes slideUp {
+      from { transform: translateX(-50%) translateY(20px); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
 
-      :root {
-        --video-width: 100vw;
-        --video-height: calc(100vw * 16 / 9);
+    /* Bottom Navigation */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--surface);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      z-index: 1000;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (min-width: 1024px) {
+      nav {
+        display: none;
       }
     }
 
-    @media (min-width: 601px) {
-      .top-bar {
-        max-width: 37.5rem;
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color var(--transition);
+    }
+
+    .nav-btn img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0.7);
+    }
+
+    .nav-btn.active,
+    .nav-btn:hover {
+      color: var(--primary);
+    }
+
+    .nav-btn.active img,
+    .nav-btn:hover img {
+      filter: brightness(1);
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+      .content {
+        padding: 5rem 2rem;
       }
 
-      #popupMenu {
-        width: 25vw;
-        max-width: 25rem;
+      .video-feed {
+        height: calc(100vh - 10rem);
+        max-width: 480px;
+        margin: 0 auto;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Top Bar -->
-  <header class="top-bar">
-    <img src="assets/images/logo.png" class="logo" alt="Supafutaa Logo" />
-    <span class="app-title">supafutaa</span>
-    <button class="menu-btn" id="menu-button" aria-label="Open menu">⋮</button>
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <img src="assets/images/logo.png" class="logo" alt="VibeSphere Logo" />
+    <span class="app-title">VibeSphere</span>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu">≡</button>
   </header>
 
-  <!-- Side Popup overlay and menu -->
-  <div id="popupOverlay"></div>
-  <aside id="popupMenu" class="side-popup-menu">
-    <div class="side-popup-header">
-      <img src="assets/images/logo.png" alt="Supafutaa Logo" class="side-popup-logo" />
-      <div class="side-popup-title">Baddiez</div>
-      <div style="color: var(--medium-grey); font-size: 0.8rem; text-align: center; margin-top: 0.25rem;">
-        Copyright © 2025 - T&C Apply
-      </div>
-    </div>
-    <nav class="side-popup-links">
-      <button id="infoBtn" aria-label="View information">Info</button>
-      <a href="https://wa.me/254720047018" target="_blank" id="paymentLink" aria-label="Make payment">Payment</a>
-      <button id="privacyBtn" aria-label="View privacy policy">Privacy Policy</button>
+  <!-- Sidebar -->
+  <div id="overlay"></div>
+  <aside id="sidebar">
+    <nav class="sidebar-nav">
+      <button data-page="home" class="active" aria-label="Home">
+        <img src="assets/images/home-icon.png" alt="" /> Home
+      </button>
+      <button data-page="premium" aria-label="Premium">
+        <img src="assets/images/premium-icon.png" alt="" /> Premium
+      </button>
+      <button data-page="profile" aria-label="Profile">
+        <img src="assets/images/profile-icon.png" alt="" /> Profile
+      </button>
+      <button data-page="admin" aria-label="Admin Panel" id="admin-nav" style="display: none;">
+        <img src="assets/images/admin-icon.png" alt="" /> Admin Panel
+      </button>
     </nav>
   </aside>
 
-  <!-- Main Content -->
-  <main>
+  <!-- Content -->
+  <main class="content">
     <!-- Home Page -->
-    <div class="page active" id="home-page">
-      <div class="home-img-holder">
-        <img src="assets/images/home image.jpg" alt="Home background" />
-      </div>
-    </div>
-    <!-- Previews Page -->
-    <div class="page" id="previews-page">
-      <div id="previews-videos"></div>
-    </div>
+    <section class="page home-page active" id="home-page">
+      <div class="video-feed" id="home-feed"></div>
+    </section>
+
     <!-- Premium Page -->
-    <div class="page" id="premium-page">
-      <div id="premium-video-holder"></div>
-    </div>
-    <!-- Info Page -->
-    <div class="page" id="info-page">
-      <div class="info-text">
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="assets/images/logo.png" alt="Supafutaa Logo" class="logo" />
-        </div>
-        <span class="highlight">Unlock Full Premium Experience</span>
-        <span class="blink">Pay via Mpesa</span>
-        <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
-          Till No: 123456 | Amount: Kshs 99/=
-        </span>
-        <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
-          Validity: 1 month
-        </span>
-        <button id="howToSubscribeBtn" class="subscribe-btn" aria-label="Learn how to subscribe">Subscribe Here</button>
-        <span class="highlight">Benefits of Premium Membership</span>
-        <b>Exclusive Videos</b><br>
-        Access 100% exclusive videos not available for free users<br><br>
-        <b>Early Access</b><br>
-        Watch new uploads before anyone else hours or days early.<br><br>
-        <b>Full Length Content</b><br>
-        Enjoy full, uncut scenes with no ads, no limits.<br><br>
-        <b>High Quality Streams</b><br>
-        Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
-        <b>Ad-Free Experience</b><br>
-        Watch without interruption, 100% ad-free viewing<br><br>
-        <b>Priority Support</b><br>
-        Need help? Premium subscribers get priority replies<br><br>
-        <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
-          Copyright © Baddiez. 2025. All rights reserved
-        </span>
-        <div style="display: flex; justify-content: center; align-items: center;">
-          <img src="assets/images/logo2.png" alt="Supafutaa Secondary Logo" class="small-logo" />
+    <section class="page premium-page" id="premium-page">
+      <div class="video-feed" id="premium-feed"></div>
+    </section>
+
+    <!-- Profile Page -->
+    <section class="page profile-page" id="profile-page">
+      <div class="profile-header">
+        <div class="profile-avatar"></div>
+        <div class="profile-info">
+          <div class="profile-email" id="profile-email">Guest</div>
+          <div class="profile-status" id="profile-status">Free Plan</div>
         </div>
       </div>
-    </div>
-    <!-- Privacy Policy Page -->
-    <div class="page" id="privacy-page">
-      <div class="privacy-text">
-        <div style="color: var(--accent); font-weight: bold; font-size: 1.3rem;">PRIVACY POLICY</div>
-        <div style="color: var(--medium-grey);">Effective date: 1st January, 2025</div>
-        <br>
-        <button id="privacyDropdownBtn" class="dropdown-btn" aria-label="Toggle privacy policy details">Show Details ▼</button>
-        <div id="privacyDropdownBody" class="dropdown-body" style="display: none;">
-          <b>1. Introduction</b><br>
-          We value your privacy and are committed to protecting your personal information.<br><br>
-          <b>2. Information We Collect</b><br>
-          We do not collect personal information unless you provide it voluntarily (e.g., through payment or support requests).<br><br>
-          <b>3. Use of Information</b><br>
-          Any information you provide is used solely to process your payment and provide access to premium content.<br><br>
-          <b>4. Data Security</b><br>
-          We implement reasonable security measures to protect your data. Payments are processed securely via Mpesa.<br><br>
-          <b>5. Sharing of Information</b><br>
-          We do not sell, trade, or share your personal information with third parties.<br><br>
-          <b>6. Cookies & Tracking</b><br>
-          We do not use cookies or tracking technologies.<br><br>
-          <b>7. Changes to This Policy</b><br>
-          We may update this policy from time to time. Changes will be posted on this page.<br><br>
-          <b>8. Contact Us</b><br>
-          If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
-          <span style="color: var(--accent);">Thank you for trusting Baddiez!</span>
-          <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
-            Copyright © Baddiez. 2025 All rights reserved
-          </span>
+      <div class="profile-actions">
+        <button class="profile-btn" id="subscribe-btn">Subscribe</button>
+        <button class="profile-btn" id="logout-btn" style="display: none;">Logout</button>
+      </div>
+      <div class="profile-section">
+        <h2>Liked Videos</h2>
+        <div class="liked-videos" id="liked-videos">
+          <p style="color: var(--text-secondary);">No liked videos yet.</p>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section class="page admin-page" id="admin-page">
+      <div class="admin-form">
+        <h2>Upload Video</h2>
+        <input type="file" id="video-file" accept="video/mp4,video/webm" required aria-label="Video file" />
+        <input type="text" id="video-title" placeholder="Video Title" required aria-label="Video title" />
+        <select id="video-bucket" required aria-label="Video category">
+          <option value="vibes">Public (Vibes)</option>
+          <option value="exclusive">Premium (Exclusive)</option>
+        </select>
+        <button type="submit" id="admin-submit">Upload</button>
+        <p class="admin-error" id="admin-error"></p>
+      </div>
+    </section>
+
+    <!-- Auth Page -->
+    <section class="page auth-page" id="auth-page">
+      <div class="auth-form">
+        <h2>Sign In / Sign Up</h2>
+        <input type="email" id="auth-email" placeholder="Email" required aria-label="Email" />
+        <input type="password" id="auth-password" placeholder="Password" required aria-label="Password" />
+        <button type="submit" id="auth-submit">Continue</button>
+        <p class="auth-error" id="auth-error"></p>
+        <div class="social-login">
+          <button class="social-btn" onclick="alert('Google login coming soon!')">Continue with Google</button>
+          <button class="social-btn" onclick="alert('Twitter login coming soon!')">Continue with Twitter</button>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Auth Popup -->
-  <div id="authPopup">
-    <div>
-      <h3>Sign In</h3>
-      <input id="authEmail" type="email" placeholder="Email" aria-label="Email input" />
-      <input id="authPassword" type="password" placeholder="Password" aria-label="Password input" />
-      <button id="authSignInBtn" aria-label="Sign in or sign up">Sign In / Sign Up</button>
-      <div id="authError" class="error"></div>
+  <!-- Welcome Modal -->
+  <div class="modal-overlay" id="welcome-overlay"></div>
+  <div class="modal" id="welcome-modal">
+    <button class="modal-close" id="welcome-close">×</button>
+    <h3 class="modal-title">Welcome to VibeSphere!</h3>
+    <div class="modal-content">
+      <p>Unlock premium vibes for Ksh 99/month.</p>
+      <ol>
+        <li>Pay via Mpesa (Till No: 123456).</li>
+        <li>Send transaction code via WhatsApp to +254720047018.</li>
+        <li>Sign in to enjoy exclusive content!</li>
+      </ol>
+      <button class="profile-btn" style="width: 100%;" id="welcome-subscribe">Subscribe Now</button>
     </div>
   </div>
 
-  <!-- Wrong Key Popup -->
-  <div id="wrongKeyPopup" aria-live="polite">Error</div>
+  <!-- Toast -->
+  <div id="toast"></div>
 
-  <!-- How to Subscribe Popup -->
-  <div id="howToSubscribePopupOverlay"></div>
-  <div id="howToSubscribePopup">
-    <button id="closeHowToSubscribePopup" class="close-btn" aria-label="Close subscription instructions">×</button>
-    <div style="color: var(--accent); font-weight: bold; font-size: 1.2rem; text-align: center; margin-bottom: 0.75rem;">
-      Steps on How To Subscribe
-    </div>
-    <ul style="color: var(--white); font-size: 1rem; line-height: 1.6; padding-left: 1.375rem; margin: 0;">
-      <li>After payment, go to Menu and click the Payment.</li>
-      <li>You will be redirected to the App WhatsApp.</li>
-      <li>Paste the Mpesa transaction code & receive access instructions.</li>
-      <li>Then, go to the Premium Tab and sign in to access premium content.</li>
-    </ul>
-  </div>
-
-  <!-- Loading Indicator -->
-  <div id="loading" aria-live="polite">Loading...</div>
-
-  <!-- Bottom Bar -->
-  <nav class="bottom-bar" id="bottomBar">
-    <button class="bar-btn" id="previewsNav" aria-label="View previews">
-      <span class="icon">
-        <img src="assets/images/previews icon.png" alt="Previews icon" />
-      </span>
-      Previews
-    </button>
-    <button class="bar-btn active" id="homeNav" aria-label="View home">
-      <span class="icon">
-        <img src="assets/images/home icon.png" alt="Home icon" />
-      </span>
+  <!-- Bottom Navigation -->
+  <nav>
+    <button class="nav-btn active" data-page="home" aria-label="Home">
+      <img src="assets/images/home-icon.png" alt="Home Icon" />
       Home
     </button>
-    <button class="bar-btn" id="premiumNav" aria-label="View premium content">
-      <span class="icon">
-        <img src="assets/images/premium icon.png" alt="Premium icon" />
-      </span>
+    <button class="nav-btn" data-page="premium" aria-label="Premium">
+      <img src="assets/images/premium-icon.png" alt="Premium Icon" />
       Premium
+    </button>
+    <button class="nav-btn" data-page="profile" aria-label="Profile">
+      <img src="assets/images/profile-icon.png" alt="Profile Icon" />
+      Profile
     </button>
   </nav>
 
-  <!-- External Scripts -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Supabase initialization
+      // Preloader
+      window.addEventListener('load', () => {
+        setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 500);
+      });
+
+      // Supabase
       const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
-      if (!window.supabase) {
-        console.error('Supabase library not loaded.');
-        document.getElementById('wrongKeyPopup').textContent = 'Failed to initialize Supabase library.';
-        document.getElementById('wrongKeyPopup').style.display = 'block';
-        setTimeout(() => {
-          document.getElementById('wrongKeyPopup').style.display = 'none';
-        }, 4000);
+      const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
+      if (!supabase) {
+        showToast('Failed to initialize Supabase.');
         return;
       }
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // DOM references
-      const popupMenu = document.getElementById('popupMenu');
-      const popupOverlay = document.getElementById('popupOverlay');
-      const menuButton = document.getElementById('menu-button');
-      const authPopup = document.getElementById('authPopup');
-      const authSignInBtn = document.getElementById('authSignInBtn');
-      const authEmail = document.getElementById('authEmail');
-      const authPassword = document.getElementById('authPassword');
-      const authError = document.getElementById('authError');
-      const howToSubscribeBtn = document.getElementById('howToSubscribeBtn');
-      const howToSubscribePopup = document.getElementById('howToSubscribePopup');
-      const howToSubscribePopupOverlay = document.getElementById('howToSubscribePopupOverlay');
-      const closeHowToSubscribePopup = document.getElementById('closeHowToSubscribePopup');
-      const loading = document.getElementById('loading');
-      const infoBtn = document.getElementById('infoBtn');
-      const privacyBtn = document.getElementById('privacyBtn');
-      const previewsVideos = document.getElementById('previews-videos');
-      const premiumVideoHolder = document.getElementById('premium-video-holder');
-      const pages = {
-        home: document.getElementById('home-page'),
-        previews: document.getElementById('previews-page'),
-        premium: document.getElementById('premium-page'),
-        info: document.getElementById('info-page'),
-        privacy: document.getElementById('privacy-page')
-      };
-      const navBtns = {
-        home: document.getElementById('homeNav'),
-        previews: document.getElementById('previewsNav'),
-        premium: document.getElementById('premiumNav')
+      // Admin Email (Replace with your email)
+      const ADMIN_EMAIL = 'your-admin-email@example.com';
+
+      // DOM Elements
+      const elements = {
+        menuBtn: document.getElementById('menu-btn'),
+        sidebar: document.getElementById('sidebar'),
+        overlay: document.getElementById('overlay'),
+        homeFeed: document.getElementById('home-feed'),
+        premiumFeed: document.getElementById('premium-feed'),
+        adminNav: document.getElementById('admin-nav'),
+        adminSubmit: document.getElementById('admin-submit'),
+        videoFile: document.getElementById('video-file'),
+        videoTitle: document.getElementById('video-title'),
+        videoBucket: document.getElementById('video-bucket'),
+        adminError: document.getElementById('admin-error'),
+        subscribeBtn: document.getElementById('subscribe-btn'),
+        welcomeModal: document.getElementById('welcome-modal'),
+        welcomeOverlay: document.getElementById('welcome-overlay'),
+        welcomeClose: document.getElementById('welcome-close'),
+        welcomeSubscribe: document.getElementById('welcome-subscribe'),
+        authSubmit: document.getElementById('auth-submit'),
+        authEmail: document.getElementById('auth-email'),
+        authPassword: document.getElementById('auth-password'),
+        authError: document.getElementById('auth-error'),
+        profileEmail: document.getElementById('profile-email'),
+        profileStatus: document.getElementById('profile-status'),
+        logoutBtn: document.getElementById('logout-btn'),
+        toast: document.getElementById('toast'),
+        pages: document.querySelectorAll('.page'),
+        navBtns: document.querySelectorAll('.nav-btn, .sidebar-nav button'),
       };
 
-      let lastActivePage = 'home';
-      let currentPremiumVideo = null;
+      let currentPage = 'home';
       let observer = null;
+      let hasInteracted = false;
 
-      // Ensure menu is hidden on load
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
+      // Track user interaction
+      document.addEventListener('click', () => (hasInteracted = true), { once: true });
 
-      // Load preview videos from Supabase Storage
-      async function loadPreviewsVideos() {
-        loading.style.display = 'block';
-        try {
-          const { data: files, error } = await supabase.storage
-            .from('previews')
-            .list('', { limit: 100 });
-
-          if (error) {
-            console.error('Error fetching preview videos:', error);
-            document.getElementById('wrongKeyPopup').textContent = `Failed to load previews: ${error.message || 'Unknown error'}`;
-            document.getElementById('wrongKeyPopup').style.display = 'block';
-            setTimeout(() => {
-              document.getElementById('wrongKeyPopup').style.display = 'none';
-            }, 5000);
-            previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
-            return;
-          }
-
-          previewsVideos.innerHTML = '';
-          if (files && files.length > 0) {
-            const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
-            if (videoFiles.length === 0) {
-              console.warn('No video files found in previews bucket.');
-              previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
-              return;
-            }
-
-            videoFiles.forEach(file => {
-              const { data: publicUrlData } = supabase.storage
-                .from('previews')
-                .getPublicUrl(file.name);
-
-              if (publicUrlData && publicUrlData.publicUrl) {
-                const container = document.createElement('div');
-                container.className = 'video-container';
-                const video = document.createElement('video');
-                video.src = publicUrlData.publicUrl;
-                video.muted = true;
-                video.playsinline = true;
-                video.loop = true;
-                video.controls = true;
-                video.autoplay = true;
-                video.setAttribute('aria-label', 'Preview video');
-                video.dataset.lowSrc = publicUrlData.publicUrl;
-                video.dataset.highSrc = publicUrlData.publicUrl;
-
-                const select = document.createElement('select');
-                select.className = 'resolution-selector';
-                select.innerHTML = `
-                  <option value="360p">360p</option>
-                  <option value="max">Max</option>
-                `;
-                select.addEventListener('change', () => {
-                  const currentTime = video.currentTime;
-                  const wasPlaying = !video.paused;
-                  video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
-                  video.currentTime = currentTime;
-                  if (wasPlaying) {
-                    video.play().catch(err => console.warn('Auto-play failed:', err));
-                  }
-                });
-
-                container.appendChild(video);
-                container.appendChild(select);
-                previewsVideos.appendChild(container);
-              }
-            });
-
-            // Setup IntersectionObserver for auto-play
-            if (observer) {
-              observer.disconnect();
-            }
-            observer = new IntersectionObserver(
-              (entries) => {
-                entries.forEach(entry => {
-                  const video = entry.target.querySelector('video');
-                  if (entry.isIntersecting) {
-                    gsap.fromTo(
-                      entry.target,
-                      { transform: 'rotateY(90deg)', opacity: 0 },
-                      { transform: 'rotateY(0deg)', opacity: 1, duration: 0.5, ease: 'power2.out' }
-                    );
-                    video.play().catch(err => {
-                      console.warn('Auto-play failed:', err);
-                      video.controls = true;
-                    });
-                  } else {
-                    gsap.to(
-                      entry.target,
-                      { transform: 'rotateY(-90deg)', opacity: 0, duration: 0.5, ease: 'power2.in' }
-                    );
-                    video.pause();
-                    video.currentTime = 0;
-                  }
-                });
-              },
-              { threshold: 0.8 }
-            );
-
-            document.querySelectorAll('.video-container').forEach(container => {
-              observer.observe(container);
-            });
-          } else {
-            console.warn('No files found in previews bucket.');
-            previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
-          }
-        } catch (err) {
-          console.error('Unexpected error in loadPreviewsVideos:', err);
-          document.getElementById('wrongKeyPopup').textContent = `Unexpected error: ${err.message || 'Unknown error'}`;
-          document.getElementById('wrongKeyPopup').style.display = 'block';
-          setTimeout(() => {
-            document.getElementById('wrongKeyPopup').style.display = 'none';
-          }, 5000);
-          previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
-        } finally {
-          loading.style.display = 'none';
-        }
+      // Utilities
+      function showToast(message, duration = 4000) {
+        elements.toast.textContent = message;
+        elements.toast.classList.add('active');
+        setTimeout(() => elements.toast.classList.remove('active'), duration);
       }
 
-      // Load premium video from Supabase Storage
-      async function loadPremiumVideo() {
-        loading.style.display = 'block';
-        try {
-          // Pause current video if exists
-          if (currentPremiumVideo) {
-            currentPremiumVideo.pause();
-            currentPremiumVideo.currentTime = 0;
-          }
-
-          // List files in the 'premium' bucket
-          const { data: files, error } = await supabase.storage
-            .from('premium')
-            .list('', { limit: 100 });
-
-          if (error) {
-            console.error('Error fetching premium videos:', error);
-            premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium content: ${error.message || 'Unknown error'}</p>`;
-            return;
-          }
-
-          premiumVideoHolder.innerHTML = '';
-          if (files && files.length > 0) {
-            const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
-            if (videoFiles.length === 0) {
-              console.warn('No video files found in premium bucket.');
-              premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium videos available.</p>';
-              return;
-            }
-
-            // Use public URL for unauthenticated playback (temporary for demo)
-            const firstVideo = videoFiles[0];
-            let videoUrl = supabase.storage.from('premium').getPublicUrl(firstVideo.name).data.publicUrl;
-
-            // If public URL fails, try signed URL
-            if (!videoUrl) {
-              const { data: signedUrlData, error: signedError } = await supabase.storage
-                .from('premium')
-                .createSignedUrl(firstVideo.name, 3600);
-              if (signedError) {
-                console.error('Error creating signed URL:', signedError);
-                premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
-                return;
-              }
-              videoUrl = signedUrlData.signedUrl;
-            }
-
-            if (videoUrl) {
-              const container = document.createElement('div');
-              container.className = 'video-container';
-              const video = document.createElement('video');
-              video.src = videoUrl;
-              video.muted = true;
-              video.playsinline = true;
-              video.loop = true;
-              video.controls = true;
-              video.autoplay = true;
-              video.setAttribute('aria-label', 'Premium video');
-              video.dataset.lowSrc = videoUrl;
-              video.dataset.highSrc = videoUrl;
-
-              const select = document.createElement('select');
-              select.className = 'resolution-selector';
-              select.innerHTML = `
-                <option value="360p">360p</option>
-                <option value="max">Max</option>
-              `;
-              select.addEventListener('change', () => {
-                const currentTime = video.currentTime;
-                const wasPlaying = !video.paused;
-                video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
-                video.currentTime = currentTime;
-                if (wasPlaying) {
-                  video.play().catch(err => console.warn('Auto-play failed:', err));
-                }
-              });
-
-              container.appendChild(video);
-              container.appendChild(select);
-              premiumVideoHolder.appendChild(container);
-              currentPremiumVideo = video;
-
-              video.play().catch(err => {
-                console.warn('Auto-play failed:', err);
-                video.controls = true;
-              });
-
-              // Check authentication after loading video
-              const userResponse = await supabase.auth.getUser();
-              if (userResponse.error || !userResponse.data.user) {
-                authPopup.style.display = 'flex';
-                pages.premium.classList.add('blur');
-              }
-            } else {
-              premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load premium video.</p>';
-            }
-          } else {
-            console.warn('No files found in premium bucket.');
-            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium videos available.</p>';
-          }
-        } catch (err) {
-          console.error('Unexpected error in loadPremiumVideo:', err);
-          premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Unexpected error: ${err.message || 'Unknown error'}</p>`;
-        } finally {
-          loading.style.display = 'none';
-        }
+      function closeModals() {
+        elements.sidebar.classList.remove('open');
+        elements.overlay.classList.remove('active');
+        elements.welcomeModal.classList.remove('active');
+        elements.welcomeOverlay.classList.remove('active');
+        elements.pages.forEach(page => page.classList.remove('blur'));
       }
 
-      // Helper to close all popups
-      function closeAllPopups() {
-        popupMenu.style.display = 'none';
-        popupOverlay.style.display = 'none';
-        authPopup.style.display = 'none';
-        howToSubscribePopup.style.display = 'none';
-        howToSubscribePopupOverlay.style.display = 'none';
-        document.getElementById('wrongKeyPopup').style.display = 'none';
-        loading.style.display = 'none';
-        document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
+      function showPage(pageId) {
+        closeModals();
+        elements.pages.forEach(page => page.classList.toggle('active', page.id === `${pageId}-page`));
+        elements.navBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+        currentPage = pageId;
+        if (pageId === 'home') loadHomeFeed();
+        if (pageId === 'premium') loadPremiumFeed();
+        if (pageId === 'profile') updateProfile();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      // Show specific page
-      function showPage(page) {
-        closeAllPopups();
-        Object.values(pages).forEach(p => p.classList.remove('active'));
-        Object.values(navBtns).forEach(b => b.classList.remove('active'));
-        if (pages[page]) pages[page].classList.add('active');
-        if (navBtns[page]) navBtns[page].classList.add('active');
-        lastActivePage = page;
-      }
-
-      // Navigation handler
-      function handleNavigation(page) {
-        showPage(page);
-        if (page === 'previews') loadPreviewsVideos();
-        if (page === 'premium') loadPremiumVideo();
-      }
-
-      // Menu toggle
-      menuButton.onclick = () => {
-        const isOpen = popupMenu.style.display === 'flex';
-        closeAllPopups();
-        if (!isOpen) {
-          popupMenu.style.display = 'flex';
-          popupOverlay.style.display = 'block';
-          pages[lastActivePage].classList.add('blur');
-        }
-      };
-
-      popupOverlay.onclick = () => closeAllPopups();
-
-      // Navigation buttons
-      navBtns.home.onclick = () => handleNavigation('home');
-      navBtns.previews.onclick = () => handleNavigation('previews');
-      navBtns.premium.onclick = () => handleNavigation('premium');
-      infoBtn.onclick = () => handleNavigation('info');
-      privacyBtn.onclick = () => handleNavigation('privacy');
-
-      // Auth popup logic
-      async function handleAuth() {
-        authError.textContent = '';
-        loading.style.display = 'block';
-        const email = authEmail.value.trim();
-        const password = authPassword.value.trim();
-        if (!email || !password) {
-          authError.textContent = 'Please enter email and password.';
-          loading.style.display = 'none';
-          return;
-        }
-        let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error && error.message.includes('Invalid login credentials')) {
-          ({ user, error } = await supabase.auth.signUp({ email, password }));
-        }
-        loading.style.display = 'none';
+      // Video Creation
+      async function createVideoContainer(file, bucket) {
+        const { data, error } = await supabase.storage.from(bucket).createSignedUrl(file.name, 3600);
         if (error) {
-          authError.textContent = error.message;
-          return;
+          console.warn(`Signed URL error for ${file.name}:`, error);
+          return null;
         }
-        authPopup.style.display = 'none';
-        pages.premium.classList.remove('blur');
-        window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
+
+        const videoUrl = data.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+        const container = document.createElement('div');
+        container.className = 'video-container';
+        container.innerHTML = `
+          <video muted loop playsinline data-src="${videoUrl}"></video>
+          <div class="video-loading"></div>
+          <div class="video-overlay">
+            <div class="video-info">
+              <div class="creator-avatar"></div>
+              <div class="video-title">${file.name.replace(/\.[^/.]+$/, '')}</div>
+            </div>
+            <div class="video-actions">
+              <button class="action-btn" aria-label="Like video">
+                <img src="assets/images/like-icon.png" alt="Like" /> Like
+              </button>
+              <button class="action-btn" aria-label="Comment on video">
+                <img src="assets/images/comment-icon.png" alt="Comment" /> Comment
+              </button>
+            </div>
+          </div>
+        `;
+
+        const video = container.querySelector('video');
+        const loading = container.querySelector('.video-loading');
+        video.src = videoUrl;
+
+        video.addEventListener('loadeddata', () => {
+          container.classList.add('loaded');
+          loading.remove();
+        });
+
+        return container;
       }
 
-      authSignInBtn.onclick = async () => {
-        await handleAuth();
-      };
+      // Feed Loading
+      async function loadHomeFeed() {
+        elements.homeFeed.innerHTML = '';
+        try {
+          const { data: files, error } = await supabase.storage.from('vibes').list('', { limit: 10 });
+          if (error) throw new Error(`Failed to fetch vibes: ${error.message}`);
 
-      authPopup.onclick = (e) => {
-        if (e.target === authPopup) {
-          closeAllPopups();
-          handleNavigation('previews');
+          const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
+          if (!videoFiles.length) {
+            elements.homeFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No vibes available.</p>';
+            return;
+          }
+
+          for (const file of videoFiles) {
+            const container = await createVideoContainer(file, 'vibes');
+            if (container) elements.homeFeed.appendChild(container);
+          }
+
+          setupObserver(elements.homeFeed);
+        } catch (err) {
+          showToast(`Error loading vibes: ${err.message}`);
+          elements.homeFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load vibes.</p>';
         }
-      };
+      }
 
-      // How to Subscribe popup
-      howToSubscribeBtn.onclick = () => {
-        closeAllPopups();
-        howToSubscribePopup.style.display = 'block';
-        howToSubscribePopupOverlay.style.display = 'block';
-        pages[lastActivePage].classList.add('blur');
-      };
+      async function loadPremiumFeed() {
+        elements.premiumFeed.innerHTML = '';
+        try {
+          const { data: user, error: authError } = await supabase.auth.getUser();
+          if (authError || !user.user) {
+            elements.premiumFeed.innerHTML = `
+              <div class="premium-locked">
+                <h2>Unlock Exclusive Vibes</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Sign in to access premium content.</p>
+                <button id="premium-signin">Sign In</button>
+              </div>
+            `;
+            document.getElementById('premium-signin').addEventListener('click', () => showPage('auth'));
+            return;
+          }
 
-      closeHowToSubscribePopup.onclick = () => {
-        closeAllPopups();
-      };
+          elements.profileEmail.textContent = user.user.email;
+          elements.profileStatus.textContent = 'Premium Plan';
+          elements.logoutBtn.style.display = 'block';
+          if (user.user.email === ADMIN_EMAIL) {
+            elements.adminNav.style.display = 'block';
+          }
 
-      howToSubscribePopupOverlay.onclick = (e) => {
-        if (e.target === howToSubscribePopupOverlay) {
-          closeAllPopups();
+          const { data: files, error } = await supabase.storage.from('exclusive').list('', { limit: 5 });
+          if (error) throw new Error(`Failed to fetch premium vibes: ${error.message}`);
+
+          const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
+          if (!videoFiles.length) {
+            elements.premiumFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No exclusive vibes available.</p>';
+            return;
+          }
+
+          for (const file of videoFiles) {
+            const container = await createVideoContainer(file, 'exclusive');
+            if (container) elements.premiumFeed.appendChild(container);
+          }
+
+          setupObserver(elements.premiumFeed);
+        } catch (err) {
+          showToast(`Error loading premium vibes: ${err.message}`);
+          elements.premiumFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load premium vibes.</p>';
         }
-      };
+      }
 
-      // Privacy dropdown
-      const dropdownBtn = document.getElementById('privacyDropdownBtn');
-      const dropdownBody = document.getElementById('privacyDropdownBody');
-      let isDropdownOpen = false;
+      function setupObserver(container) {
+        if (observer) observer.disconnect();
+        observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              const video = entry.target.querySelector('video');
+              if (entry.isIntersecting && hasInteracted) {
+                gsap.fromTo(
+                  entry.target,
+                  { opacity: 0, scale: 0.95 },
+                  { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+                );
+                video.play().catch(() => showToast('Tap to play video.'));
+              } else {
+                video.pause();
+                video.currentTime = 0;
+              }
+            });
+          },
+          { threshold: 0.9 }
+        );
 
-      dropdownBtn.addEventListener('click', () => {
-        isDropdownOpen = !isDropdownOpen;
-        dropdownBody.style.display = isDropdownOpen ? 'block' : 'none';
-        dropdownBtn.innerHTML = isDropdownOpen ? 'Hide Details ▲' : 'Show Details ▼';
+        container.querySelectorAll('.video-container').forEach(container => observer.observe(container));
+      }
+
+      // Authentication
+      async function handleAuth() {
+        const email = elements.authEmail.value.trim();
+        const password = elements.authPassword.value.trim();
+        if (!email || !password) {
+          elements.authError.textContent = 'Please enter email and password.';
+          return;
+        }
+
+        try {
+          let { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error && error.message.includes('Invalid login')) {
+            ({ data, error } = await supabase.auth.signUp({ email, password }));
+          }
+          if (error) throw new Error(error.message);
+
+          elements.profileEmail.textContent = email;
+          elements.profileStatus.textContent = 'Premium Plan';
+          elements.logoutBtn.style.display = 'block';
+          if (email === ADMIN_EMAIL) {
+            elements.adminNav.style.display = 'block';
+          }
+          showPage('premium');
+          window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
+        } catch (err) {
+          elements.authError.textContent = err.message;
+        }
+      }
+
+      // Admin Upload
+      async function handleAdminUpload() {
+        const file = elements.videoFile.files[0];
+        const title = elements.videoTitle.value.trim();
+        const bucket = elements.videoBucket.value;
+        if (!file || !title || !bucket) {
+          elements.adminError.textContent = 'Please fill all fields.';
+          return;
+        }
+
+        if (!/\.(mp4|webm)$/i.test(file.name)) {
+          elements.adminError.textContent = 'Only .mp4 or .webm files allowed.';
+          return;
+        }
+
+        try {
+          const { data: user, error: authError } = await supabase.auth.getUser();
+          if (authError || !user.user || user.user.email !== ADMIN_EMAIL) {
+            elements.adminError.textContent = 'Unauthorized: Admin access only.';
+            return;
+          }
+
+          const fileName = `${Date.now()}_${title.replace(/\s+/g, '_')}.${file.name.split('.').pop()}`;
+          const { error: uploadError } = await supabase.storage.from(bucket).upload(fileName, file);
+          if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
+
+          elements.adminError.textContent = '';
+          elements.videoFile.value = '';
+          elements.videoTitle.value = '';
+          showToast('Video uploaded successfully!');
+        } catch (err) {
+          elements.adminError.textContent = err.message;
+        }
+      }
+
+      function updateProfile() {
+        supabase.auth.getUser().then(({ data: user, error }) => {
+          if (user?.user) {
+            elements.profileEmail.textContent = user.user.email;
+            elements.profileStatus.textContent = 'Premium Plan';
+            elements.logoutBtn.style.display = 'block';
+            if (user.user.email === ADMIN_EMAIL) {
+              elements.adminNav.style.display = 'block';
+            }
+          } else {
+            elements.profileEmail.textContent = 'Guest';
+            elements.profileStatus.textContent = 'Free Plan';
+            elements.logoutBtn.style.display = 'none';
+            elements.adminNav.style.display = 'none';
+          }
+        });
+      }
+
+      // Event Listeners
+      elements.menuBtn.addEventListener('click', () => {
+        elements.sidebar.classList.toggle('open');
+        elements.overlay.classList.toggle('active');
+        document.getElementById(`${currentPage}-page`).classList.toggle('blur');
       });
+
+      elements.overlay.addEventListener('click', closeModals);
+
+      elements.navBtns.forEach(btn => {
+        btn.addEventListener('click', () => showPage(btn.dataset.page));
+      });
+
+      elements.subscribeBtn.addEventListener('click', () => {
+        elements.welcomeModal.classList.add('active');
+        elements.welcomeOverlay.classList.add('active');
+        document.getElementById('profile-page').classList.add('blur');
+      });
+
+      elements.welcomeSubscribe.addEventListener('click', () => {
+        window.open('https://wa.me/254720047018', '_blank');
+      });
+
+      elements.welcomeClose.addEventListener('click', closeModals);
+      elements.welcomeOverlay.addEventListener('click', e => {
+        if (e.target === elements.welcomeOverlay) closeModals();
+      });
+
+      elements.authSubmit.addEventListener('click', handleAuth);
+
+      elements.adminSubmit.addEventListener('click', handleAdminUpload);
+
+      elements.logoutBtn.addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        elements.profileEmail.textContent = 'Guest';
+        elements.profileStatus.textContent = 'Free Plan';
+        elements.logoutBtn.style.display = 'none';
+        elements.adminNav.style.display = 'none';
+        showPage('auth');
+      });
+
+      // Welcome Modal
+      setTimeout(() => {
+        elements.welcomeModal.classList.add('active');
+        elements.welcomeOverlay.classList.add('active');
+        document.getElementById('home-page').classList.add('blur');
+      }, 1000);
+
+      // Initial Load
+      loadHomeFeed();
     });
   </script>
 </body>
