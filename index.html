@@ -54,7 +54,7 @@
       width: calc(100vw - 2rem);
       max-width: 30rem;
       height: 4rem;
-      background: var(--bar-bg);
+      background: transparent;
       box-shadow: var(--shadow);
       display: flex;
       align-items: center;
@@ -165,7 +165,7 @@
 
     .side-popup-links button,
     .side-popup-links a {
-      padding: 0.875rem 0 0.875rem 1.125rem;
+      padding: 0.875rem silt0 0.875rem 1.125rem;
       background: var(--bg);
       color: var(--text-light);
       border: none;
@@ -248,7 +248,7 @@
     .page {
       display: none;
       width: 100%;
-      min-height: calc(100vh - 8.5rem);
+      min-height: 60vh;
       padding-top: 0.75rem;
     }
 
@@ -426,7 +426,7 @@
       justify-content: center;
       align-items: center;
       z-index: 4000;
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.3); /* Slightly transparent to show video */
     }
 
     #authPopup > div {
@@ -520,22 +520,18 @@
 
     #previews-videos {
       width: var(--video-width);
-      height: calc(100vh - 8.5rem);
+      height: var(--video-height);
       margin: 0 auto;
       overflow-y: auto;
       scroll-snap-type: y mandatory;
       background: #000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: calc((100vh - 8.5rem - var(--video-height)) / 2) 0;
       position: relative;
     }
 
     .video-container {
       width: var(--video-width);
       height: var(--video-height);
-      scroll-snap-align: center;
+      scroll-snap-align: start;
       position: relative;
       display: flex;
       align-items: center;
@@ -553,11 +549,6 @@
       top: 0;
       left: 0;
       z-index: 1;
-      background: #000; /* Black background before load */
-    }
-
-    .video-container video:not([src]) {
-      background: #000; /* Ensure black screen when no src */
     }
 
     #premium-video-holder {
@@ -580,11 +571,6 @@
       top: 0;
       left: 0;
       z-index: 1;
-      background: #000;
-    }
-
-    #premium-video-holder video:not([src]) {
-      background: #000;
     }
 
     .resolution-selector {
@@ -630,10 +616,6 @@
       :root {
         --video-width: 100vw;
         --video-height: calc(100vw * 16 / 9);
-      }
-
-      #previews-videos {
-        padding: calc((100vh - 8.5rem - var(--video-height)) / 2) 0;
       }
     }
 
@@ -832,9 +814,6 @@
       }
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // Black poster image (1x1 black pixel, base64)
-      const blackPoster = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-
       // DOM references
       const popupMenu = document.getElementById('popupMenu');
       const popupOverlay = document.getElementById('popupOverlay');
@@ -911,7 +890,7 @@
                 const container = document.createElement('div');
                 container.className = 'video-container';
                 const video = document.createElement('video');
-                video.poster = blackPoster;
+                video.src = publicUrlData.publicUrl;
                 video.muted = true;
                 video.playsinline = true;
                 video.loop = true;
@@ -943,7 +922,7 @@
               }
             });
 
-            // Setup IntersectionObserver for auto-play and source loading
+            // Setup IntersectionObserver for auto-play
             if (observer) {
               observer.disconnect();
             }
@@ -952,9 +931,6 @@
                 entries.forEach(entry => {
                   const video = entry.target.querySelector('video');
                   if (entry.isIntersecting) {
-                    if (!video.src) {
-                      video.src = video.dataset.lowSrc;
-                    }
                     gsap.fromTo(
                       entry.target,
                       { transform: 'rotateY(90deg)', opacity: 0 },
@@ -971,8 +947,6 @@
                     );
                     video.pause();
                     video.currentTime = 0;
-                    video.src = ''; // Clear source to show black poster
-                    video.poster = blackPoster;
                   }
                 });
               },
@@ -982,9 +956,6 @@
             document.querySelectorAll('.video-container').forEach(container => {
               observer.observe(container);
             });
-
-            // Scroll to first video
-            previewsVideos.scrollTo({ top: 0, behavior: 'smooth' });
           } else {
             console.warn('No files found in previews bucket.');
             previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
@@ -1010,8 +981,6 @@
           if (currentPremiumVideo) {
             currentPremiumVideo.pause();
             currentPremiumVideo.currentTime = 0;
-            currentPremiumVideo.src = '';
-            currentPremiumVideo.poster = blackPoster;
           }
 
           // List files in the 'premium' bucket
@@ -1055,7 +1024,6 @@
               const container = document.createElement('div');
               container.className = 'video-container';
               const video = document.createElement('video');
-              video.poster = blackPoster;
               video.src = videoUrl;
               video.muted = true;
               video.playsinline = true;
