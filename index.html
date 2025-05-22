@@ -528,19 +528,22 @@
       scroll-snap-type: y mandatory;
       background: #000;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .video-container {
       width: var(--video-width);
-      height: var(--video-height);
-      scroll-snap-align: start;
+      height: 100%;
+      scroll-snap-align: center;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #000;
       overflow: hidden;
-      transition: transform 0.5s ease-in-out;
     }
 
     .video-container video {
@@ -618,6 +621,12 @@
       :root {
         --video-width: 100vw;
         --video-height: calc(100vw * 16 / 9);
+      }
+
+      .video-container,
+      #previews-videos,
+      #premium-video-holder {
+        height: 100%;
       }
     }
 
@@ -922,7 +931,7 @@
               }
             });
 
-            // Setup IntersectionObserver for auto-play
+            // Setup IntersectionObserver for auto-play and flip transition
             if (observer) {
               observer.disconnect();
             }
@@ -950,7 +959,7 @@
                   }
                 });
               },
-              { threshold: 0.8 }
+              { threshold: 0.5 }
             );
 
             document.querySelectorAll('.video-container').forEach(container => {
@@ -977,13 +986,11 @@
       async function loadPremiumVideo() {
         loading.style.display = 'block';
         try {
-          // Pause current video if exists
           if (currentPremiumVideo) {
             currentPremiumVideo.pause();
             currentPremiumVideo.currentTime = 0;
           }
 
-          // List files in the 'premium' bucket
           const { data: files, error } = await supabase.storage
             .from('premium')
             .list('', { limit: 100 });
@@ -1003,11 +1010,9 @@
               return;
             }
 
-            // Use public URL for unauthenticated playback (temporary for demo)
             const firstVideo = videoFiles[0];
             let videoUrl = supabase.storage.from('premium').getPublicUrl(firstVideo.name).data.publicUrl;
 
-            // If public URL fails, try signed URL
             if (!videoUrl) {
               const { data: signedUrlData, error: signedError } = await supabase.storage
                 .from('premium')
@@ -1060,7 +1065,6 @@
                 video.controls = true;
               });
 
-              // Check authentication after loading video
               const userResponse = await supabase.auth.getUser();
               if (userResponse.error || !userResponse.data.user) {
                 authPopup.style.display = 'flex';
@@ -1081,7 +1085,6 @@
         }
       }
 
-      // Helper to close all popups
       function closeAllPopups() {
         popupMenu.style.display = 'none';
         popupOverlay.style.display = 'none';
@@ -1093,7 +1096,6 @@
         document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
       }
 
-      // Show specific page
       function showPage(page) {
         closeAllPopups();
         Object.values(pages).forEach(p => p.classList.remove('active'));
@@ -1103,14 +1105,12 @@
         lastActivePage = page;
       }
 
-      // Navigation handler
       function handleNavigation(page) {
         showPage(page);
         if (page === 'previews') loadPreviewsVideos();
         if (page === 'premium') loadPremiumVideo();
       }
 
-      // Menu toggle
       menuButton.onclick = () => {
         const isOpen = popupMenu.style.display === 'flex';
         closeAllPopups();
@@ -1123,14 +1123,12 @@
 
       popupOverlay.onclick = () => closeAllPopups();
 
-      // Navigation buttons
       navBtns.home.onclick = () => handleNavigation('home');
       navBtns.previews.onclick = () => handleNavigation('previews');
       navBtns.premium.onclick = () => handleNavigation('premium');
       infoBtn.onclick = () => handleNavigation('info');
       privacyBtn.onclick = () => handleNavigation('privacy');
 
-      // Auth popup logic
       async function handleAuth() {
         authError.textContent = '';
         loading.style.display = 'block';
@@ -1166,7 +1164,6 @@
         }
       };
 
-      // How to Subscribe popup
       howToSubscribeBtn.onclick = () => {
         closeAllPopups();
         howToSubscribePopup.style.display = 'block';
@@ -1184,7 +1181,6 @@
         }
       };
 
-      // Privacy dropdown
       const dropdownBtn = document.getElementById('privacyDropdownBtn');
       const dropdownBody = document.getElementById('privacyDropdownBody');
       let isDropdownOpen = false;
