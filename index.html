@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VelvetFlix - Unlock Your Secret Vibes</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" />
+  <title>Baddiez - Unlock Your Secret Vibes</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" />
   <style>
     /* Base Styles */
     :root {
-      --background: #343541;
-      --surface: #444654;
-      --text: #FFFFFF;
-      --text-secondary: #D1D5DB;
-      --primary: #2EA4F2;
-      --accent: #10A37F;
-      --muted: #9CA3AF;
-      --error: #EF4444;
+      --background: #343541; /* Main background */
+      --surface: #444654; /* User containers (forms, nav) */
+      --surface-secondary: #343541; /* Modals */
+      --text: #FFFFFF; /* Primary text */
+      --text-secondary: #D1D5DB; /* Secondary text */
+      --text-muted: #9CA3AF; /* Muted text/icons */
+      --accent: #10A37F; /* Green buttons */
+      --link: #2EA4F2; /* Links, titles */
+      --error: #EF4444; /* Errors */
       --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       --radius: 0.5rem;
       --transition: 240ms ease-out;
@@ -29,7 +30,7 @@
     }
 
     html, body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--background);
       color: var(--text);
       line-height: 1.5;
@@ -59,7 +60,7 @@
     }
 
     .loader {
-      border: 4px solid var(--primary);
+      border: 4px solid var(--link);
       border-top: 4px solid var(--accent);
       border-radius: 50%;
       width: 48px;
@@ -96,13 +97,14 @@
     .app-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.2rem;
-      color: var(--primary);
+      color: var(--link);
+      font-weight: 700;
     }
 
     .menu-btn {
       background: none;
       border: none;
-      color: var(--text);
+      color: var(--text-muted);
       font-size: 1.5rem;
       cursor: pointer;
     }
@@ -111,7 +113,7 @@
       position: fixed;
       top: 0;
       right: -100%;
-      width: 250px;
+      width: 280px;
       height: 100%;
       background: var(--surface);
       padding: 2rem 1rem;
@@ -126,7 +128,7 @@
     .menu-close {
       background: none;
       border: none;
-      color: var(--primary);
+      color: var(--link);
       font-size: 1.5rem;
       position: absolute;
       top: 1rem;
@@ -138,18 +140,39 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.5rem;
       margin-top: 2rem;
     }
 
+    .menu li {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+
+    .menu li:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
     .menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       color: var(--text-secondary);
       text-decoration: none;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
     }
 
     .menu a:hover {
-      color: var(--primary);
+      color: var(--link);
+    }
+
+    .menu i {
+      width: 20px;
+      height: 20px;
     }
 
     /* Content */
@@ -197,7 +220,7 @@
       position: absolute;
       bottom: 20px;
       left: 20px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-muted);
       font-size: 0.8rem;
       pointer-events: none;
     }
@@ -218,7 +241,7 @@
       position: absolute;
       bottom: 60px;
       left: 1rem;
-      background: rgba(0, 0, 0, 0.6);
+      background: var(--surface);
       padding: 0.5rem;
       border-radius: var(--radius);
       pointer-events: auto;
@@ -227,7 +250,7 @@
 
     .video-title {
       font-size: 0.9rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
     }
 
@@ -239,9 +262,9 @@
     }
 
     .action-btn {
-      background: rgba(0, 0, 0, 0.6);
+      background: var(--surface);
       border: none;
-      color: var(--text);
+      color: var(--text-muted);
       font-size: 1.5rem;
       cursor: pointer;
       width: 40px;
@@ -256,6 +279,7 @@
 
     .action-btn:hover {
       transform: scale(1.1);
+      color: var(--link);
     }
 
     .video-loading {
@@ -263,7 +287,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      border: 4px solid var(--primary);
+      border: 4px solid var(--link);
       border-top: 4px solid var(--accent);
       border-radius: 50%;
       width: 36px;
@@ -281,12 +305,20 @@
       padding: 2rem;
       max-width: 400px;
       margin: 0 auto;
+      background: var(--surface);
+      border-radius: var(--radius);
     }
 
     .premium-locked h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      color: var(--primary);
+      color: var(--link);
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .premium-locked p {
+      color: var(--text-secondary);
       margin-bottom: 1rem;
     }
 
@@ -297,7 +329,7 @@
       padding: 0.75rem 1.5rem;
       border-radius: 2rem;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: opacity var(--transition);
     }
@@ -326,13 +358,14 @@
     .auth-form h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      color: var(--primary);
+      color: var(--link);
       text-align: center;
+      font-weight: 700;
     }
 
     .auth-form input {
       padding: 0.75rem;
-      border: 1px solid var(--muted);
+      border: 1px solid var(--text-muted);
       border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
@@ -346,7 +379,7 @@
       padding: 0.75rem;
       border-radius: var(--radius);
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: opacity var(--transition);
     }
@@ -368,9 +401,10 @@
     }
 
     .auth-toggle a {
-      color: var(--primary);
+      color: var(--link);
       text-decoration: none;
       cursor: pointer;
+      font-weight: 700;
     }
 
     .auth-toggle a:hover {
@@ -389,13 +423,16 @@
       align-items: center;
       gap: 1rem;
       margin-bottom: 2rem;
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: var(--radius);
     }
 
     .profile-avatar {
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: var(--primary);
+      background: var(--link);
     }
 
     .profile-info {
@@ -404,7 +441,7 @@
 
     .profile-email {
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
     }
 
@@ -427,7 +464,7 @@
       padding: 0.75rem;
       border-radius: var(--radius);
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: opacity var(--transition);
     }
@@ -456,14 +493,15 @@
     .admin-form h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      color: var(--primary);
+      color: var(--link);
       text-align: center;
+      font-weight: 700;
     }
 
     .admin-form input,
     .admin-form select {
       padding: 0.75rem;
-      border: 1px solid var(--muted);
+      border: 1px solid var(--text-muted);
       border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
@@ -477,7 +515,7 @@
       padding: 0.75rem;
       border-radius: var(--radius);
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: opacity var(--transition);
     }
@@ -512,13 +550,14 @@
     .paywall-form h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      color: var(--primary);
+      color: var(--link);
       text-align: center;
+      font-weight: 700;
     }
 
     .paywall-form input {
       padding: 0.75rem;
-      border: 1px solid var(--muted);
+      border: 1px solid var(--text-muted);
       border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
@@ -532,7 +571,7 @@
       padding: 0.75rem;
       border-radius: var(--radius);
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: opacity var(--transition);
     }
@@ -552,13 +591,16 @@
       max-width: 600px;
       margin: 0 auto;
       padding: 2rem 1rem;
+      background: var(--surface);
+      border-radius: var(--radius);
     }
 
     .static-page h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      color: var(--primary);
+      color: var(--link);
       margin-bottom: 1rem;
+      font-weight: 700;
     }
 
     .static-page p {
@@ -567,8 +609,9 @@
     }
 
     .static-page a {
-      color: var(--primary);
+      color: var(--link);
       text-decoration: none;
+      font-weight: 700;
     }
 
     .static-page a:hover {
@@ -596,7 +639,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: var(--surface);
+      background: var(--surface-secondary);
       border-radius: var(--radius);
       padding: 1.5rem;
       max-width: min(90vw, 400px);
@@ -613,7 +656,7 @@
     .modal-close {
       background: none;
       border: none;
-      color: var(--primary);
+      color: var(--link);
       font-size: 1.25rem;
       cursor: pointer;
     }
@@ -621,12 +664,31 @@
     .modal-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.25rem;
-      color: var(--primary);
+      color: var(--link);
       margin-bottom: 1rem;
+      font-weight: 700;
     }
 
     .modal-content {
       font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .modal-content button {
+      background: var(--accent);
+      color: var(--text);
+      border: none;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity var(--transition);
+      width: 100%;
+    }
+
+    .modal-content button:hover {
+      opacity: 0.9;
     }
 
     /* Toast */
@@ -673,8 +735,9 @@
     .nav-btn {
       background: none;
       border: none;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       font-size: 0.75rem;
+      font-weight: 700;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -687,17 +750,17 @@
     .nav-btn svg {
       width: 24px;
       height: 24px;
-      stroke: var(--text-secondary);
+      stroke: var(--text-muted);
     }
 
     .nav-btn.active,
     .nav-btn:hover {
-      color: var(--primary);
+      color: var(--link);
     }
 
     .nav-btn.active svg,
     .nav-btn:hover svg {
-      stroke: var(--primary);
+      stroke: var(--link);
     }
 
     /* Responsive Design */
@@ -729,8 +792,8 @@
 
   <!-- Header -->
   <header>
-    <img src="assets/images/logo.png" class="logo" alt="VelvetFlix Logo" />
-    <span class="app-title">VelvetFlix</span>
+    <img src="assets/images/logo.png" class="logo" alt="Baddiez Logo" />
+    <span class="app-title">Baddiez</span>
     <button class="menu-btn" id="menu-btn">
       <i data-lucide="menu"></i>
     </button>
@@ -740,10 +803,10 @@
   <div class="menu" id="menu">
     <button class="menu-close" id="menu-close">×</button>
     <ul>
-      <li><a href="#" onClick="setPage('contact')">Contact Us</a></li>
-      <li><a href="#" onClick="setPage('privacy')">Privacy Policy</a></li>
-      <li><a href="#" onClick="setPage('terms')">Terms of Service</a></li>
-      <li><a href="#" onClick="setPage('about')">About</a></li>
+      <li><a href="#" onClick="setPage('contact'); closeMenu();"><i data-lucide="mail"></i>Contact Us</a></li>
+      <li><a href="#" onClick="setPage('privacy'); closeMenu();"><i data-lucide="lock"></i>Privacy Policy</a></li>
+      <li><a href="#" onClick="setPage('terms'); closeMenu();"><i data-lucide="file-text"></i>Terms of Service</a></li>
+      <li><a href="#" onClick="setPage('about'); closeMenu();"><i data-lucide="info"></i>About</a></li>
     </ul>
   </div>
 
@@ -755,8 +818,8 @@
   <div class="modal" id="age-modal">
     <h3 class="modal-title">Age Verification</h3>
     <div class="modal-content">
-      <p>You must be 18 or older to use VelvetFlix. Are you 18+?</p>
-      <button class="profile-btn" style="width: 100%;" id="age-confirm">Yes, I am 18+</button>
+      <p>You must be 18 or older to use Baddiez. Are you 18+?</p>
+      <button id="age-confirm">Yes, I am 18+</button>
     </div>
   </div>
 
@@ -764,7 +827,7 @@
   <div class="modal-overlay" id="welcome-overlay"></div>
   <div class="modal" id="welcome-modal">
     <button class="modal-close" id="welcome-close">×</button>
-    <h3 class="modal-title">Welcome to VelvetFlix!</h3>
+    <h3 class="modal-title">Welcome to Baddiez!</h3>
     <div class="modal-content">
       <p>Unlock Your Secret Vibes with a Premium subscription for Ksh 99/month.</p>
       <ol>
@@ -772,7 +835,7 @@
         <li>Send transaction code via WhatsApp to +254720047018.</li>
         <li>Redeem your access code to enjoy exclusive content!</li>
       </ol>
-      <button class="profile-btn" style="width: 100%;" id="welcome-subscribe">Get Premium</button>
+      <button id="welcome-subscribe">Get Premium</button>
     </div>
   </div>
 
@@ -794,6 +857,17 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     const ADMIN_EMAIL = 'your-admin-email@example.com';
+
+    function showToast(message, duration = 4000) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('active');
+      setTimeout(() => toast.classList.remove('active'), duration);
+    }
+
+    function closeMenu() {
+      document.getElementById('menu').classList.remove('active');
+    }
 
     function App() {
       const [page, setPage] = useState('home');
@@ -826,7 +900,6 @@
           document.getElementById('welcome-overlay').classList.add('active');
         }
 
-        // Expose setPage globally for menu links
         window.setPage = setPage;
       }, []);
 
@@ -839,20 +912,6 @@
           .eq('used', true)
           .single();
         if (data && !error) setIsPremium(true);
-      }
-
-      function showToast(message, duration = 4000) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.classList.add('active');
-        setTimeout(() => toast.classList.remove('active'), duration);
-      }
-
-      function closeModals() {
-        document.getElementById('welcome-modal').classList.remove('active');
-        document.getElementById('welcome-overlay').classList.remove('active');
-        document.getElementById('age-modal').classList.remove('active');
-        document.getElementById('age-overlay').classList.remove('active');
       }
 
       async function handleLogout() {
@@ -870,8 +929,8 @@
         createElement(PremiumPage, { active: page === 'premium', user, isPremium, hasInteracted, setPage }),
         createElement(AuthPage, { active: page === 'auth', setUser, setPage }),
         createElement(ProfilePage, { active: page === 'profile', user, isPremium, handleLogout, setPage }),
-        createElement(AdminPage, { active: page === 'admin', user, showToast }),
-        createElement(PaywallPage, { active: page === 'paywall', user, setIsPremium, showToast, setPage }),
+        createElement(AdminPage, { active: page === 'admin', user }),
+        createElement(PaywallPage, { active: page === 'paywall', user, setIsPremium, setPage }),
         createElement(ContactPage, { active: page === 'contact' }),
         createElement(PrivacyPage, { active: page === 'privacy' }),
         createElement(TermsPage, { active: page === 'terms' }),
@@ -1005,7 +1064,7 @@
             createElement('h2', null, 'Unlock Premium Vibes'),
             createElement(
               'p',
-              { style: { color: 'var(--text-secondary)', marginBottom: '1rem' } },
+              null,
               'Sign in or redeem an access code to enjoy exclusive content.'
             ),
             createElement(
@@ -1070,7 +1129,7 @@
           onLoadedData: () => setLoaded(true)
         }),
         !loaded && createElement('div', { className: 'video-loading' }),
-        !isPremium && createElement('div', { className: 'watermark' }, `VelvetFlix${user?.id ? ` | ${user.id}` : ''}`),
+        !isPremium && createElement('div', { className: 'watermark' }, `Baddiez${user?.id ? ` | ${user.id}` : ''}`),
         createElement(
           'div',
           { className: 'video-overlay' },
@@ -1168,8 +1227,6 @@
     }
 
     function ProfilePage({ active, user, isPremium, handleLogout, setPage }) {
-      const [theme, setTheme] = useState('dark');
-
       return createElement(
         'section',
         { className: `page profile-page ${active ? 'active' : ''}`, id: 'profile-page' },
@@ -1202,23 +1259,12 @@
               'button',
               { className: 'profile-btn', onClick: handleLogout },
               'Logout'
-            ),
-          createElement(
-            'button',
-            {
-              className: 'profile-btn',
-              onClick: () => {
-                setTheme(theme === 'dark' ? 'light' : 'dark');
-                document.body.style.background = theme === 'dark' ? '#D1D5DB' : '#343541';
-              }
-            },
-            `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Theme`
-          )
+            )
         )
       );
     }
 
-    function AdminPage({ active, user, showToast }) {
+    function AdminPage({ active, user }) {
       const [file, setFile] = useState(null);
       const [title, setTitle] = useState('');
       const [bucket, setBucket] = useState('previews');
@@ -1285,12 +1331,12 @@
             createElement('option', { value: 'premuim' }, 'Premium')
           ),
           createElement('button', { onClick: handleUpload }, 'Upload'),
-          createElement('p', { className: 'auth-error' }, error)
+          createElement('p', { className: 'admin-error' }, error)
         )
       );
     }
 
-    function PaywallPage({ active, user, setIsPremium, showToast, setPage }) {
+    function PaywallPage({ active, user, setIsPremium, setPage }) {
       const [code, setCode] = useState('');
       const [error, setError] = useState('');
 
@@ -1339,7 +1385,7 @@
             'aria-label': 'Access code'
           }),
           createElement('button', { onClick: handleRedeem }, 'Redeem'),
-          createElement('p', { className: 'auth-error' }, error)
+          createElement('p', { className: 'paywall-error' }, error)
         )
       );
     }
@@ -1350,7 +1396,7 @@
         { className: `page static-page ${active ? 'active' : ''}`, id: 'contact-page' },
         createElement('h2', null, 'Contact Us'),
         createElement('p', null, 'Have questions or feedback? Reach out to us!'),
-        createElement('p', null, 'Email: ', createElement('a', { href: 'mailto:support@velvetflix.com' }, 'support@velvetflix.com')),
+        createElement('p', null, 'Email: ', createElement('a', { href: 'mailto:support@baddiez.com' }, 'support@baddiez.com')),
         createElement('p', null, 'WhatsApp: ', createElement('a', { href: 'https://wa.me/254720047018' }, '+254 720 047018'))
       );
     }
@@ -1360,9 +1406,9 @@
         'section',
         { className: `page static-page ${active ? 'active' : ''}`, id: 'privacy-page' },
         createElement('h2', null, 'Privacy Policy'),
-        createElement('p', null, 'At VelvetFlix, we value your privacy. This policy outlines how we collect, use, and protect your personal information.'),
+        createElement('p', null, 'At Baddiez, we value your privacy. This policy outlines how we collect, use, and protect your personal information.'),
         createElement('p', null, 'We collect email addresses for authentication and communication purposes. Your data is stored securely with Supabase and not shared with third parties.'),
-        createElement('p', null, 'For more details, contact us at ', createElement('a', { href: 'mailto:support@velvetflix.com' }, 'support@velvetflix.com'), '.')
+        createElement('p', null, 'For more details, contact us at ', createElement('a', { href: 'mailto:support@baddiez.com' }, 'support@baddiez.com'), '.')
       );
     }
 
@@ -1371,9 +1417,9 @@
         'section',
         { className: `page static-page ${active ? 'active' : ''}`, id: 'terms-page' },
         createElement('h2', null, 'Terms of Service'),
-        createElement('p', null, 'By using VelvetFlix, you agree to our terms of service. You must be 18+ to access our content.'),
+        createElement('p', null, 'By using Baddiez, you agree to our terms of service. You must be 18+ to access our content.'),
         createElement('p', null, 'Premium subscriptions require payment via M-Pesa and a valid access code. Refunds are not available.'),
-        createElement('p', null, 'Contact us at ', createElement('a', { href: 'mailto:support@velvetflix.com' }, 'support@velvetflix.com'), ' for support.')
+        createElement('p', null, 'Contact us at ', createElement('a', { href: 'mailto:support@baddiez.com' }, 'support@baddiez.com'), ' for support.')
       );
     }
 
@@ -1381,8 +1427,8 @@
       return createElement(
         'section',
         { className: `page static-page ${active ? 'active' : ''}`, id: 'about-page' },
-        createElement('h2', null, 'About VelvetFlix'),
-        createElement('p', null, 'VelvetFlix is your destination for exclusive, premium video content. Unlock your secret vibes with our curated selection.'),
+        createElement('h2', null, 'About Baddiez'),
+        createElement('p', null, 'Baddiez is your destination for exclusive, premium video content. Unlock your secret vibes with our curated selection.'),
         createElement('p', null, 'Founded in 2025, we aim to provide a seamless and secure experience for our users.'),
         createElement('p', null, 'Join us today at ', createElement('a', { href: 'https://wa.me/254720047018' }, '+254 720 047018'), '.')
       );
