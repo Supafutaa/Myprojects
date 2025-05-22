@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VibeSphere - Premium Video Vibes</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" />
+  <title>VelvetFlix - Unlock Your Secret Vibes</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700&display=swap" />
   <style>
     /* Base Styles */
     :root {
-      --background: #0f0f0f;
-      --surface: #1c1c1c;
-      --text: #f5f5f5;
-      --text-secondary: #b0b0b0;
-      --primary: #00f7ff;
-      --accent: #ff00ff;
-      --error: #ff4b4b;
-      --success: #00cc00;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --background: #0E0E12;
+      --surface: #1A1A1E;
+      --text: #F0F0F5;
+      --text-secondary: #A0A0AA;
+      --primary: #C71585;
+      --accent: #8A2BE2;
+      --error: #FF4040;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
       --radius: 0.5rem;
-      --transition: 0.3s ease;
+      --transition: 240ms ease-out;
       --video-aspect: 9 / 16;
     }
 
@@ -29,7 +28,7 @@
     }
 
     html, body {
-      font-family: 'Poppins', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--background);
       color: var(--text);
       line-height: 1.5;
@@ -78,7 +77,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(28, 28, 28, 0.9);
+      background: rgba(10, 10, 14, 0.9);
       backdrop-filter: blur(8px);
       padding: 0.75rem 1rem;
       z-index: 1000;
@@ -94,93 +93,12 @@
     }
 
     .app-title {
+      font-family: 'Playfair Display', serif;
       font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .menu-btn {
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    /* Sidebar (Desktop) */
-    #sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: min(80vw, 220px);
-      height: 100vh;
-      background: var(--surface);
-      transform: translateX(-100%);
-      transition: transform var(--transition);
-      z-index: 1001;
-      padding: 1rem;
-      display: none;
-    }
-
-    @media (min-width: 1024px) {
-      #sidebar {
-        display: block;
-        transform: translateX(0);
-        width: 240px;
-      }
-    }
-
-    #sidebar.open {
-      transform: translateX(0);
-      display: block;
-    }
-
-    .sidebar-nav {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 2rem;
-    }
-
-    .sidebar-nav button {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: var(--radius);
-      transition: background var(--transition);
-    }
-
-    .sidebar-nav button:hover,
-    .sidebar-nav button.active {
-      background: var(--primary);
-      color: #000;
-    }
-
-    .sidebar-nav img {
-      width: 20px;
-      height: 20px;
-    }
-
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 1000;
-    }
-
-    #overlay.active {
-      display: block;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     /* Content */
@@ -188,16 +106,9 @@
       padding: 4.5rem 0 4rem;
     }
 
-    @media (min-width: 1024px) {
-      .content {
-        margin-left: 240px;
-        padding: 5rem 1rem;
-      }
-    }
-
     .page {
       display: none;
-      animation: fadeIn 0.4s ease;
+      animation: fadeIn 240ms ease-out;
     }
 
     .page.active {
@@ -209,7 +120,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Video Feed (Home) */
+    /* Video Feed */
     .video-feed {
       height: calc(100vh - 8.5rem);
       overflow-y: auto;
@@ -230,35 +141,36 @@
       object-fit: contain;
     }
 
+    .watermark {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.8rem;
+      pointer-events: none;
+    }
+
     .video-overlay {
       position: absolute;
       top: 0;
-      left: 0;
-      width: 100%;
+      right: 0;
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      align-items: flex-end;
       padding: 1rem;
       pointer-events: none;
     }
 
     .video-info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      position: absolute;
+      bottom: 60px;
+      left: 1rem;
       background: rgba(0, 0, 0, 0.6);
       padding: 0.5rem;
       border-radius: var(--radius);
       pointer-events: auto;
       max-width: 80%;
-    }
-
-    .creator-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent);
     }
 
     .video-title {
@@ -269,7 +181,6 @@
     .video-actions {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
       gap: 1rem;
       pointer-events: auto;
     }
@@ -278,20 +189,16 @@
       background: rgba(0, 0, 0, 0.6);
       border: none;
       color: var(--text);
-      font-size: 0.9rem;
+      font-size: 1.5rem;
       cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: 0.25rem;
-      padding: 0.5rem;
-      border-radius: var(--radius);
+      justify-content: center;
       pointer-events: auto;
       transition: transform var(--transition);
-    }
-
-    .action-btn img {
-      width: 24px;
-      height: 24px;
     }
 
     .action-btn:hover {
@@ -304,7 +211,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       border: 4px solid var(--primary);
-      border-top: 4px solid transparent;
+      border-top: 4px solid var(--accent);
       border-radius: 50%;
       width: 36px;
       height: 36px;
@@ -324,82 +231,29 @@
     }
 
     .premium-locked h2 {
+      font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--primary);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       margin-bottom: 1rem;
     }
 
     .premium-locked button {
-      background: var(--primary);
-      color: #000;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: var(--text);
       border: none;
       padding: 0.75rem 1.5rem;
       border-radius: 2rem;
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background var(--transition);
+      transition: opacity var(--transition);
     }
 
     .premium-locked button:hover {
-      background: var(--accent);
-    }
-
-    /* Admin Panel */
-    .admin-page {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-    }
-
-    .admin-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      background: var(--surface);
-      padding: 1.5rem;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .admin-form h2 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--primary);
-      text-align: center;
-    }
-
-    .admin-form input,
-    .admin-form select {
-      padding: 0.75rem;
-      border: none;
-      border-radius: var(--radius);
-      background: var(--background);
-      color: var(--text);
-      font-size: 0.9rem;
-    }
-
-    .admin-form button {
-      background: var(--primary);
-      color: #000;
-      border: none;
-      padding: 0.75rem;
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background var(--transition);
-    }
-
-    .admin-form button:hover {
-      background: var(--accent);
-    }
-
-    .admin-error {
-      color: var(--error);
-      font-size: 0.85rem;
-      text-align: center;
+      opacity: 0.9;
     }
 
     /* Auth Page */
@@ -420,9 +274,12 @@
     }
 
     .auth-form h2 {
+      font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--primary);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       text-align: center;
     }
 
@@ -436,19 +293,19 @@
     }
 
     .auth-form button {
-      background: var(--primary);
-      color: #000;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: var(--text);
       border: none;
       padding: 0.75rem;
       border-radius: var(--radius);
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background var(--transition);
+      transition: opacity var(--transition);
     }
 
     .auth-form button:hover {
-      background: var(--accent);
+      opacity: 0.9;
     }
 
     .auth-error {
@@ -457,31 +314,25 @@
       text-align: center;
     }
 
-    .social-login {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    .auth-guest {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
       margin-top: 1rem;
     }
 
-    .social-btn {
-      background: var(--background);
-      color: var(--text);
-      border: 1px solid var(--text-secondary);
-      padding: 0.75rem;
-      border-radius: var(--radius);
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: background var(--transition);
+    .auth-guest a {
+      color: var(--primary);
+      text-decoration: none;
     }
 
-    .social-btn:hover {
-      background: var(--surface);
+    .auth-guest a:hover {
+      text-decoration: underline;
     }
 
     /* Profile Page */
     .profile-page {
-      max-width: 600px;
+      max-width: 400px;
       margin: 0 auto;
       padding: 2rem 1rem;
     }
@@ -497,7 +348,7 @@
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: var(--primary);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
     }
 
     .profile-info {
@@ -506,8 +357,8 @@
 
     .profile-email {
       font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
+      font-weight: 600;
+      color: var(--text);
     }
 
     .profile-status {
@@ -517,41 +368,142 @@
 
     .profile-actions {
       display: flex;
+      flex-direction: column;
       gap: 1rem;
       margin-top: 1rem;
     }
 
     .profile-btn {
-      background: var(--primary);
-      color: #000;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: var(--text);
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.75rem;
       border-radius: var(--radius);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background var(--transition);
+      transition: opacity var(--transition);
     }
 
     .profile-btn:hover {
-      background: var(--accent);
+      opacity: 0.9;
     }
 
-    .profile-section {
-      margin-bottom: 2rem;
+    /* Admin Page */
+    .admin-page {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
     }
 
-    .profile-section h2 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin-bottom: 1rem;
-    }
-
-    .liked-videos {
+    .admin-form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .admin-form h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-align: center;
+    }
+
+    .admin-form input,
+    .admin-form select {
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--background);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .admin-form button {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: var(--text);
+      border: none;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+
+    .admin-form button:hover {
+      opacity: 0.9;
+    }
+
+    .admin-error {
+      color: var(--error);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    /* Paywall Page */
+    .paywall-page {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .paywall-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .paywall-form h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-align: center;
+    }
+
+    .paywall-form input {
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--background);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .paywall-form button {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: var(--text);
+      border: none;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity var(--transition);
+    }
+
+    .paywall-form button:hover {
+      opacity: 0.9;
+    }
+
+    .paywall-error {
+      color: var(--error);
+      font-size: 0.85rem;
+      text-align: center;
     }
 
     /* Modal */
@@ -601,9 +553,12 @@
     }
 
     .modal-title {
+      font-family: 'Playfair Display', serif;
       font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       margin-bottom: 1rem;
     }
 
@@ -618,7 +573,7 @@
       left: 50%;
       transform: translateX(-50%);
       background: var(--error);
-      color: #fff;
+      color: var(--text);
       padding: 0.75rem 1.5rem;
       border-radius: var(--radius);
       z-index: 3000;
@@ -630,7 +585,7 @@
 
     #toast.active {
       display: block;
-      animation: slideUp 0.3s ease;
+      animation: slideUp 240ms ease-out;
     }
 
     @keyframes slideUp {
@@ -652,12 +607,6 @@
       box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
     }
 
-    @media (min-width: 1024px) {
-      nav {
-        display: none;
-      }
-    }
-
     .nav-btn {
       background: none;
       border: none;
@@ -672,10 +621,10 @@
       transition: color var(--transition);
     }
 
-    .nav-btn img {
+    .nav-btn svg {
       width: 24px;
       height: 24px;
-      filter: brightness(0.7);
+      stroke: var(--text-secondary);
     }
 
     .nav-btn.active,
@@ -683,9 +632,9 @@
       color: var(--primary);
     }
 
-    .nav-btn.active img,
-    .nav-btn:hover img {
-      filter: brightness(1);
+    .nav-btn.active svg,
+    .nav-btn:hover svg {
+      stroke: var(--primary);
     }
 
     /* Responsive Design */
@@ -695,9 +644,15 @@
       }
 
       .video-feed {
-        height: calc(100vh - 10rem);
-        max-width: 480px;
+        max-width: 360px;
         margin: 0 auto;
+      }
+
+      .auth-page,
+      .profile-page,
+      .admin-page,
+      .paywall-page {
+        max-width: 600px;
       }
     }
   </style>
@@ -710,328 +665,156 @@
 
   <!-- Header -->
   <header>
-    <img src="assets/images/logo.png" class="logo" alt="VibeSphere Logo" />
-    <span class="app-title">VibeSphere</span>
-    <button class="menu-btn" id="menu-btn" aria-label="Open menu">≡</button>
+    <img src="assets/images/logo.png" class="logo" alt="VelvetFlix Logo" />
+    <span class="app-title">VelvetFlix</span>
   </header>
 
-  <!-- Sidebar -->
-  <div id="overlay"></div>
-  <aside id="sidebar">
-    <nav class="sidebar-nav">
-      <button data-page="home" class="active" aria-label="Home">
-        <img src="assets/images/home-icon.png" alt="" /> Home
-      </button>
-      <button data-page="premium" aria-label="Premium">
-        <img src="assets/images/premium-icon.png" alt="" /> Premium
-      </button>
-      <button data-page="profile" aria-label="Profile">
-        <img src="assets/images/profile-icon.png" alt="" /> Profile
-      </button>
-      <button data-page="admin" aria-label="Admin Panel" id="admin-nav" style="display: none;">
-        <img src="assets/images/admin-icon.png" alt="" /> Admin Panel
-      </button>
-    </nav>
-  </aside>
-
   <!-- Content -->
-  <main class="content">
-    <!-- Home Page -->
-    <section class="page home-page active" id="home-page">
-      <div class="video-feed" id="home-feed"></div>
-    </section>
+  <div id="app"></div>
 
-    <!-- Premium Page -->
-    <section class="page premium-page" id="premium-page">
-      <div class="video-feed" id="premium-feed"></div>
-    </section>
-
-    <!-- Profile Page -->
-    <section class="page profile-page" id="profile-page">
-      <div class="profile-header">
-        <div class="profile-avatar"></div>
-        <div class="profile-info">
-          <div class="profile-email" id="profile-email">Guest</div>
-          <div class="profile-status" id="profile-status">Free Plan</div>
-        </div>
-      </div>
-      <div class="profile-actions">
-        <button class="profile-btn" id="subscribe-btn">Subscribe</button>
-        <button class="profile-btn" id="logout-btn" style="display: none;">Logout</button>
-      </div>
-      <div class="profile-section">
-        <h2>Liked Videos</h2>
-        <div class="liked-videos" id="liked-videos">
-          <p style="color: var(--text-secondary);">No liked videos yet.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Admin Panel -->
-    <section class="page admin-page" id="admin-page">
-      <div class="admin-form">
-        <h2>Upload Video</h2>
-        <input type="file" id="video-file" accept="video/mp4,video/webm" required aria-label="Video file" />
-        <input type="text" id="video-title" placeholder="Video Title" required aria-label="Video title" />
-        <select id="video-bucket" required aria-label="Video category">
-          <option value="vibes">Public (Vibes)</option>
-          <option value="exclusive">Premium (Exclusive)</option>
-        </select>
-        <button type="submit" id="admin-submit">Upload</button>
-        <p class="admin-error" id="admin-error"></p>
-      </div>
-    </section>
-
-    <!-- Auth Page -->
-    <section class="page auth-page" id="auth-page">
-      <div class="auth-form">
-        <h2>Sign In / Sign Up</h2>
-        <input type="email" id="auth-email" placeholder="Email" required aria-label="Email" />
-        <input type="password" id="auth-password" placeholder="Password" required aria-label="Password" />
-        <button type="submit" id="auth-submit">Continue</button>
-        <p class="auth-error" id="auth-error"></p>
-        <div class="social-login">
-          <button class="social-btn" onclick="alert('Google login coming soon!')">Continue with Google</button>
-          <button class="social-btn" onclick="alert('Twitter login coming soon!')">Continue with Twitter</button>
-        </div>
-      </div>
-    </section>
-  </main>
+  <!-- Age Gate Modal -->
+  <div class="modal-overlay" id="age-overlay"></div>
+  <div class="modal" id="age-modal">
+    <h3 class="modal-title">Age Verification</h3>
+    <div class="modal-content">
+      <p>You must be 18 or older to use VelvetFlix. Are you 18+?</p>
+      <button class="profile-btn" style="width: 100%;" id="age-confirm">Yes, I am 18+</button>
+    </div>
+  </div>
 
   <!-- Welcome Modal -->
   <div class="modal-overlay" id="welcome-overlay"></div>
   <div class="modal" id="welcome-modal">
     <button class="modal-close" id="welcome-close">×</button>
-    <h3 class="modal-title">Welcome to VibeSphere!</h3>
+    <h3 class="modal-title">Welcome to VelvetFlix!</h3>
     <div class="modal-content">
-      <p>Unlock premium vibes for Ksh 99/month.</p>
+      <p>Unlock Your Secret Vibes with a Premium subscription for Ksh 99/month.</p>
       <ol>
-        <li>Pay via Mpesa (Till No: 123456).</li>
+        <li>Pay via M-Pesa (Till No: 123456).</li>
         <li>Send transaction code via WhatsApp to +254720047018.</li>
-        <li>Sign in to enjoy exclusive content!</li>
+        <li>Redeem your access code to enjoy exclusive content!</li>
       </ol>
-      <button class="profile-btn" style="width: 100%;" id="welcome-subscribe">Subscribe Now</button>
+      <button class="profile-btn" style="width: 100%;" id="welcome-subscribe">Get Premium</button>
     </div>
   </div>
 
   <!-- Toast -->
   <div id="toast"></div>
 
-  <!-- Bottom Navigation -->
-  <nav>
-    <button class="nav-btn active" data-page="home" aria-label="Home">
-      <img src="assets/images/home-icon.png" alt="Home Icon" />
-      Home
-    </button>
-    <button class="nav-btn" data-page="premium" aria-label="Premium">
-      <img src="assets/images/premium-icon.png" alt="Premium Icon" />
-      Premium
-    </button>
-    <button class="nav-btn" data-page="profile" aria-label="Profile">
-      <img src="assets/images/profile-icon.png" alt="Profile Icon" />
-      Profile
-    </button>
-  </nav>
-
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.441.0/dist/umd/lucide.min.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Preloader
-      window.addEventListener('load', () => {
-        setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 500);
-      });
+    lucide.createIcons();
 
-      // Supabase
-      const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
-      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
-      const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
-      if (!supabase) {
-        showToast('Failed to initialize Supabase.');
-        return;
+    const { createElement, useState, useEffect } = React;
+    const { createRoot } = ReactDOM;
+    const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const ADMIN_EMAIL = 'your-admin-email@example.com';
+
+    function App() {
+      const [page, setPage] = useState('home');
+      const [user, setUser] = useState(null);
+      const [isPremium, setIsPremium] = useState(false);
+      const [hasInteracted, setHasInteracted] = useState(false);
+      const [ageVerified, setAgeVerified] = useState(localStorage.getItem('ageVerified') === 'true');
+
+      useEffect(() => {
+        setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 500);
+        document.addEventListener('click', () => setHasInteracted(true), { once: true });
+
+        supabase.auth.getUser().then(({ data: { user } }) => {
+          setUser(user);
+          if (user?.email === ADMIN_EMAIL) setIsPremium(true);
+          checkPremium(user?.id);
+        });
+
+        supabase.auth.onAuthStateChange((event, session) => {
+          setUser(session?.user || null);
+          if (session?.user?.email === ADMIN_EMAIL) setIsPremium(true);
+          checkPremium(session?.user?.id);
+        });
+
+        if (!ageVerified) {
+          document.getElementById('age-modal').classList.add('active');
+          document.getElementById('age-overlay').classList.add('active');
+        } else {
+          document.getElementById('welcome-modal').classList.add('active');
+          document.getElementById('welcome-overlay').classList.add('active');
+        }
+      }, []);
+
+      async function checkPremium(userId) {
+        if (!userId) return;
+        const { data, error } = await supabase
+          .from('access_codes')
+          .select('used')
+          .eq('assigned_to', userId)
+          .eq('used', true)
+          .single();
+        if (data && !error) setIsPremium(true);
       }
 
-      // Admin Email (Replace with your email)
-      const ADMIN_EMAIL = 'your-admin-email@example.com';
-
-      // DOM Elements
-      const elements = {
-        menuBtn: document.getElementById('menu-btn'),
-        sidebar: document.getElementById('sidebar'),
-        overlay: document.getElementById('overlay'),
-        homeFeed: document.getElementById('home-feed'),
-        premiumFeed: document.getElementById('premium-feed'),
-        adminNav: document.getElementById('admin-nav'),
-        adminSubmit: document.getElementById('admin-submit'),
-        videoFile: document.getElementById('video-file'),
-        videoTitle: document.getElementById('video-title'),
-        videoBucket: document.getElementById('video-bucket'),
-        adminError: document.getElementById('admin-error'),
-        subscribeBtn: document.getElementById('subscribe-btn'),
-        welcomeModal: document.getElementById('welcome-modal'),
-        welcomeOverlay: document.getElementById('welcome-overlay'),
-        welcomeClose: document.getElementById('welcome-close'),
-        welcomeSubscribe: document.getElementById('welcome-subscribe'),
-        authSubmit: document.getElementById('auth-submit'),
-        authEmail: document.getElementById('auth-email'),
-        authPassword: document.getElementById('auth-password'),
-        authError: document.getElementById('auth-error'),
-        profileEmail: document.getElementById('profile-email'),
-        profileStatus: document.getElementById('profile-status'),
-        logoutBtn: document.getElementById('logout-btn'),
-        toast: document.getElementById('toast'),
-        pages: document.querySelectorAll('.page'),
-        navBtns: document.querySelectorAll('.nav-btn, .sidebar-nav button'),
-      };
-
-      let currentPage = 'home';
-      let observer = null;
-      let hasInteracted = false;
-
-      // Track user interaction
-      document.addEventListener('click', () => (hasInteracted = true), { once: true });
-
-      // Utilities
       function showToast(message, duration = 4000) {
-        elements.toast.textContent = message;
-        elements.toast.classList.add('active');
-        setTimeout(() => elements.toast.classList.remove('active'), duration);
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('active');
+        setTimeout(() => toast.classList.remove('active'), duration);
       }
 
       function closeModals() {
-        elements.sidebar.classList.remove('open');
-        elements.overlay.classList.remove('active');
-        elements.welcomeModal.classList.remove('active');
-        elements.welcomeOverlay.classList.remove('active');
-        elements.pages.forEach(page => page.classList.remove('blur'));
+        document.getElementById('welcome-modal').classList.remove('active');
+        document.getElementById('welcome-overlay').classList.remove('active');
+        document.getElementById('age-modal').classList.remove('active');
+        document.getElementById('age-overlay').classList.remove('active');
       }
 
-      function showPage(pageId) {
-        closeModals();
-        elements.pages.forEach(page => page.classList.toggle('active', page.id === `${pageId}-page`));
-        elements.navBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
-        currentPage = pageId;
-        if (pageId === 'home') loadHomeFeed();
-        if (pageId === 'premium') loadPremiumFeed();
-        if (pageId === 'profile') updateProfile();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      async function handleLogout() {
+        await supabase.auth.signOut();
+        setUser(null);
+        setIsPremium(false);
+        setPage('auth');
+        showToast('Logged out successfully');
       }
 
-      // Video Creation
-      async function createVideoContainer(file, bucket) {
-        const { data, error } = await supabase.storage.from(bucket).createSignedUrl(file.name, 3600);
-        if (error) {
-          console.warn(`Signed URL error for ${file.name}:`, error);
-          return null;
-        }
+      return createElement(
+        'div',
+        { className: 'content' },
+        createElement(HomePage, { active: page === 'home', user, isPremium, hasInteracted }),
+        createElement(PremiumPage, { active: page === 'premium', user, isPremium, hasInteracted, setPage }),
+        createElement(AuthPage, { active: page === 'auth', setUser, setPage }),
+        createElement(ProfilePage, { active: page === 'profile', user, isPremium, handleLogout, setPage }),
+        createElement(AdminPage, { active: page === 'admin', user, showToast }),
+        createElement(PaywallPage, { active: page === 'paywall', user, setIsPremium, showToast, setPage }),
+        createElement(NavBar, { page, setPage, user })
+      );
+    }
 
-        const videoUrl = data.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
-        const container = document.createElement('div');
-        container.className = 'video-container';
-        container.innerHTML = `
-          <video muted loop playsinline data-src="${videoUrl}"></video>
-          <div class="video-loading"></div>
-          <div class="video-overlay">
-            <div class="video-info">
-              <div class="creator-avatar"></div>
-              <div class="video-title">${file.name.replace(/\.[^/.]+$/, '')}</div>
-            </div>
-            <div class="video-actions">
-              <button class="action-btn" aria-label="Like video">
-                <img src="assets/images/like-icon.png" alt="Like" /> Like
-              </button>
-              <button class="action-btn" aria-label="Comment on video">
-                <img src="assets/images/comment-icon.png" alt="Comment" /> Comment
-              </button>
-            </div>
-          </div>
-        `;
+    function HomePage({ active, user, isPremium, hasInteracted }) {
+      const [videos, setVideos] = useState([]);
 
-        const video = container.querySelector('video');
-        const loading = container.querySelector('.video-loading');
-        video.src = videoUrl;
-
-        video.addEventListener('loadeddata', () => {
-          container.classList.add('loaded');
-          loading.remove();
-        });
-
-        return container;
-      }
-
-      // Feed Loading
-      async function loadHomeFeed() {
-        elements.homeFeed.innerHTML = '';
-        try {
-          const { data: files, error } = await supabase.storage.from('vibes').list('', { limit: 10 });
-          if (error) throw new Error(`Failed to fetch vibes: ${error.message}`);
-
+      useEffect(() => {
+        if (!active) return;
+        async function loadVideos() {
+          const { data: files, error } = await supabase.storage.from('previews').list('', { limit: 10 });
+          if (error) {
+            showToast(`Error loading videos: ${error.message}`);
+            return;
+          }
           const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
-          if (!videoFiles.length) {
-            elements.homeFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No vibes available.</p>';
-            return;
-          }
-
-          for (const file of videoFiles) {
-            const container = await createVideoContainer(file, 'vibes');
-            if (container) elements.homeFeed.appendChild(container);
-          }
-
-          setupObserver(elements.homeFeed);
-        } catch (err) {
-          showToast(`Error loading vibes: ${err.message}`);
-          elements.homeFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load vibes.</p>';
+          setVideos(videoFiles);
         }
-      }
+        loadVideos();
+      }, [active]);
 
-      async function loadPremiumFeed() {
-        elements.premiumFeed.innerHTML = '';
-        try {
-          const { data: user, error: authError } = await supabase.auth.getUser();
-          if (authError || !user.user) {
-            elements.premiumFeed.innerHTML = `
-              <div class="premium-locked">
-                <h2>Unlock Exclusive Vibes</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Sign in to access premium content.</p>
-                <button id="premium-signin">Sign In</button>
-              </div>
-            `;
-            document.getElementById('premium-signin').addEventListener('click', () => showPage('auth'));
-            return;
-          }
-
-          elements.profileEmail.textContent = user.user.email;
-          elements.profileStatus.textContent = 'Premium Plan';
-          elements.logoutBtn.style.display = 'block';
-          if (user.user.email === ADMIN_EMAIL) {
-            elements.adminNav.style.display = 'block';
-          }
-
-          const { data: files, error } = await supabase.storage.from('exclusive').list('', { limit: 5 });
-          if (error) throw new Error(`Failed to fetch premium vibes: ${error.message}`);
-
-          const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
-          if (!videoFiles.length) {
-            elements.premiumFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No exclusive vibes available.</p>';
-            return;
-          }
-
-          for (const file of videoFiles) {
-            const container = await createVideoContainer(file, 'exclusive');
-            if (container) elements.premiumFeed.appendChild(container);
-          }
-
-          setupObserver(elements.premiumFeed);
-        } catch (err) {
-          showToast(`Error loading premium vibes: ${err.message}`);
-          elements.premiumFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load premium vibes.</p>';
-        }
-      }
-
-      function setupObserver(container) {
-        if (observer) observer.disconnect();
-        observer = new IntersectionObserver(
+      useEffect(() => {
+        if (!active || !videos.length) return;
+        const observer = new IntersectionObserver(
           entries => {
             entries.forEach(entry => {
               const video = entry.target.querySelector('video');
@@ -1039,9 +822,9 @@
                 gsap.fromTo(
                   entry.target,
                   { opacity: 0, scale: 0.95 },
-                  { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+                  { opacity: 1, scale: 1, duration: 0.24, ease: 'power2.out' }
                 );
-                video.play().catch(() => showToast('Tap to play video.'));
+                video.play().catch(() => showToast('Tap to play video'));
               } else {
                 video.pause();
                 video.currentTime = 0;
@@ -1051,141 +834,491 @@
           { threshold: 0.9 }
         );
 
-        container.querySelectorAll('.video-container').forEach(container => observer.observe(container));
-      }
+        document.querySelectorAll('.video-container').forEach(container => observer.observe(container));
+        return () => observer.disconnect();
+      }, [videos, active, hasInteracted]);
 
-      // Authentication
-      async function handleAuth() {
-        const email = elements.authEmail.value.trim();
-        const password = elements.authPassword.value.trim();
-        if (!email || !password) {
-          elements.authError.textContent = 'Please enter email and password.';
+      return createElement(
+        'section',
+        { className: `page home-page ${active ? 'active' : ''}`, id: 'home-page' },
+        createElement(
+          'div',
+          { className: 'video-feed' },
+          videos.length
+            ? videos.map(file =>
+                createElement(VideoContainer, {
+                  key: file.name,
+                  file,
+                  bucket: 'previews',
+                  isPremium,
+                  user
+                })
+              )
+            : createElement(
+                'p',
+                { style: { textAlign: 'center', color: 'var(--text-secondary)' } },
+                'No videos available'
+              )
+        )
+      );
+    }
+
+    function PremiumPage({ active, user, isPremium, hasInteracted, setPage }) {
+      const [videos, setVideos] = useState([]);
+
+      useEffect(() => {
+        if (!active) return;
+        if (!user || !isPremium) {
+          setVideos([]);
           return;
         }
+        async function loadVideos() {
+          const { data: files, error } = await supabase.storage.from('premuim').list('', { limit: 5 });
+          if (error) {
+            showToast(`Error loading premium videos: ${error.message}`);
+            return;
+          }
+          const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
+          setVideos(videoFiles);
+        }
+        loadVideos();
+      }, [active, user, isPremium]);
 
+      useEffect(() => {
+        if (!active || !videos.length) return;
+        const observer = new IntersectionObserver(
+          entries => {
+            entries.forEach(entry => {
+              const video = entry.target.querySelector('video');
+              if (entry.isIntersecting && hasInteracted) {
+                gsap.fromTo(
+                  entry.target,
+                  { opacity: 0, scale: 0.95 },
+                  { opacity: 1, scale: 1, duration: 0.24, ease: 'power2.out' }
+                );
+                video.play().catch(() => showToast('Tap to play video'));
+              } else {
+                video.pause();
+                video.currentTime = 0;
+              }
+            });
+          },
+          { threshold: 0.9 }
+        );
+
+        document.querySelectorAll('.video-container').forEach(container => observer.observe(container));
+        return () => observer.disconnect();
+      }, [videos, active, hasInteracted]);
+
+      if (!user || !isPremium) {
+        return createElement(
+          'section',
+          { className: `page premium-page ${active ? 'active' : ''}`, id: 'premium-page' },
+          createElement(
+            'div',
+            { className: 'premium-locked' },
+            createElement('h2', null, 'Unlock Premium Vibes'),
+            createElement(
+              'p',
+              { style: { color: 'var(--text-secondary)', marginBottom: '1rem' } },
+              'Sign in or redeem an access code to enjoy exclusive content.'
+            ),
+            createElement(
+              'button',
+              { onClick: () => setPage(user ? 'paywall' : 'auth') },
+              user ? 'Redeem Code' : 'Sign In'
+            )
+          )
+        );
+      }
+
+      return createElement(
+        'section',
+        { className: `page premium-page ${active ? 'active' : ''}`, id: 'premium-page' },
+        createElement(
+          'div',
+          { className: 'video-feed' },
+          videos.length
+            ? videos.map(file =>
+                createElement(VideoContainer, {
+                  key: file.name,
+                  file,
+                  bucket: 'premuim',
+                  isPremium,
+                  user
+                })
+              )
+            : createElement(
+                'p',
+                { style: { textAlign: 'center', color: 'var(--text-secondary)' } },
+                'No premium videos available'
+              )
+        )
+      );
+    }
+
+    function VideoContainer({ file, bucket, isPremium, user }) {
+      const [videoUrl, setVideoUrl] = useState('');
+      const [loaded, setLoaded] = useState(false);
+
+      useEffect(() => {
+        async function getVideoUrl() {
+          const { data, error } = await supabase.storage.from(bucket).createSignedUrl(file.name, 3600);
+          if (error) {
+            console.warn(`Signed URL error for ${file.name}:`, error);
+            setVideoUrl('https://www.w3schools.com/html/mov_bbb.mp4');
+          } else {
+            setVideoUrl(data.signedUrl);
+          }
+        }
+        getVideoUrl();
+      }, [file.name, bucket]);
+
+      return createElement(
+        'div',
+        { className: `video-container ${loaded ? 'loaded' : ''}` },
+        createElement('video', {
+          muted: true,
+          loop: true,
+          playsInline: true,
+          src: videoUrl,
+          onLoadedData: () => setLoaded(true)
+        }),
+        !loaded && createElement('div', { className: 'video-loading' }),
+        !isPremium && createElement('div', { className: 'watermark' }, `VelvetFlix${user?.id ? ` | ${user.id}` : ''}`),
+        createElement(
+          'div',
+          { className: 'video-overlay' },
+          createElement(
+            'div',
+            { className: 'video-info' },
+            createElement('div', { className: 'video-title' }, file.name.replace(/\.[^/.]+$/, ''))
+          ),
+          createElement(
+            'div',
+            { className: 'video-actions' },
+            createElement(
+              'button',
+              { className: 'action-btn', 'aria-label': 'Like video' },
+              createElement('i', { 'data-lucide': 'heart' })
+            )
+          )
+        )
+      );
+    }
+
+    function AuthPage({ active, setUser, setPage }) {
+      const [email, setEmail] = useState('');
+      const [password, setPassword] = useState('');
+      const [error, setError] = useState('');
+
+      async function handleAuth() {
+        if (!email || !password) {
+          setError('Please enter email and password');
+          return;
+        }
         try {
           let { data, error } = await supabase.auth.signInWithPassword({ email, password });
           if (error && error.message.includes('Invalid login')) {
             ({ data, error } = await supabase.auth.signUp({ email, password }));
           }
           if (error) throw new Error(error.message);
-
-          elements.profileEmail.textContent = email;
-          elements.profileStatus.textContent = 'Premium Plan';
-          elements.logoutBtn.style.display = 'block';
-          if (email === ADMIN_EMAIL) {
-            elements.adminNav.style.display = 'block';
-          }
-          showPage('premium');
-          window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
+          setUser(data.user);
+          setPage('premium');
+          window.open('https://wa.me/254720047018', '_blank');
         } catch (err) {
-          elements.authError.textContent = err.message;
+          setError(err.message);
         }
       }
 
-      // Admin Upload
-      async function handleAdminUpload() {
-        const file = elements.videoFile.files[0];
-        const title = elements.videoTitle.value.trim();
-        const bucket = elements.videoBucket.value;
-        if (!file || !title || !bucket) {
-          elements.adminError.textContent = 'Please fill all fields.';
+      return createElement(
+        'section',
+        { className: `page auth-page ${active ? 'active' : ''}`, id: 'auth-page' },
+        createElement(
+          'div',
+          { className: 'auth-form' },
+          createElement('h2', null, 'Sign In / Sign Up'),
+          createElement('input', {
+            type: 'email',
+            placeholder: 'Email',
+            value: email,
+            onChange: e => setEmail(e.target.value),
+            required: true,
+            'aria-label': 'Email'
+          }),
+          createElement('input', {
+            type: 'password',
+            placeholder: 'Password',
+            value: password,
+            onChange: e => setPassword(e.target.value),
+            required: true,
+            'aria-label': 'Password'
+          }),
+          createElement('button', { onClick: handleAuth }, 'Continue'),
+          createElement('p', { className: 'auth-error' }, error),
+          createElement(
+            'div',
+            { className: 'auth-guest' },
+            createElement(
+              'a',
+              { href: '#', onClick: () => setPage('home') },
+              'Continue as Guest'
+            )
+          )
+        )
+      );
+    }
+
+    function ProfilePage({ active, user, isPremium, handleLogout, setPage }) {
+      const [theme, setTheme] = useState('dark');
+
+      return createElement(
+        'section',
+        { className: `page profile-page ${active ? 'active' : ''}`, id: 'profile-page' },
+        createElement(
+          'div',
+          { className: 'profile-header' },
+          createElement('div', { className: 'profile-avatar' }),
+          createElement(
+            'div',
+            { className: 'profile-info' },
+            createElement('div', { className: 'profile-email' }, user?.email || 'Guest'),
+            createElement(
+              'div',
+              { className: 'profile-status' },
+              isPremium ? 'Premium' : 'Free'
+            )
+          )
+        ),
+        createElement(
+          'div',
+          { className: 'profile-actions' },
+          !isPremium &&
+            createElement(
+              'button',
+              { className: 'profile-btn', onClick: () => setPage('paywall') },
+              'Upgrade to Premium'
+            ),
+          user &&
+            createElement(
+              'button',
+              { className: 'profile-btn', onClick: handleLogout },
+              'Logout'
+            ),
+          createElement(
+            'button',
+            {
+              className: 'profile-btn',
+              onClick: () => {
+                setTheme(theme === 'dark' ? 'light' : 'dark');
+                document.body.style.background = theme === 'dark' ? '#f5f5f5' : '#0E0E12';
+              }
+            },
+            `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Theme`
+          )
+        )
+      );
+    }
+
+    function AdminPage({ active, user, showToast }) {
+      const [file, setFile] = useState(null);
+      const [title, setTitle] = useState('');
+      const [bucket, setBucket] = useState('previews');
+      const [error, setError] = useState('');
+
+      async function handleUpload() {
+        if (!user || user.email !== ADMIN_EMAIL) {
+          setError('Unauthorized: Admin access only');
           return;
         }
-
+        if (!file || !title) {
+          setError('Please select a file and enter a title');
+          return;
+        }
         if (!/\.(mp4|webm)$/i.test(file.name)) {
-          elements.adminError.textContent = 'Only .mp4 or .webm files allowed.';
+          setError('Only .mp4 or .webm files allowed');
           return;
         }
-
         try {
-          const { data: user, error: authError } = await supabase.auth.getUser();
-          if (authError || !user.user || user.user.email !== ADMIN_EMAIL) {
-            elements.adminError.textContent = 'Unauthorized: Admin access only.';
-            return;
-          }
-
           const fileName = `${Date.now()}_${title.replace(/\s+/g, '_')}.${file.name.split('.').pop()}`;
           const { error: uploadError } = await supabase.storage.from(bucket).upload(fileName, file);
           if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
-
-          elements.adminError.textContent = '';
-          elements.videoFile.value = '';
-          elements.videoTitle.value = '';
-          showToast('Video uploaded successfully!');
+          setFile(null);
+          setTitle('');
+          setError('');
+          showToast('Video uploaded successfully');
         } catch (err) {
-          elements.adminError.textContent = err.message;
+          setError(err.message);
         }
       }
 
-      function updateProfile() {
-        supabase.auth.getUser().then(({ data: user, error }) => {
-          if (user?.user) {
-            elements.profileEmail.textContent = user.user.email;
-            elements.profileStatus.textContent = 'Premium Plan';
-            elements.logoutBtn.style.display = 'block';
-            if (user.user.email === ADMIN_EMAIL) {
-              elements.adminNav.style.display = 'block';
-            }
-          } else {
-            elements.profileEmail.textContent = 'Guest';
-            elements.profileStatus.textContent = 'Free Plan';
-            elements.logoutBtn.style.display = 'none';
-            elements.adminNav.style.display = 'none';
-          }
-        });
+      if (!user || user.email !== ADMIN_EMAIL) return null;
+
+      return createElement(
+        'section',
+        { className: `page admin-page ${active ? 'active' : ''}`, id: 'admin-page' },
+        createElement(
+          'div',
+          { className: 'admin-form' },
+          createElement('h2', null, 'Upload Video'),
+          createElement('input', {
+            type: 'file',
+            accept: 'video/mp4,video/webm',
+            onChange: e => setFile(e.target.files[0]),
+            required: true,
+            'aria-label': 'Video file'
+          }),
+          createElement('input', {
+            type: 'text',
+            placeholder: 'Video Title',
+            value: title,
+            onChange: e => setTitle(e.target.value),
+            required: true,
+            'aria-label': 'Video title'
+          }),
+          createElement(
+            'select',
+            {
+              value: bucket,
+              onChange: e => setBucket(e.target.value),
+              'aria-label': 'Video category'
+            },
+            createElement('option', { value: 'previews' }, 'Previews'),
+            createElement('option', { value: 'premuim' }, 'Premium')
+          ),
+          createElement('button', { onClick: handleUpload }, 'Upload'),
+          createElement('p', { className: 'admin-error' }, error)
+        )
+      );
+    }
+
+    function PaywallPage({ active, user, setIsPremium, showToast, setPage }) {
+      const [code, setCode] = useState('');
+      const [error, setError] = useState('');
+
+      async function handleRedeem() {
+        if (!user) {
+          setError('Please sign in to redeem a code');
+          return;
+        }
+        if (!code) {
+          setError('Please enter an access code');
+          return;
+        }
+        try {
+          const { data, error } = await supabase
+            .from('access_codes')
+            .select('*')
+            .eq('code', code)
+            .eq('used', false)
+            .single();
+          if (error || !data) throw new Error('Invalid or used code');
+          await supabase
+            .from('access_codes')
+            .update({ used: true, assigned_to: user.id })
+            .eq('code', code);
+          setIsPremium(true);
+          setPage('premium');
+          showToast('Premium unlocked!');
+        } catch (err) {
+          setError(err.message);
+        }
       }
 
-      // Event Listeners
-      elements.menuBtn.addEventListener('click', () => {
-        elements.sidebar.classList.toggle('open');
-        elements.overlay.classList.toggle('active');
-        document.getElementById(`${currentPage}-page`).classList.toggle('blur');
-      });
+      return createElement(
+        'section',
+        { className: `page paywall-page ${active ? 'active' : ''}`, id: 'paywall-page' },
+        createElement(
+          'div',
+          { className: 'paywall-form' },
+          createElement('h2', null, 'Unlock Premium'),
+          createElement('input', {
+            type: 'text',
+            placeholder: 'Enter Access Code',
+            value: code,
+            onChange: e => setCode(e.target.value),
+            required: true,
+            'aria-label': 'Access code'
+          }),
+          createElement('button', { onClick: handleRedeem }, 'Redeem'),
+          createElement('p', { className: 'paywall-error' }, error)
+        )
+      );
+    }
 
-      elements.overlay.addEventListener('click', closeModals);
+    function NavBar({ page, setPage, user }) {
+      return createElement(
+        'nav',
+        null,
+        createElement(
+          'button',
+          {
+            className: `nav-btn ${page === 'home' ? 'active' : ''}`,
+            onClick: () => setPage('home'),
+            'aria-label': 'Home'
+          },
+          createElement('i', { 'data-lucide': 'home' }),
+          'Home'
+        ),
+        createElement(
+          'button',
+          {
+            className: `nav-btn ${page === 'premium' ? 'active' : ''}`,
+            onClick: () => setPage('premium'),
+            'aria-label': 'Premium'
+          },
+          createElement('i', { 'data-lucide': 'star' }),
+          'Premium'
+        ),
+        createElement(
+          'button',
+          {
+            className: `nav-btn ${page === 'profile' ? 'active' : ''}`,
+            onClick: () => setPage('profile'),
+            'aria-label': 'Profile'
+          },
+          createElement('i', { 'data-lucide': 'user' }),
+          'Profile'
+        ),
+        user?.email === ADMIN_EMAIL &&
+          createElement(
+            'button',
+            {
+              className: `nav-btn ${page === 'admin' ? 'active' : ''}`,
+              onClick: () => setPage('admin'),
+              'aria-label': 'Admin'
+            },
+            createElement('i', { 'data-lucide': 'upload' }),
+            'Admin'
+          )
+      );
+    }
 
-      elements.navBtns.forEach(btn => {
-        btn.addEventListener('click', () => showPage(btn.dataset.page));
-      });
+    const root = createRoot(document.getElementById('app'));
+    root.render(createElement(App));
 
-      elements.subscribeBtn.addEventListener('click', () => {
-        elements.welcomeModal.classList.add('active');
-        elements.welcomeOverlay.classList.add('active');
-        document.getElementById('profile-page').classList.add('blur');
-      });
+    document.getElementById('age-confirm').addEventListener('click', () => {
+      localStorage.setItem('ageVerified', 'true');
+      document.getElementById('age-modal').className = 'modal';
+      document.getElementById('age-overlay').className = 'modal-overlay';
+      document.getElementById('welcome-modal').className = 'modal active';
+      document.getElementById('welcome-overlay').className = 'modal-overlay active';
+    });
 
-      elements.welcomeSubscribe.addEventListener('click', () => {
-        window.open('https://wa.me/254720047018', '_blank');
-      });
+    document.getElementById('welcome-close').addEventListener('click', () => {
+      document.getElementById('welcome-modal').className = 'modal';
+      document.getElementById('welcome-overlay').className = 'modal-overlay';
+    });
 
-      elements.welcomeClose.addEventListener('click', closeModals);
-      elements.welcomeOverlay.addEventListener('click', e => {
-        if (e.target === elements.welcomeOverlay) closeModals();
-      });
+    document.getElementById('welcome-subscribe').addEventListener('click', () => {
+      window.open('https://wa.me/254720047018', '_blank');
+    });
 
-      elements.authSubmit.addEventListener('click', handleAuth);
-
-      elements.adminSubmit.addEventListener('click', handleAdminUpload);
-
-      elements.logoutBtn.addEventListener('click', async () => {
-        await supabase.auth.signOut();
-        elements.profileEmail.textContent = 'Guest';
-        elements.profileStatus.textContent = 'Free Plan';
-        elements.logoutBtn.style.display = 'none';
-        elements.adminNav.style.display = 'none';
-        showPage('auth');
-      });
-
-      // Welcome Modal
-      setTimeout(() => {
-        elements.welcomeModal.classList.add('active');
-        elements.welcomeOverlay.classList.add('active');
-        document.getElementById('home-page').classList.add('blur');
-      }, 1000);
-
-      // Initial Load
-      loadHomeFeed();
+    document.getElementById('welcome-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('welcome-overlay')) {
+        document.getElementById('welcome-modal').className = 'modal';
+        document.getElementById('welcome-overlay').className = 'modal-overlay';
+      }
     });
   </script>
 </body>
