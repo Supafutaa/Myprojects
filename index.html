@@ -8,14 +8,15 @@
   <style>
     /* Base Styles */
     :root {
-      --background: #0E0E12;
-      --surface: #1A1A1E;
-      --text: #F0F0F5;
-      --text-secondary: #A0A0AA;
-      --primary: #C71585;
-      --accent: #8A2BE2;
-      --error: #FF4040;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      --background: #343541;
+      --surface: #444654;
+      --text: #FFFFFF;
+      --text-secondary: #D1D5DB;
+      --primary: #2EA4F2;
+      --accent: #10A37F;
+      --muted: #9CA3AF;
+      --error: #EF4444;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       --radius: 0.5rem;
       --transition: 240ms ease-out;
       --video-aspect: 9 / 16;
@@ -77,7 +78,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(10, 10, 14, 0.9);
+      background: rgba(52, 53, 65, 0.9);
       backdrop-filter: blur(8px);
       padding: 0.75rem 1rem;
       z-index: 1000;
@@ -95,10 +96,60 @@
     .app-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.2rem;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 250px;
+      height: 100%;
+      background: var(--surface);
+      padding: 2rem 1rem;
+      transition: right 0.3s ease;
+      z-index: 1001;
+    }
+
+    .menu.active {
+      right: 0;
+    }
+
+    .menu-close {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+    }
+
+    .menu ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .menu a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .menu a:hover {
+      color: var(--primary);
     }
 
     /* Content */
@@ -109,6 +160,7 @@
     .page {
       display: none;
       animation: fadeIn 240ms ease-out;
+      padding: 1rem;
     }
 
     .page.active {
@@ -176,6 +228,7 @@
     .video-title {
       font-size: 0.9rem;
       font-weight: 600;
+      color: var(--text);
     }
 
     .video-actions {
@@ -233,15 +286,12 @@
     .premium-locked h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
       margin-bottom: 1rem;
     }
 
     .premium-locked button {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: var(--accent);
       color: var(--text);
       border: none;
       padding: 0.75rem 1.5rem;
@@ -276,16 +326,13 @@
     .auth-form h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
       text-align: center;
     }
 
     .auth-form input {
       padding: 0.75rem;
-      border: none;
+      border: 1px solid var(--muted);
       border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
@@ -293,7 +340,7 @@
     }
 
     .auth-form button {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: var(--accent);
       color: var(--text);
       border: none;
       padding: 0.75rem;
@@ -314,19 +361,19 @@
       text-align: center;
     }
 
-    .auth-guest {
+    .auth-toggle {
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      margin-top: 1rem;
     }
 
-    .auth-guest a {
+    .auth-toggle a {
       color: var(--primary);
       text-decoration: none;
+      cursor: pointer;
     }
 
-    .auth-guest a:hover {
+    .auth-toggle a:hover {
       text-decoration: underline;
     }
 
@@ -348,7 +395,7 @@
       width: 80px;
       height: 80px;
       border-radius: 50%;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: var(--primary);
     }
 
     .profile-info {
@@ -374,7 +421,7 @@
     }
 
     .profile-btn {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: var(--accent);
       color: var(--text);
       border: none;
       padding: 0.75rem;
@@ -409,17 +456,14 @@
     .admin-form h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
       text-align: center;
     }
 
     .admin-form input,
     .admin-form select {
       padding: 0.75rem;
-      border: none;
+      border: 1px solid var(--muted);
       border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
@@ -427,7 +471,7 @@
     }
 
     .admin-form button {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: var(--accent);
       color: var(--text);
       border: none;
       padding: 0.75rem;
@@ -468,16 +512,13 @@
     .paywall-form h2 {
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
       text-align: center;
     }
 
     .paywall-form input {
       padding: 0.75rem;
-      border: none;
+      border: 1px solid var(--muted);
       border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
@@ -485,7 +526,7 @@
     }
 
     .paywall-form button {
-      background: linear-gradient(45deg, var(--primary), var(--accent));
+      background: var(--accent);
       color: var(--text);
       border: none;
       padding: 0.75rem;
@@ -504,6 +545,34 @@
       color: var(--error);
       font-size: 0.85rem;
       text-align: center;
+    }
+
+    /* Static Pages */
+    .static-page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .static-page h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .static-page p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .static-page a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .static-page a:hover {
+      text-decoration: underline;
     }
 
     /* Modal */
@@ -542,9 +611,6 @@
     }
 
     .modal-close {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
       background: none;
       border: none;
       color: var(--primary);
@@ -555,10 +621,7 @@
     .modal-title {
       font-family: 'Playfair Display', serif;
       font-size: 1.25rem;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      color: var(--primary);
       margin-bottom: 1rem;
     }
 
@@ -651,7 +714,8 @@
       .auth-page,
       .profile-page,
       .admin-page,
-      .paywall-page {
+      .paywall-page,
+      .static-page {
         max-width: 600px;
       }
     }
@@ -667,7 +731,21 @@
   <header>
     <img src="assets/images/logo.png" class="logo" alt="VelvetFlix Logo" />
     <span class="app-title">VelvetFlix</span>
+    <button class="menu-btn" id="menu-btn">
+      <i data-lucide="menu"></i>
+    </button>
   </header>
+
+  <!-- Menu -->
+  <div class="menu" id="menu">
+    <button class="menu-close" id="menu-close">×</button>
+    <ul>
+      <li><a href="#" onClick="setPage('contact')">Contact Us</a></li>
+      <li><a href="#" onClick="setPage('privacy')">Privacy Policy</a></li>
+      <li><a href="#" onClick="setPage('terms')">Terms of Service</a></li>
+      <li><a href="#" onClick="setPage('about')">About</a></li>
+    </ul>
+  </div>
 
   <!-- Content -->
   <div id="app"></div>
@@ -747,6 +825,9 @@
           document.getElementById('welcome-modal').classList.add('active');
           document.getElementById('welcome-overlay').classList.add('active');
         }
+
+        // Expose setPage globally for menu links
+        window.setPage = setPage;
       }, []);
 
       async function checkPremium(userId) {
@@ -791,6 +872,10 @@
         createElement(ProfilePage, { active: page === 'profile', user, isPremium, handleLogout, setPage }),
         createElement(AdminPage, { active: page === 'admin', user, showToast }),
         createElement(PaywallPage, { active: page === 'paywall', user, setIsPremium, showToast, setPage }),
+        createElement(ContactPage, { active: page === 'contact' }),
+        createElement(PrivacyPage, { active: page === 'privacy' }),
+        createElement(TermsPage, { active: page === 'terms' }),
+        createElement(AboutPage, { active: page === 'about' }),
         createElement(NavBar, { page, setPage, user })
       );
     }
@@ -1008,23 +1093,38 @@
     }
 
     function AuthPage({ active, setUser, setPage }) {
+      const [isSignUp, setIsSignUp] = useState(false);
       const [email, setEmail] = useState('');
       const [password, setPassword] = useState('');
       const [error, setError] = useState('');
 
-      async function handleAuth() {
+      async function handleSignIn() {
         if (!email || !password) {
           setError('Please enter email and password');
           return;
         }
         try {
-          let { data, error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error && error.message.includes('Invalid login')) {
-            ({ data, error } = await supabase.auth.signUp({ email, password }));
-          }
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
           if (error) throw new Error(error.message);
           setUser(data.user);
           setPage('premium');
+          showToast('Signed in successfully');
+        } catch (err) {
+          setError(err.message);
+        }
+      }
+
+      async function handleSignUp() {
+        if (!email || !password) {
+          setError('Please enter email and password');
+          return;
+        }
+        try {
+          const { data, error } = await supabase.auth.signUp({ email, password });
+          if (error) throw new Error(error.message);
+          setUser(data.user);
+          setPage('premium');
+          showToast('Signed up successfully! Check your email for confirmation.');
           window.open('https://wa.me/254720047018', '_blank');
         } catch (err) {
           setError(err.message);
@@ -1037,7 +1137,7 @@
         createElement(
           'div',
           { className: 'auth-form' },
-          createElement('h2', null, 'Sign In / Sign Up'),
+          createElement('h2', null, isSignUp ? 'Sign Up' : 'Sign In'),
           createElement('input', {
             type: 'email',
             placeholder: 'Email',
@@ -1054,16 +1154,14 @@
             required: true,
             'aria-label': 'Password'
           }),
-          createElement('button', { onClick: handleAuth }, 'Continue'),
+          createElement('button', { onClick: isSignUp ? handleSignUp : handleSignIn }, isSignUp ? 'Sign Up' : 'Sign In'),
           createElement('p', { className: 'auth-error' }, error),
           createElement(
             'div',
-            { className: 'auth-guest' },
-            createElement(
-              'a',
-              { href: '#', onClick: () => setPage('home') },
-              'Continue as Guest'
-            )
+            { className: 'auth-toggle' },
+            isSignUp
+              ? createElement('span', null, 'Already have an account? ', createElement('a', { onClick: () => setIsSignUp(false) }, 'Sign In'))
+              : createElement('span', null, 'No account? ', createElement('a', { onClick: () => setIsSignUp(true) }, 'Sign Up'))
           )
         )
       );
@@ -1111,7 +1209,7 @@
               className: 'profile-btn',
               onClick: () => {
                 setTheme(theme === 'dark' ? 'light' : 'dark');
-                document.body.style.background = theme === 'dark' ? '#f5f5f5' : '#0E0E12';
+                document.body.style.background = theme === 'dark' ? '#D1D5DB' : '#343541';
               }
             },
             `Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Theme`
@@ -1187,7 +1285,7 @@
             createElement('option', { value: 'premuim' }, 'Premium')
           ),
           createElement('button', { onClick: handleUpload }, 'Upload'),
-          createElement('p', { className: 'admin-error' }, error)
+          createElement('p', { className: 'auth-error' }, error)
         )
       );
     }
@@ -1241,8 +1339,52 @@
             'aria-label': 'Access code'
           }),
           createElement('button', { onClick: handleRedeem }, 'Redeem'),
-          createElement('p', { className: 'paywall-error' }, error)
+          createElement('p', { className: 'auth-error' }, error)
         )
+      );
+    }
+
+    function ContactPage({ active }) {
+      return createElement(
+        'section',
+        { className: `page static-page ${active ? 'active' : ''}`, id: 'contact-page' },
+        createElement('h2', null, 'Contact Us'),
+        createElement('p', null, 'Have questions or feedback? Reach out to us!'),
+        createElement('p', null, 'Email: ', createElement('a', { href: 'mailto:support@velvetflix.com' }, 'support@velvetflix.com')),
+        createElement('p', null, 'WhatsApp: ', createElement('a', { href: 'https://wa.me/254720047018' }, '+254 720 047018'))
+      );
+    }
+
+    function PrivacyPage({ active }) {
+      return createElement(
+        'section',
+        { className: `page static-page ${active ? 'active' : ''}`, id: 'privacy-page' },
+        createElement('h2', null, 'Privacy Policy'),
+        createElement('p', null, 'At VelvetFlix, we value your privacy. This policy outlines how we collect, use, and protect your personal information.'),
+        createElement('p', null, 'We collect email addresses for authentication and communication purposes. Your data is stored securely with Supabase and not shared with third parties.'),
+        createElement('p', null, 'For more details, contact us at ', createElement('a', { href: 'mailto:support@velvetflix.com' }, 'support@velvetflix.com'), '.')
+      );
+    }
+
+    function TermsPage({ active }) {
+      return createElement(
+        'section',
+        { className: `page static-page ${active ? 'active' : ''}`, id: 'terms-page' },
+        createElement('h2', null, 'Terms of Service'),
+        createElement('p', null, 'By using VelvetFlix, you agree to our terms of service. You must be 18+ to access our content.'),
+        createElement('p', null, 'Premium subscriptions require payment via M-Pesa and a valid access code. Refunds are not available.'),
+        createElement('p', null, 'Contact us at ', createElement('a', { href: 'mailto:support@velvetflix.com' }, 'support@velvetflix.com'), ' for support.')
+      );
+    }
+
+    function AboutPage({ active }) {
+      return createElement(
+        'section',
+        { className: `page static-page ${active ? 'active' : ''}`, id: 'about-page' },
+        createElement('h2', null, 'About VelvetFlix'),
+        createElement('p', null, 'VelvetFlix is your destination for exclusive, premium video content. Unlock your secret vibes with our curated selection.'),
+        createElement('p', null, 'Founded in 2025, we aim to provide a seamless and secure experience for our users.'),
+        createElement('p', null, 'Join us today at ', createElement('a', { href: 'https://wa.me/254720047018' }, '+254 720 047018'), '.')
       );
     }
 
@@ -1319,6 +1461,14 @@
         document.getElementById('welcome-modal').className = 'modal';
         document.getElementById('welcome-overlay').className = 'modal-overlay';
       }
+    });
+
+    document.getElementById('menu-btn').addEventListener('click', () => {
+      document.getElementById('menu').classList.add('active');
+    });
+
+    document.getElementById('menu-close').addEventListener('click', () => {
+      document.getElementById('menu').classList.remove('active');
     });
   </script>
 </body>
