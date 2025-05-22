@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Baddiez - Premium Streaming</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" />
+  <title>Baddiez - Premium Content Platform</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" />
   <style>
     /* Base Styles */
     :root {
-      --primary: #1a73e8;
-      --accent: #b89778;
-      --background: #0a0a14;
-      --surface: #1f1f2f;
-      --text: #f0f0f5;
-      --text-secondary: #a0a0b5;
-      --error: #ff4b4b;
-      --success: #4caf50;
-      --shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      --radius: 0.75rem;
-      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      --video-max-width: min(100%, 720px);
+      --background: #18181b;
+      --surface: #27272a;
+      --text: #f7f7f7;
+      --text-secondary: #a1a1aa;
+      --primary: #ff005e;
+      --accent: #8b5cf6;
+      --error: #ef4444;
+      --success: #22c55e;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      --radius: 0.5rem;
+      --transition: 0.3s ease;
+      --video-max-width: min(100%, 640px);
       --video-aspect: 16 / 9;
     }
 
@@ -30,10 +30,10 @@
     }
 
     html, body {
-      font-family: 'Manrope', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, sans-serif;
       background: var(--background);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.5;
       min-height: 100vh;
       overflow-x: hidden;
       scroll-behavior: smooth;
@@ -51,7 +51,7 @@
       align-items: center;
       justify-content: center;
       z-index: 10000;
-      transition: opacity 0.6s;
+      transition: opacity 0.5s;
     }
 
     #preloader.hidden {
@@ -60,12 +60,12 @@
     }
 
     .loader {
-      border: 5px solid var(--accent);
-      border-top: 5px solid transparent;
+      border: 4px solid var(--primary);
+      border-top: 4px solid transparent;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1.2s linear infinite;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
     }
 
     @keyframes spin {
@@ -79,183 +79,93 @@
       top: 0;
       left: 0;
       width: 100%;
-      background: rgba(31, 31, 47, 0.95);
-      backdrop-filter: blur(10px);
+      background: var(--surface);
+      padding: 1rem;
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 2rem;
-      z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .logo {
-      width: 48px;
-      height: 48px;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
     }
 
     .app-title {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 800;
-      color: var(--accent);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .search-bar {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 2rem;
-      background: var(--surface);
-      color: var(--text);
-      font-size: 0.9rem;
-      width: 200px;
-      max-width: 100%;
+      color: var(--primary);
     }
 
     .menu-btn {
       background: none;
       border: none;
       color: var(--text);
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       cursor: pointer;
-      padding: 0.5rem;
-      transition: color var(--transition);
     }
 
-    .menu-btn:hover {
-      color: var(--accent);
-    }
-
-    /* Sidebar */
+    /* Sidebar (Desktop) */
     #sidebar {
       position: fixed;
       top: 0;
       left: 0;
-      width: min(90vw, 300px);
+      width: min(80vw, 240px);
       height: 100vh;
       background: var(--surface);
       transform: translateX(-100%);
       transition: transform var(--transition);
       z-index: 1001;
-      padding: 1.5rem;
-      overflow-y: auto;
+      padding: 1rem;
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      #sidebar {
+        display: block;
+        transform: translateX(0);
+        width: 260px;
+      }
     }
 
     #sidebar.open {
       transform: translateX(0);
-    }
-
-    .sidebar-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .sidebar-logo {
-      width: 60px;
-      height: 60px;
-    }
-
-    .sidebar-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--accent);
-    }
-
-    .sidebar-section {
-      margin-bottom: 1.5rem;
-    }
-
-    .sidebar-section h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 0.75rem;
+      display: block;
     }
 
     .sidebar-nav {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      margin-top: 2rem;
     }
 
-    .sidebar-nav button,
-    .sidebar-nav a {
+    .sidebar-nav button {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       padding: 0.75rem 1rem;
-      background: transparent;
+      background: none;
       border: none;
       color: var(--text);
       font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      border-radius: 0.5rem;
-      transition: background var(--transition), color var(--transition);
-      text-decoration: none;
+      border-radius: var(--radius);
+      transition: background var(--transition);
     }
 
     .sidebar-nav button:hover,
-    .sidebar-nav a:hover,
-    .sidebar-nav button.active,
-    .sidebar-nav a.active {
+    .sidebar-nav button.active {
       background: var(--primary);
       color: #fff;
     }
 
     .sidebar-nav img {
-      width: 20px;
-      height: 20px;
-      filter: brightness(1);
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: var(--background);
-      border-radius: var(--radius);
-      margin-top: 1rem;
-    }
-
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-
-    .user-info {
-      flex: 1;
-    }
-
-    .user-email {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .user-status {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-    }
-
-    .logout-btn {
-      background: var(--error);
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      font-size: 0.85rem;
-      cursor: pointer;
+      width: 24px;
+      height: 24px;
     }
 
     #overlay {
@@ -265,7 +175,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.6);
       z-index: 1000;
     }
 
@@ -275,14 +185,22 @@
 
     /* Content */
     .content {
-      max-width: 1280px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 1rem;
+      max-width: 720px;
+    }
+
+    @media (min-width: 1024px) {
+      .content {
+        margin-left: 260px;
+        max-width: 960px;
+        padding: 2rem;
+      }
     }
 
     .page {
       display: none;
-      animation: fadeIn 0.5s ease;
+      animation: fadeIn 0.4s ease;
     }
 
     .page.active {
@@ -290,118 +208,65 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .breadcrumb {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      margin-bottom: 1.5rem;
+    /* Feed (Home, Previews) */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .breadcrumb a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    .breadcrumb a:hover {
-      text-decoration: underline;
-    }
-
-    /* Home Page */
-    .home-page {
-      padding: 0;
-    }
-
-    .carousel {
-      position: relative;
-      width: 100%;
-      aspect-ratio: var(--video-aspect);
-      overflow: hidden;
+    .feed-card {
+      background: var(--surface);
       border-radius: var(--radius);
-      margin-bottom: 2rem;
+      overflow: hidden;
       box-shadow: var(--shadow);
     }
 
-    .carousel-video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.7);
+    .feed-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
     }
 
-    .carousel-content {
-      position: absolute;
-      bottom: 2rem;
-      left: 2rem;
-      color: #fff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-    }
-
-    .carousel-title {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-
-    .carousel-btn {
+    .creator-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       background: var(--accent);
-      color: #1a1a1a;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 2rem;
+    }
+
+    .creator-info {
+      flex: 1;
+    }
+
+    .creator-name {
       font-size: 0.95rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: background var(--transition), transform var(--transition);
     }
 
-    .carousel-btn:hover {
-      background: #c9a88a;
-      transform: scale(1.05);
+    .post-time {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
     }
 
-    .section-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
-
-    .preview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.5rem;
-    }
-
-    /* Previews Page */
-    .previews-page .preview-grid {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    }
-
-    .video-card {
+    .feed-media {
       position: relative;
       aspect-ratio: var(--video-aspect);
       background: #000;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform var(--transition);
     }
 
-    .video-card:hover {
-      transform: scale(1.05);
-    }
-
-    .video-card video {
+    .feed-media video {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      display: block;
     }
 
-    .video-card img.poster {
+    .feed-media img.poster {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -411,8 +276,22 @@
       z-index: 1;
     }
 
-    .video-card video.loaded ~ img.poster {
+    .feed-media video.loaded ~ img.poster {
       display: none;
+    }
+
+    .video-loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 3px solid var(--primary);
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      animation: spin 0.8s linear infinite;
+      z-index: 2;
     }
 
     .video-overlay {
@@ -421,7 +300,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.5);
       opacity: 0;
       transition: opacity var(--transition);
       display: flex;
@@ -429,7 +308,7 @@
       justify-content: center;
     }
 
-    .video-card:hover .video-overlay {
+    .feed-media:hover .video-overlay {
       opacity: 1;
     }
 
@@ -437,10 +316,10 @@
       background: var(--primary);
       color: #fff;
       border: none;
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       cursor: pointer;
       transition: background var(--transition);
     }
@@ -449,48 +328,27 @@
       background: var(--accent);
     }
 
-    .video-meta {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.75rem;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-      color: #fff;
-      font-size: 0.85rem;
-    }
-
-    .video-title {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .video-duration {
-      color: var(--text-secondary);
-    }
-
     .video-controls {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 8px;
+      right: 8px;
       display: flex;
       gap: 0.5rem;
     }
 
     .resolution-selector,
     .fullscreen-btn {
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.7);
       color: var(--text);
       border: none;
       border-radius: 0.25rem;
-      padding: 0.5rem;
-      font-size: 0.85rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: background var(--transition);
     }
 
     .fullscreen-btn {
-      padding: 0.5rem;
+      padding: 0.25rem;
       line-height: 1;
     }
 
@@ -499,18 +357,36 @@
       background: var(--primary);
     }
 
-    .video-loading {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border: 3px solid var(--accent);
-      border-top: 3px solid transparent;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      animation: spin 1s linear infinite;
-      z-index: 2;
+    .feed-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .action-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .action-btn:hover {
+      color: var(--primary);
+    }
+
+    /* Previews Page */
+    .previews-page .feed {
+      gap: 2rem;
     }
 
     /* Premium Page */
@@ -526,7 +402,6 @@
       aspect-ratio: var(--video-aspect);
       background: #000;
       border-radius: var(--radius);
-      overflow: hidden;
       box-shadow: var(--shadow);
       position: relative;
     }
@@ -537,12 +412,39 @@
       object-fit: contain;
     }
 
+    .premium-locked {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .premium-locked h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .premium-locked button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .premium-locked button:hover {
+      background: var(--accent);
+    }
+
     /* Auth Page */
     .auth-page {
-      max-width: 480px;
+      max-width: 400px;
       margin: 0 auto;
-      padding: 2rem;
-      text-align: center;
+      padding: 2rem 1rem;
     }
 
     .auth-form {
@@ -550,58 +452,57 @@
       flex-direction: column;
       gap: 1rem;
       background: var(--surface);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
     .auth-form h2 {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 1rem;
+      color: var(--primary);
+      text-align: center;
     }
 
     .auth-form input {
       padding: 0.75rem;
       border: none;
-      border-radius: 0.5rem;
+      border-radius: var(--radius);
       background: var(--background);
       color: var(--text);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     .auth-form button {
-      background: var(--accent);
-      color: #1a1a1a;
+      background: var(--primary);
+      color: #fff;
       border: none;
       padding: 0.75rem;
-      border-radius: 0.5rem;
-      font-size: 1rem;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
       transition: background var(--transition);
     }
 
     .auth-form button:hover {
-      background: #c9a88a;
+      background: var(--accent);
     }
 
     .auth-error {
       color: var(--error);
       font-size: 0.85rem;
+      text-align: center;
     }
 
     .auth-options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
     }
 
     .auth-options a {
       color: var(--primary);
-      font-size: 0.9rem;
       text-decoration: none;
     }
 
@@ -611,76 +512,143 @@
 
     .social-login {
       display: flex;
-      gap: 1rem;
-      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
       margin-top: 1rem;
     }
 
     .social-btn {
-      background: var(--surface);
+      background: var(--background);
       color: var(--text);
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
+      border: 1px solid var(--text-secondary);
+      padding: 0.75rem;
+      border-radius: var(--radius);
       font-size: 0.9rem;
       cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .social-btn:hover {
+      background: var(--surface);
+    }
+
+    /* Profile Page */
+    .profile-page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-email {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .profile-status {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .profile-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .profile-btn:hover {
+      background: var(--accent);
+    }
+
+    .profile-section {
+      margin-bottom: 2rem;
+    }
+
+    .profile-section h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .liked-videos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
     /* Info Page */
     .info-page {
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
+      padding: 2rem 1rem;
       text-align: center;
     }
 
     .info-logo {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 1.5rem;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1rem;
     }
 
     .info-title {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--primary);
       margin-bottom: 1rem;
     }
 
-    .info-blink {
-      font-size: 1.75rem;
-      color: var(--success);
-      animation: blink 2.5s ease-in-out infinite;
-      margin: 1.5rem 0;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
     .info-btn {
-      background: var(--accent);
-      color: #1a1a1a;
+      background: var(--primary);
+      color: #fff;
       border: none;
-      padding: 0.75rem 2rem;
+      padding: 0.75rem 1.5rem;
       border-radius: 2rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background var(--transition), transform var(--transition);
-      display: inline-block;
-      margin: 1.5rem 0;
+      margin: 1rem 0;
+      transition: background var(--transition);
     }
 
     .info-btn:hover {
-      background: #c9a88a;
-      transform: scale(1.05);
+      background: var(--accent);
     }
 
     .info-text {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .info-text strong {
@@ -690,53 +658,29 @@
 
     /* Privacy Page */
     .privacy-page {
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto;
-      text-align: center;
+      padding: 2rem 1rem;
     }
 
     .privacy-title {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--primary);
       margin-bottom: 1rem;
     }
 
-    .privacy-toggle {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 2rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin: 1.5rem 0;
-      transition: background var(--transition);
-    }
-
-    .privacy-toggle:hover {
-      background: var(--accent);
-    }
-
     .privacy-content {
-      display: none;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      text-align: left;
-      padding: 1.5rem;
       background: var(--surface);
+      padding: 1.5rem;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
-    .privacy-content.active {
-      display: block;
-    }
-
     /* Modal */
     .modal-overlay {
-      display: none;
       position: fixed;
       top: 0;
       left: 0;
@@ -744,6 +688,7 @@
       height: 100%;
       background: rgba(0, 0, 0, 0.8);
       z-index: 2000;
+      display: none;
     }
 
     .modal-overlay.active {
@@ -757,8 +702,8 @@
       transform: translate(-50%, -50%);
       background: var(--surface);
       border-radius: var(--radius);
-      padding: 2rem;
-      max-width: min(90vw, 500px);
+      padding: 1.5rem;
+      max-width: min(90vw, 400px);
       z-index: 2001;
       color: var(--text);
       display: none;
@@ -771,24 +716,24 @@
 
     .modal-close {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 0.5rem;
+      right: 0.5rem;
       background: none;
       border: none;
-      color: var(--accent);
-      font-size: 1.5rem;
+      color: var(--primary);
+      font-size: 1.25rem;
       cursor: pointer;
     }
 
     .modal-title {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 800;
-      color: var(--accent);
+      color: var(--primary);
       margin-bottom: 1rem;
     }
 
     .modal-content {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     /* Toast */
@@ -803,10 +748,9 @@
       border-radius: var(--radius);
       z-index: 3000;
       display: none;
-      font-size: 0.95rem;
-      max-width: min(90vw, 400px);
+      font-size: 0.9rem;
+      max-width: min(90vw, 360px);
       text-align: center;
-      box-shadow: var(--shadow);
     }
 
     #toast.active {
@@ -819,65 +763,64 @@
       to { transform: translateX(-50%) translateY(0); opacity: 1; }
     }
 
-    /* Loading */
-    #loading {
+    /* Bottom Navigation (Mobile) */
+    nav {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      bottom: 0;
+      left: 0;
+      width: 100%;
       background: var(--surface);
-      color: var(--text);
-      padding: 1rem 2rem;
-      border-radius: var(--radius);
-      z-index: 3000;
-      display: none;
-      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      z-index: 1000;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    #loading.active {
-      display: block;
+    @media (min-width: 1024px) {
+      nav {
+        display: none;
+      }
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: color var(--transition);
+    }
+
+    .nav-btn img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0.8);
+    }
+
+    .nav-btn.active,
+    .nav-btn:hover {
+      color: var(--primary);
+    }
+
+    .nav-btn.active img,
+    .nav-btn:hover img {
+      filter: brightness(1) hue-rotate(320deg);
     }
 
     /* Responsive Design */
     @media (min-width: 768px) {
       .content {
-        padding: 3rem 2rem;
-      }
-
-      .carousel-title {
-        font-size: 2.5rem;
-      }
-
-      .preview-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      }
-
-      .previews-page .preview-grid {
-        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        padding: 2rem;
       }
 
       .premium-player {
         width: min(100%, 960px);
-      }
-
-      .auth-page {
-        padding: 3rem;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      #sidebar {
-        width: 360px;
-      }
-
-      header {
-        padding: 1.5rem 3rem;
-      }
-
-      .carousel {
-        max-width: 960px;
-        margin-left: auto;
-        margin-right: auto;
       }
     }
   </style>
@@ -892,108 +835,74 @@
   <header>
     <img src="assets/images/logo.png" class="logo" alt="Baddiez Logo" />
     <span class="app-title">Baddiez</span>
-    <div class="header-actions">
-      <input type="text" class="search-bar" placeholder="Search videos..." disabled aria-label="Search (coming soon)" />
-      <button class="menu-btn" id="menu-btn" aria-label="Open menu">≡</button>
-    </div>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu">≡</button>
   </header>
 
   <!-- Sidebar -->
   <div id="overlay"></div>
   <aside id="sidebar">
-    <div class="sidebar-header">
-      <img src="assets/images/logo.png" class="sidebar-logo" alt="Baddiez Logo" />
-      <h2 class="sidebar-title">Baddiez</h2>
-    </div>
-    <div class="sidebar-section">
-      <h3>Content</h3>
-      <nav class="sidebar-nav">
-        <button data-page="home" class="active" aria-label="Home">
-          <img src="assets/images/home icon.png" alt="" /> Home
-        </button>
-        <button data-page="previews" aria-label="Previews">
-          <img src="assets/images/previews icon.png" alt="" /> Previews
-        </button>
-        <button data-page="premium" aria-label="Premium">
-          <img src="assets/images/premium icon.png" alt="" /> Premium
-        </button>
-      </nav>
-    </div>
-    <div class="sidebar-section">
-      <h3>Account</h3>
-      <nav class="sidebar-nav">
-        <button data-page="auth" aria-label="Sign In">
-          <img src="assets/images/auth icon.png" alt="" /> Sign In
-        </button>
-        <a href="https://wa.me/254720047018" target="_blank" aria-label="Payment">
-          <img src="assets/images/payment icon.png" alt="" /> Payment
-        </a>
-      </nav>
-    </div>
-    <div class="sidebar-section">
-      <h3>Legal</h3>
-      <nav class="sidebar-nav">
-        <button data-page="info" aria-label="Info">
-          <img src="assets/images/info icon.png" alt="" /> Info
-        </button>
-        <button data-page="privacy" aria-label="Privacy Policy">
-          <img src="assets/images/privacy icon.png" alt="" /> Privacy Policy
-        </button>
-      </nav>
-    </div>
-    <div class="user-profile">
-      <div class="user-avatar"></div>
-      <div class="user-info">
-        <div class="user-email" id="user-email">Guest</div>
-        <div class="user-status">Free Plan</div>
-      </div>
-      <button class="logout-btn" id="logout-btn" style="display: none;">Logout</button>
-    </div>
-    <div style="font-size: 0.8rem; color: var(--text-secondary); text-align: center; margin-top: 2rem;">
-      © 2025 Baddiez. All Rights Reserved.
-    </div>
+    <nav class="sidebar-nav">
+      <button data-page="home" class="active" aria-label="Home">
+        <img src="assets/images/home-icon.png" alt="" /> Home
+      </button>
+      <button data-page="previews" aria-label="Previews">
+        <img src="assets/images/previews-icon.png" alt="" /> Previews
+      </button>
+      <button data-page="premium" aria-label="Premium">
+        <img src="assets/images/premium-icon.png" alt="" /> Premium
+      </button>
+      <button data-page="profile" aria-label="Profile">
+        <img src="assets/images/profile-icon.png" alt="" /> Profile
+      </button>
+      <button data-page="info" aria-label="Info">
+        <img src="assets/images/info-icon.png" alt="" /> Info
+      </button>
+      <button data-page="privacy" aria-label="Privacy Policy">
+        <img src="assets/images/privacy-icon.png" alt="" /> Privacy Policy
+      </button>
+    </nav>
   </aside>
 
   <!-- Content -->
   <main class="content">
     <!-- Home Page -->
     <section class="page home-page active" id="home-page">
-      <div class="carousel">
-        <video class="carousel-video" autoplay muted loop playsinline poster="assets/images/carousel-poster.jpg">
-          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-        </video>
-        <div class="carousel-content">
-          <h2 class="carousel-title">Discover Baddiez Premium</h2>
-          <button class="carousel-btn" id="carousel-subscribe">Subscribe Now</button>
-        </div>
-      </div>
-      <h2 class="section-title">Featured Previews</h2>
-      <div class="preview-grid" id="home-previews"></div>
+      <div class="feed" id="home-feed"></div>
     </section>
 
     <!-- Previews Page -->
     <section class="page previews-page" id="previews-page">
-      <div class="breadcrumb">
-        <a href="#" data-page="home">Home</a> / Previews
-      </div>
-      <h2 class="section-title">All Previews</h2>
-      <div class="preview-grid" id="preview-grid"></div>
+      <div class="feed" id="preview-feed"></div>
     </section>
 
     <!-- Premium Page -->
     <section class="page premium-page" id="premium-page">
-      <div class="breadcrumb">
-        <a href="#" data-page="home">Home</a> / Premium
-      </div>
-      <h2 class="section-title">Premium Content</h2>
       <div class="premium-player" id="premium-player"></div>
+    </section>
+
+    <!-- Profile Page -->
+    <section class="page profile-page" id="profile-page">
+      <div class="profile-header">
+        <div class="profile-avatar"></div>
+        <div class="profile-info">
+          <div class="profile-email" id="profile-email">Guest</div>
+          <div class="profile-status" id="profile-status">Free Plan</div>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button class="profile-btn" id="subscribe-btn">Subscribe</button>
+        <button class="profile-btn" id="logout-btn" style="display: none;">Logout</button>
+      </div>
+      <div class="profile-section">
+        <h2>Liked Videos</h2>
+        <div class="liked-videos" id="liked-videos">
+          <p style="color: var(--text-secondary);">No liked videos yet.</p>
+        </div>
+      </div>
     </section>
 
     <!-- Auth Page -->
     <section class="page auth-page" id="auth-page">
-      <div class="breadcrumb">
-        <a href="#" data-page="home">Home</a> / Sign In
-      </div>
       <div class="auth-form">
         <h2>Sign In / Sign Up</h2>
         <input type="email" id="auth-email" placeholder="Email" required aria-label="Email" />
@@ -1002,84 +911,87 @@
         <p class="auth-error" id="auth-error"></p>
         <div class="auth-options">
           <a href="#" onclick="alert('Password recovery coming soon!')">Forgot Password?</a>
-          <a href="#" onclick="alert('Create an account to access premium content.')">Don't have an account?</a>
         </div>
         <div class="social-login">
-          <button class="social-btn" onclick="alert('Google login coming soon!')">Google</button>
-          <button class="social-btn" onclick="alert('Facebook login coming soon!')">Facebook</button>
+          <button class="social-btn" onclick="alert('Google login coming soon!')">Continue with Google</button>
+          <button class="social-btn" onclick="alert('Twitter login coming soon!')">Continue with Twitter</button>
         </div>
       </div>
     </section>
 
     <!-- Info Page -->
     <section class="page info-page" id="info-page">
-      <div class="breadcrumb">
-        <a href="#" data-page="home">Home</a> / Info
-      </div>
       <img src="assets/images/logo.png" class="info-logo" alt="Baddiez Logo" />
-      <h2 class="info-title">Unlock Baddiez Premium</h2>
-      <p class="info-blink">Pay via Mpesa</p>
+      <h2 class="info-title">Unlock Premium Content</h2>
       <p class="info-text">
         <strong>Till No: 123456 | Amount: Ksh 99 | Validity: 1 Month</strong>
       </p>
-      <button class="info-btn" id="subscribe-btn">Subscribe Now</button>
-      <h3 class="info-title">Premium Benefits</h3>
+      <button class="info-btn" id="info-subscribe">Subscribe Now</button>
       <div class="info-text">
-        <p><strong>Exclusive Content:</strong> Unique videos only for premium members.</p>
+        <p><strong>Exclusive Videos:</strong> Access premium content from top creators.</p>
+        <p><strong>Ad-Free:</strong> Enjoy uninterrupted viewing.</p>
+        <p><strong>HD Quality:</strong> Crystal-clear video playback.</p>
         <p><strong>Early Access:</strong> Watch new releases first.</p>
-        <p><strong>Full-Length Videos:</strong> Uncut, ad-free experiences.</p>
-        <p><strong>HD/4K Quality:</strong> Stunning visuals.</p>
-        <p><strong>Ad-Free:</strong> Seamless viewing.</p>
-        <p><strong>Priority Support:</strong> Fast, dedicated help.</p>
         <small>© 2025 Baddiez. All rights reserved.</small>
       </div>
-      <img src="assets/images/logo2.png" style="width: 100px; margin: 2rem auto;" alt="Secondary Logo" />
     </section>
 
     <!-- Privacy Page -->
     <section class="page privacy-page" id="privacy-page">
-      <div class="breadcrumb">
-        <a href="#" data-page="home">Home</a> / Privacy Policy
-      </div>
       <h2 class="privacy-title">Privacy Policy</h2>
-      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Effective: January 1, 2025</p>
-      <button class="privacy-toggle" id="privacy-toggle">Show Details</button>
-      <div class="privacy-content" id="privacy-content">
-        <p><strong>1. Introduction</strong><br>Your privacy is our priority.</p>
-        <p><strong>2. Data Collection</strong><br>We collect only essential data (e.g., email, payment details).</p>
-        <p><strong>3. Data Use</strong><br>Used for account management and subscriptions.</p>
-        <p><strong>4. Security</strong><br>Secure payments via Mpesa with encryption.</p>
-        <p><strong>5. Data Sharing</strong><br>We do not share your data with third parties.</p>
-        <p><strong>6. Cookies</strong><br>No cookies or trackers used.</p>
+      <p style="color: var(--text-secondary); margin-bottom: 1rem;">Effective: January 1, 2025</p>
+      <div class="privacy-content">
+        <p><strong>1. Introduction</strong><br>We value your privacy and protect your data.</p>
+        <p><strong>2. Data Collection</strong><br>Email and payment details for account management.</p>
+        <p><strong>3. Data Use</strong><br>Used for subscriptions and personalized content.</p>
+        <p><strong>4. Security</strong><br>Secure Mpesa payments with encryption.</p>
+        <p><strong>5. Data Sharing</strong><br>No third-party sharing.</p>
+        <p><strong>6. Cookies</strong><br>No cookies used.</p>
         <p><strong>7. Updates</strong><br>Policy changes posted here.</p>
-        <p><strong>8. Contact</strong><br>Contact us via Telegram for support.</p>
-        <p style="color: var(--accent); font-weight: 600;">Thank you for trusting Baddiez!</p>
+        <p><strong>8. Contact</strong><br>Reach us via Telegram.</p>
         <small>© 2025 Baddiez. All rights reserved.</small>
       </div>
     </section>
   </main>
 
-  <!-- Subscribe Modal -->
-  <div class="modal-overlay" id="subscribe-overlay"></div>
-  <div class="modal" id="subscribe-modal">
-    <button class="modal-close" id="subscribe-close">×</button>
-    <h3 class="modal-title">How to Subscribe</h3>
+  <!-- Welcome Modal -->
+  <div class="modal-overlay" id="welcome-overlay"></div>
+  <div class="modal" id="welcome-modal">
+    <button class="modal-close" id="welcome-close">×</button>
+    <h3 class="modal-title">Welcome to Baddiez!</h3>
     <div class="modal-content">
+      <p>Get started with a premium subscription for only Ksh 99/month.</p>
       <ol>
-        <li>Pay Ksh 99 via Mpesa (Till No: 123456).</li>
-        <li>Go to Menu > Payment.</li>
-        <li>Send Mpesa transaction code via WhatsApp.</li>
-        <li>Receive access instructions.</li>
-        <li>Sign in on the Premium tab to enjoy!</li>
+        <li>Pay via Mpesa (Till No: 123456).</li>
+        <li>Send transaction code via WhatsApp.</li>
+        <li>Sign in to unlock exclusive content!</li>
       </ol>
+      <button class="info-btn" style="width: 100%;" id="welcome-subscribe">Subscribe Now</button>
     </div>
   </div>
 
   <!-- Toast -->
   <div id="toast"></div>
 
-  <!-- Loading -->
-  <div id="loading">Loading...</div>
+  <!-- Bottom Navigation -->
+  <nav>
+    <button class="nav-btn active" data-page="home" aria-label="Home">
+      <img src="assets/images/home-icon.png" alt="Home Icon" />
+      Home
+    </button>
+    <button class="nav-btn" data-page="previews" aria-label="Previews">
+      <img src="assets/images/previews-icon.png" alt="Previews Icon" />
+      Previews
+    </button>
+    <button class="nav-btn" data-page="premium" aria-label="Premium">
+      <img src="assets/images/premium-icon.png" alt="Premium Icon" />
+      Premium
+    </button>
+    <button class="nav-btn" data-page="profile" aria-label="Profile">
+      <img src="assets/images/profile-icon.png" alt="Profile Icon" />
+      Profile
+    </button>
+  </nav>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1088,7 +1000,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Preloader
       window.addEventListener('load', () => {
-        setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 600);
+        setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 500);
       });
 
       // Supabase
@@ -1105,27 +1017,25 @@
         menuBtn: document.getElementById('menu-btn'),
         sidebar: document.getElementById('sidebar'),
         overlay: document.getElementById('overlay'),
-        homePreviews: document.getElementById('home-previews'),
-        previewGrid: document.getElementById('preview-grid'),
+        homeFeed: document.getElementById('home-feed'),
+        previewFeed: document.getElementById('preview-feed'),
         premiumPlayer: document.getElementById('premium-player'),
-        carouselSubscribe: document.getElementById('carousel-subscribe'),
         subscribeBtn: document.getElementById('subscribe-btn'),
-        subscribeModal: document.getElementById('subscribe-modal'),
-        subscribeOverlay: document.getElementById('subscribe-overlay'),
-        subscribeClose: document.getElementById('subscribe-close'),
+        infoSubscribe: document.getElementById('info-subscribe'),
+        welcomeModal: document.getElementById('welcome-modal'),
+        welcomeOverlay: document.getElementById('welcome-overlay'),
+        welcomeClose: document.getElementById('welcome-close'),
+        welcomeSubscribe: document.getElementById('welcome-subscribe'),
         authSubmit: document.getElementById('auth-submit'),
         authEmail: document.getElementById('auth-email'),
         authPassword: document.getElementById('auth-password'),
         authError: document.getElementById('auth-error'),
-        userEmail: document.getElementById('user-email'),
-        userStatus: document.getElementById('user-status'),
+        profileEmail: document.getElementById('profile-email'),
+        profileStatus: document.getElementById('profile-status'),
         logoutBtn: document.getElementById('logout-btn'),
         toast: document.getElementById('toast'),
-        loading: document.getElementById('loading'),
-        privacyToggle: document.getElementById('privacy-toggle'),
-        privacyContent: document.getElementById('privacy-content'),
         pages: document.querySelectorAll('.page'),
-        navLinks: document.querySelectorAll('.sidebar-nav button, .breadcrumb a'),
+        navBtns: document.querySelectorAll('.nav-btn, .sidebar-nav button'),
       };
 
       let currentPage = 'home';
@@ -1136,15 +1046,7 @@
       document.addEventListener('click', () => (hasInteracted = true), { once: true });
 
       // Utilities
-      function showLoading() {
-        elements.loading.classList.add('active');
-      }
-
-      function hideLoading() {
-        elements.loading.classList.remove('active');
-      }
-
-      function showToast(message, duration = 5000) {
+      function showToast(message, duration = 4000) {
         elements.toast.textContent = message;
         elements.toast.classList.add('active');
         setTimeout(() => elements.toast.classList.remove('active'), duration);
@@ -1153,24 +1055,25 @@
       function closeModals() {
         elements.sidebar.classList.remove('open');
         elements.overlay.classList.remove('active');
-        elements.subscribeModal.classList.remove('active');
-        elements.subscribeOverlay.classList.remove('active');
+        elements.welcomeModal.classList.remove('active');
+        elements.welcomeOverlay.classList.remove('active');
         elements.pages.forEach(page => page.classList.remove('blur'));
       }
 
       function showPage(pageId) {
         closeModals();
         elements.pages.forEach(page => page.classList.toggle('active', page.id === `${pageId}-page`));
-        elements.navLinks.forEach(link => link.classList.toggle('active', link.dataset.page === pageId));
+        elements.navBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
         currentPage = pageId;
-        if (pageId === 'home') loadHomePreviews();
+        if (pageId === 'home') loadHomeFeed();
         if (pageId === 'previews') loadPreviews();
         if (pageId === 'premium') loadPremium();
+        if (pageId === 'profile') updateProfile();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      // Video Loading
-      async function createVideoCard(file, bucket) {
+      // Video Card Creation
+      async function createFeedCard(file, bucket) {
         const { data, error } = await supabase.storage.from(bucket).createSignedUrl(file.name, 3600);
         if (error) {
           console.warn(`Signed URL error for ${file.name}:`, error);
@@ -1179,55 +1082,50 @@
 
         const videoUrl = data.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
         const card = document.createElement('div');
-        card.className = 'video-card';
-        const video = document.createElement('video');
+        card.className = 'feed-card';
+        card.innerHTML = `
+          <div class="feed-header">
+            <div class="creator-avatar"></div>
+            <div class="creator-info">
+              <div class="creator-name">Creator Name</div>
+              <div class="post-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="feed-media">
+            <video muted playsinline data-low-src="${videoUrl}" data-high-src="${videoUrl}"></video>
+            <img class="poster" src="assets/images/video-poster.jpg" alt="Video thumbnail" />
+            <div class="video-loading"></div>
+            <div class="video-overlay">
+              <button class="play-btn" aria-label="Play video">▶</button>
+            </div>
+            <div class="video-controls">
+              <select class="resolution-selector" aria-label="Select video quality">
+                <option value="360p">360p</option>
+                <option value="720p">720p</option>
+              </select>
+              <button class="fullscreen-btn" aria-label="Toggle fullscreen">⤢</button>
+            </div>
+          </div>
+          <div class="feed-actions">
+            <button class="action-btn"><img src="assets/images/like-icon.png" alt="Like" /> Like</button>
+            <button class="action-btn"><img src="assets/images/comment-icon.png" alt="Comment" /> Comment</button>
+          </div>
+        `;
+
+        const video = card.querySelector('video');
         video.src = videoUrl;
-        video.muted = true;
-        video.playsinline = true;
-        video.controls = false;
-        video.dataset.lowSrc = videoUrl;
-        video.dataset.highSrc = videoUrl;
-        video.poster = 'assets/images/video-poster.jpg';
+        const playBtn = card.querySelector('.play-btn');
+        const select = card.querySelector('.resolution-selector');
+        const fullscreenBtn = card.querySelector('.fullscreen-btn');
+        const loading = card.querySelector('.video-loading');
 
-        const poster = document.createElement('img');
-        poster.className = 'poster';
-        poster.src = 'assets/images/video-poster.jpg';
-        poster.alt = 'Video thumbnail';
-
-        const loading = document.createElement('div');
-        loading.className = 'video-loading';
-
-        const overlay = document.createElement('div');
-        overlay.className = 'video-overlay';
-        const playBtn = document.createElement('button');
-        playBtn.className = 'play-btn';
-        playBtn.innerHTML = '▶';
-        playBtn.setAttribute('aria-label', 'Play video');
         playBtn.addEventListener('click', () => {
           video.play().catch(() => {
             video.controls = true;
             playBtn.style.display = 'none';
           });
         });
-        overlay.appendChild(playBtn);
 
-        const meta = document.createElement('div');
-        meta.className = 'video-meta';
-        meta.innerHTML = `
-          <div class="video-title">${file.name.replace(/\.[^/.]+$/, '')}</div>
-          <div class="video-duration">2:30</div>
-        `;
-
-        const controls = document.createElement('div');
-        controls.className = 'video-controls';
-        const select = document.createElement('select');
-        select.className = 'resolution-selector';
-        select.setAttribute('aria-label', 'Select video quality');
-        select.innerHTML = `
-          <option value="360p">360p</option>
-          <option value="720p">720p</option>
-          <option value="1080p">1080p</option>
-        `;
         select.addEventListener('change', () => {
           const currentTime = video.currentTime;
           const isPlaying = !video.paused;
@@ -1236,10 +1134,6 @@
           if (isPlaying) video.play().catch(err => console.warn('Play failed:', err));
         });
 
-        const fullscreenBtn = document.createElement('button');
-        fullscreenBtn.className = 'fullscreen-btn';
-        fullscreenBtn.innerHTML = '⤢';
-        fullscreenBtn.setAttribute('aria-label', 'Toggle fullscreen');
         fullscreenBtn.addEventListener('click', () => {
           if (!document.fullscreenElement) {
             card.requestFullscreen().catch(err => console.warn('Fullscreen failed:', err));
@@ -1247,9 +1141,6 @@
             document.exitFullscreen();
           }
         });
-
-        controls.append(select, fullscreenBtn);
-        card.append(video, poster, loading, overlay, meta, controls);
 
         video.addEventListener('loadeddata', () => {
           card.classList.add('loaded');
@@ -1259,97 +1150,152 @@
         return card;
       }
 
-      async function loadHomePreviews() {
-        showLoading();
-        elements.homePreviews.innerHTML = '';
+      // Feed Loading
+      async function loadHomeFeed() {
+        elements.homeFeed.innerHTML = '';
         try {
-          const { data: files, error } = await supabase.storage.from('previews').list('', { limit: 4 });
+          const { data: files, error } = await supabase.storage.from('previews').list('', { limit: 6 });
           if (error) throw new Error(`Failed to fetch previews: ${error.message}`);
 
           const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
           if (!videoFiles.length) {
-            elements.homePreviews.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">No previews available.</p>';
+            elements.homeFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No content available.</p>';
             return;
           }
 
           for (const file of videoFiles) {
-            const card = await createVideoCard(file, 'previews');
-            if (card) elements.homePreviews.appendChild(card);
+            const card = await createFeedCard(file, 'previews');
+            if (card) elements.homeFeed.appendChild(card);
           }
 
-          setupObserver(elements.homePreviews);
+          setupObserver(elements.homeFeed);
         } catch (err) {
-          showToast(`Error loading previews: ${err.message}`);
-          elements.homePreviews.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">Failed to load previews.</p>';
-        } finally {
-          hideLoading();
+          showToast(`Error loading feed: ${err.message}`);
+          elements.homeFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load content.</p>';
         }
       }
 
       async function loadPreviews() {
-        showLoading();
-        elements.previewGrid.innerHTML = '';
+        elements.previewFeed.innerHTML = '';
         try {
           const { data: files, error } = await supabase.storage.from('previews').list('', { limit: 12 });
           if (error) throw new Error(`Failed to fetch previews: ${error.message}`);
 
           const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
           if (!videoFiles.length) {
-            elements.previewGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">No previews available.</p>';
+            elements.previewFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No previews available.</p>';
             return;
           }
 
           for (const file of videoFiles) {
-            const card = await createVideoCard(file, 'previews');
-            if (card) elements.previewGrid.appendChild(card);
+            const card = await createFeedCard(file, 'previews');
+            if (card) elements.previewFeed.appendChild(card);
           }
 
-          setupObserver(elements.previewGrid);
+          setupObserver(elements.previewFeed);
         } catch (err) {
           showToast(`Error loading previews: ${err.message}`);
-          elements.previewGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center;">Failed to load previews.</p>';
-        } finally {
-          hideLoading();
+          elements.previewFeed.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load previews.</p>';
         }
       }
 
       async function loadPremium() {
-        showLoading();
         elements.premiumPlayer.innerHTML = '';
         try {
           const { data: user, error: authError } = await supabase.auth.getUser();
           if (authError || !user.user) {
-            showPage('auth');
+            elements.premiumPlayer.innerHTML = `
+              <div class="premium-locked">
+                <h2>Unlock Premium Content</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Sign in to access exclusive videos.</p>
+                <button id="premium-signin">Sign In</button>
+              </div>
+            `;
+            document.getElementById('premium-signin').addEventListener('click', () => showPage('auth'));
             return;
           }
 
-          elements.userEmail.textContent = user.user.email;
-          elements.userStatus.textContent = 'Premium Plan';
+          elements.profileEmail.textContent = user.user.email;
+          elements.profileStatus.textContent = 'Premium Plan';
           elements.logoutBtn.style.display = 'block';
 
           const { data: files, error } = await supabase.storage.from('premium').list('', { limit: 1 });
           if (error) throw new Error(`Failed to fetch premium video: ${error.message}`);
 
           if (!files.length || !/\.(mp4|webm)$/i.test(files[0].name)) {
-            elements.premiumPlayer.innerHTML = '<p style="text-align: center;">No premium videos available.</p>';
+            elements.premiumPlayer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No premium videos available.</p>';
             return;
           }
 
-          const card = await createVideoCard(files[0], 'premium');
-          if (card) elements.premiumPlayer.appendChild(card);
+          const { data, error: signedError } = await supabase.storage.from('premium').createSignedUrl(files[0].name, 3600);
+          if (signedError) throw new Error(`Signed URL error: ${signedError.message}`);
+
+          const videoUrl = data.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+          const card = document.createElement('div');
+          card.className = 'feed-card';
+          card.innerHTML = `
+            <div class="feed-media">
+              <video muted playsinline data-low-src="${videoUrl}" data-high-src="${videoUrl}"></video>
+              <img class="poster" src="assets/images/video-poster.jpg" alt="Video thumbnail" />
+              <div class="video-loading"></div>
+              <div class="video-overlay">
+                <button class="play-btn" aria-label="Play video">▶</button>
+              </div>
+              <div class="video-controls">
+                <select class="resolution-selector" aria-label="Select video quality">
+                  <option value="360p">360p</option>
+                  <option value="720p">720p</option>
+                </select>
+                <button class="fullscreen-btn" aria-label="Toggle fullscreen">⤢</button>
+              </div>
+            </div>
+          `;
 
           const video = card.querySelector('video');
-          if (hasInteracted) {
+          video.src = videoUrl;
+          const playBtn = card.querySelector('.play-btn');
+          const select = card.querySelector('.resolution-selector');
+          const fullscreenBtn = card.querySelector('.fullscreen-btn');
+          const loading = card.querySelector('.video-loading');
+
+          playBtn.addEventListener('click', () => {
             video.play().catch(() => {
               video.controls = true;
-              card.querySelector('.play-btn').style.display = 'none';
+              playBtn.style.display = 'none';
             });
-          }
+          });
+
+          select.addEventListener('change', () => {
+            const currentTime = video.currentTime;
+            const isPlaying = !video.paused;
+            video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
+            video.currentTime = currentTime;
+            if (isPlaying) video.play().catch(err => console.warn('Play failed:', err));
+          });
+
+          fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+              card.requestFullscreen().catch(err => console.warn('Fullscreen failed:', err));
+            } else {
+              document.exitFullscreen();
+            }
+          });
+
+          video.addEventListener('loadeddata', () => {
+            card.classList.add('loaded');
+            loading.remove();
+            if (hasInteracted) {
+              video.play().catch(() => {
+                video.controls = true;
+                playBtn.style.display = 'none';
+              });
+            }
+          });
+
+          elements.premiumPlayer.appendChild(card);
         } catch (err) {
           showToast(`Error loading premium video: ${err.message}`);
-          elements.premiumPlayer.innerHTML = '<p style="text-align: center;">Failed to load premium video.</p>';
-        } finally {
-          hideLoading();
+          elements.premiumPlayer.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">Failed to load premium video.</p>';
         }
       }
 
@@ -1363,35 +1309,32 @@
               if (entry.isIntersecting && hasInteracted) {
                 gsap.fromTo(
                   entry.target,
-                  { opacity: 0, scale: 0.95 },
-                  { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }
+                  { opacity: 0, y: 20 },
+                  { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
                 );
                 video.play().catch(() => {
                   video.controls = true;
                   playBtn.style.display = 'none';
                 });
               } else {
-                gsap.to(entry.target, { opacity: 0.8, scale: 0.95, duration: 0.5 });
                 video.pause();
                 video.currentTime = 0;
                 playBtn.style.display = 'block';
               }
             });
           },
-          { threshold: 0.7 }
+          { threshold: 0.5 }
         );
 
-        container.querySelectorAll('.video-card').forEach(card => observer.observe(card));
+        container.querySelectorAll('.feed-card').forEach(card => observer.observe(card));
       }
 
       // Authentication
       async function handleAuth() {
-        showLoading();
         const email = elements.authEmail.value.trim();
         const password = elements.authPassword.value.trim();
         if (!email || !password) {
           elements.authError.textContent = 'Please enter email and password.';
-          hideLoading();
           return;
         }
 
@@ -1402,16 +1345,28 @@
           }
           if (error) throw new Error(error.message);
 
-          elements.userEmail.textContent = email;
-          elements.userStatus.textContent = 'Premium Plan';
+          elements.profileEmail.textContent = email;
+          elements.profileStatus.textContent = 'Premium Plan';
           elements.logoutBtn.style.display = 'block';
           showPage('premium');
           window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
         } catch (err) {
           elements.authError.textContent = err.message;
-        } finally {
-          hideLoading();
         }
+      }
+
+      function updateProfile() {
+        supabase.auth.getUser().then(({ data: user, error }) => {
+          if (user?.user) {
+            elements.profileEmail.textContent = user.user.email;
+            elements.profileStatus.textContent = 'Premium Plan';
+            elements.logoutBtn.style.display = 'block';
+          } else {
+            elements.profileEmail.textContent = 'Guest';
+            elements.profileStatus.textContent = 'Free Plan';
+            elements.logoutBtn.style.display = 'none';
+          }
+        });
       }
 
       // Event Listeners
@@ -1423,47 +1378,52 @@
 
       elements.overlay.addEventListener('click', closeModals);
 
-      elements.navLinks.forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          showPage(link.dataset.page);
-        });
-      });
-
-      elements.carouselSubscribe.addEventListener('click', () => {
-        elements.subscribeModal.classList.add('active');
-        elements.subscribeOverlay.classList.add('active');
-        document.getElementById('home-page').classList.add('blur');
+      elements.navBtns.forEach(btn => {
+        btn.addEventListener('click', () => showPage(btn.dataset.page));
       });
 
       elements.subscribeBtn.addEventListener('click', () => {
-        elements.subscribeModal.classList.add('active');
-        elements.subscribeOverlay.classList.add('active');
+        elements.welcomeModal.classList.add('active');
+        elements.welcomeOverlay.classList.add('active');
+        document.getElementById('profile-page').classList.add('blur');
+      });
+
+      elements.infoSubscribe.addEventListener('click', () => {
+        elements.welcomeModal.classList.add('active');
+        elements.welcomeOverlay.classList.add('active');
         document.getElementById('info-page').classList.add('blur');
       });
 
-      elements.subscribeClose.addEventListener('click', closeModals);
-      elements.subscribeOverlay.addEventListener('click', e => {
-        if (e.target === elements.subscribeOverlay) closeModals();
+      elements.welcomeSubscribe.addEventListener('click', () => {
+        elements.welcomeModal.classList.add('active');
+        elements.welcomeOverlay.classList.add('active');
+        document.getElementById(currentPage + '-page').classList.add('blur');
+      });
+
+      elements.welcomeClose.addEventListener('click', closeModals);
+      elements.welcomeOverlay.addEventListener('click', e => {
+        if (e.target === elements.welcomeOverlay) closeModals();
       });
 
       elements.authSubmit.addEventListener('click', handleAuth);
 
       elements.logoutBtn.addEventListener('click', async () => {
         await supabase.auth.signOut();
-        elements.userEmail.textContent = 'Guest';
-        elements.userStatus.textContent = 'Free Plan';
+        elements.profileEmail.textContent = 'Guest';
+        elements.profileStatus.textContent = 'Free Plan';
         elements.logoutBtn.style.display = 'none';
         showPage('auth');
       });
 
-      elements.privacyToggle.addEventListener('click', () => {
-        const isOpen = elements.privacyContent.classList.toggle('active');
-        elements.privacyToggle.textContent = isOpen ? 'Hide Details' : 'Show Details';
-      });
+      // Welcome Modal
+      setTimeout(() => {
+        elements.welcomeModal.classList.add('active');
+        elements.welcomeOverlay.classList.add('active');
+        document.getElementById('home-page').classList.add('blur');
+      }, 1000);
 
       // Initial Load
-      loadHomePreviews();
+      loadHomeFeed();
     });
   </script>
 </body>
