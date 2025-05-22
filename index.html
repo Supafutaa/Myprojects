@@ -4,266 +4,181 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Baddiez</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:900,700,400&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
   <style>
+    /* Reset and Base Styles */
     :root {
-      --primary: #4fc3f7;
+      --primary: #00b7ff;
       --accent: #ffd700;
-      --bg: #343541;
-      --bar-bg: #444654;
-      --shadow: 0 4px 24px rgba(0,0,0,0.18);
-      --radius: 1rem;
-      --icon-size: 2rem;
-      --menu-width: 90vw;
-      --menu-max-width: 20rem;
-      --bar-float: 0.3rem;
-      --medium-grey: #799dcc;
-      --text-light: #d1d5db;
-      --error-red: #e53935;
-      --dark-bg: #23243a;
-      --white: #ffffff;
-      --light-green: lightgreen;
-      --video-width: 360px;
-      --video-height: 640px;
+      --background: #1a1a2e;
+      --surface: #2a2a3e;
+      --text: #e0e0e0;
+      --text-secondary: #a0a0b0;
+      --error: #ff4d4d;
+      --success: #4caf50;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      --radius: 0.75rem;
+      --video-width: min(100vw, 480px);
+      --video-aspect: calc(16 / 9);
     }
 
     *, *::before, *::after {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      background: var(--bg);
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.5;
       min-height: 100vh;
       overflow-x: hidden;
+      scroll-behavior: smooth;
     }
 
-    .top-bar {
+    /* Header */
+    header {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 4rem;
-      background: var(--bar-bg);
-      box-shadow: var(--shadow);
+      width: 100%;
+      height: 64px;
+      background: var(--surface);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      z-index: 1002;
       padding: 0 1rem;
-      border-radius: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow);
     }
 
     .logo {
-      height: 2.5rem;
-      width: 2.5rem;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
     }
 
     .app-title {
-      flex: 1;
-      text-align: center;
-      font-weight: 580;
-      color: var(--white);
-      font-size: 1.5rem;
-      user-select: none;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
     }
 
     .menu-btn {
       background: none;
       border: none;
-      font-size: 2rem;
       color: var(--primary);
+      font-size: 1.5rem;
       cursor: pointer;
       padding: 0.5rem;
       border-radius: 50%;
       transition: background 0.2s;
     }
 
-    .menu-btn:hover, .menu-btn:focus {
-      background: #f0f7fa;
-      outline: none;
+    .menu-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
 
-    #popupOverlay {
-      display: none;
+    /* Sidebar */
+    #sidebar {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.25);
+      width: min(80vw, 280px);
+      height: 100vh;
+      background: var(--surface);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
       z-index: 1001;
-      transition: background 0.2s;
-    }
-
-    #popupMenu {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 90vh;
-      width: var(--menu-width);
-      max-width: var(--menu-max-width);
-      background: var(--bar-bg);
-      box-shadow: 2px 0 24px rgba(0,0,0,0.18);
-      z-index: 1003;
-      border-top-right-radius: 1.5rem;
-      border-bottom-right-radius: 1.5rem;
-      padding: 0;
-      animation: slideInLeft 0.25s ease-out;
       display: flex;
       flex-direction: column;
+      padding: 1rem;
     }
 
-    @keyframes slideInLeft {
-      from { transform: translateX(-100%); }
-      to { transform: translateX(0); }
-    }
-    @-webkit-keyframes slideInLeft {
-      from { -webkit-transform: translateX(-100%); }
-      to { -webkit-transform: translateX(0); }
+    #sidebar.open {
+      transform: translateX(0);
     }
 
-    .side-popup-header {
-      padding: 2rem 0 1rem;
-      background: var(--bg);
-      border-top-right-radius: 1.5rem;
-      text-align: center;
+    .sidebar-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .side-popup-logo {
-      width: 4rem;
-      height: 4rem;
-      object-fit: contain;
+    .sidebar-logo {
+      width: 64px;
+      height: 64px;
       margin-bottom: 0.5rem;
     }
 
-    .side-popup-title {
-      color: var(--white);
+    .sidebar-title {
       font-size: 1.5rem;
-      font-weight: 580;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text);
     }
 
-    .side-popup-links {
+    .sidebar-links {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      padding: 2rem 1.5rem;
+      gap: 0.5rem;
+      padding: 1rem 0;
     }
 
-    .side-popup-links button,
-    .side-popup-links a {
-      padding: 0.875rem 0 0.875rem 1.125rem;
-      background: var(--bg);
-      color: var(--text-light);
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-family: inherit;
-      text-decoration: none;
-      transition: background 0.18s, color 0.18s;
-      text-align: left;
-    }
-
-    .side-popup-links button:hover,
-    .side-popup-links a:hover {
-      background: var(--accent);
-      color: #181c23;
-    }
-
-    .bottom-bar {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100vw;
-      height: 4.5rem;
-      background: var(--bar-bg);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      z-index: 1002;
-      padding-bottom: 0;
-      gap: 0;
-    }
-
-    .bottom-bar .bar-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    .sidebar-links button,
+    .sidebar-links a {
+      padding: 0.75rem 1rem;
       background: none;
       border: none;
-      color: var(--white);
-      font-size: 0.75rem;
-      font-weight: 450;
+      color: var(--text);
+      text-align: left;
+      font-size: 1rem;
       cursor: pointer;
-      padding: 0;
-      transition: color 0.2s, background 0.2s;
-      border-radius: 0.625rem;
-      height: 100%;
+      border-radius: var(--radius);
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
     }
 
-    .bottom-bar .bar-btn .icon img {
-      width: var(--icon-size);
-      height: var(--icon-size);
-      object-fit: contain;
-      filter: brightness(1.2) invert(1);
-      transition: filter 0.2s;
+    .sidebar-links button:hover,
+    .sidebar-links a:hover {
+      background: var(--primary);
+      color: #fff;
     }
 
-    .bottom-bar .bar-btn.active,
-    .bottom-bar .bar-btn:hover {
-      color: var(--primary);
-      background: rgba(79, 195, 247, 0.08);
-    }
-
-    .bottom-bar .bar-btn.active .icon img,
-    .bottom-bar .bar-btn:hover .icon img {
-      filter: brightness(1.2) invert(74%) sepia(80%) saturate(400%) hue-rotate(170deg) brightness(1.5);
-    }
-
-    .content-wrapper {
+    #overlay {
+      display: none;
       position: fixed;
-      top: 4rem;
-      bottom: 4.5rem;
+      top: 0;
       left: 0;
-      right: 0;
-      overflow-y: auto;
-      background: var(--bg);
-      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
     }
 
-    main {
-      margin: 0 auto;
+    #overlay.active {
+      display: block;
+    }
+
+    /* Content */
+    .content {
+      padding: 80px 0 72px;
       max-width: var(--video-width);
-      padding: 0;
-      background: var(--bg);
+      margin: 0 auto;
+      min-height: 100vh;
     }
 
     .page {
       display: none;
-      width: 100%;
-      min-height: 60vh;
-      padding-top: 0.75rem;
+      padding: 1rem;
     }
 
     .page.active {
       display: block;
-      animation: fadeIn 0.3s;
-    }
-
-    .page.blur {
-      filter: blur(6px);
-      pointer-events: none;
-      user-select: none;
-      transition: filter 0.2s;
+      animation: fadeIn 0.3s ease;
     }
 
     @keyframes fadeIn {
@@ -271,920 +186,787 @@
       to { opacity: 1; }
     }
 
-    .home-img-holder {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #222;
+    /* Home Page */
+    .home-page {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      z-index: 1;
+      text-align: center;
+      min-height: calc(100vh - 152px);
     }
 
-    .home-img-holder img {
-      width: 100vw;
-      height: 100vh;
+    .home-hero {
+      width: 100%;
+      max-height: 50vh;
       object-fit: cover;
-      max-width: 100vw;
-      max-height: 100vh;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+    }
+
+    .home-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .home-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    /* Videos Page */
+    #videos {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .video-card {
+      width: 100%;
+      aspect-ratio: var(--video-aspect);
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .video-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .resolution-selector {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--text);
+      border: none;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    /* Premium Page */
+    #premium-video {
+      width: 100%;
+      aspect-ratio: var(--video-aspect);
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    #premium-video video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Info Page */
+    .info-page {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .info-logo {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto;
+    }
+
+    .info-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .info-blink {
+      font-size: 2rem;
+      color: var(--success);
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .info-btn {
+      background: var(--accent);
+      color: #1a1a1a;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    .info-btn:hover {
+      background: #ffea00;
     }
 
     .info-text {
-      margin: 0 auto;
-      max-width: 26.25rem;
-      padding: 0.75rem 0.625rem 0;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      line-height: 1.2;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Privacy Page */
+    .privacy-page {
       text-align: center;
-      white-space: pre-line;
     }
 
-    .info-text .logo {
-      width: 8rem;
-      height: 8rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .info-text .small-logo {
-      width: 4rem;
-      height: 4rem;
-      margin-top: 0;
-    }
-
-    .info-text .highlight {
-      color: var(--accent);
-      font-weight: bold;
+    .privacy-title {
       font-size: 1.5rem;
-      display: block;
-      text-align: center;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
     }
 
-    .info-text .blink {
-      color: var(--light-green);
-      font-size: 2.5rem;
-      animation: blink-animation 2.2s ease-in-out infinite;
-      will-change: opacity;
-    }
-
-    @keyframes blink-animation {
-      0% { opacity: 1; }
-      45% { opacity: 1; }
-      55% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-    @-webkit-keyframes blink-animation {
-      0% { opacity: 1; }
-      45% { opacity: 1; }
-      55% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    .info-text .subscribe-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--accent);
-      color: #666;
+    .privacy-toggle {
+      background: var(--surface);
+      color: var(--text);
       border: none;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1.5rem;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-      transition: background 0.2s;
-      margin: 0.5rem auto;
-      height: 2.5rem;
-      min-width: 7.5rem;
-    }
-
-    .info-text .subscribe-btn:hover {
-      background: #ffe066;
-    }
-
-    .privacy-text {
-      margin: 0 auto;
-      max-width: 26.25rem;
-      padding: 0.75rem 0.625rem 0;
-      color: var(--text-light);
-      font-size: 0.9rem;
-      line-height: 1.2;
-      text-align: center;
-      white-space: pre-line;
-    }
-
-    .privacy-text .dropdown-btn {
-      margin: 0 auto 0.75rem;
-      background: var(--bar-bg);
-      color: var(--white);
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.5rem 1.125rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
       font-size: 1rem;
       cursor: pointer;
+      margin: 1rem 0;
     }
 
-    .privacy-text .dropdown-body {
-      margin-top: 0.5rem;
-      text-align: center;
+    .privacy-content {
+      display: none;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
     }
 
-    #howToSubscribePopupOverlay, #authPopup {
+    .privacy-content.active {
+      display: block;
+    }
+
+    /* Popups */
+    .popup-overlay {
       display: none;
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.45);
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
       z-index: 2000;
     }
 
-    #howToSubscribePopup {
-      display: none;
+    .popup-overlay.active {
+      display: block;
+    }
+
+    .popup {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: var(--dark-bg);
+      background: var(--surface);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2rem 1.5rem 1.5rem;
-      min-width: 16.25rem;
-      max-width: 90vw;
+      padding: 1.5rem;
+      max-width: min(90vw, 400px);
       z-index: 2001;
-      text-align: center;
-      color: var(--white);
-      animation: popupFadeIn 0.25s;
-    }
-
-    #authPopup {
+      color: var(--text);
       display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 4000;
-      background: rgba(0,0,0,0.3);
     }
 
-    #authPopup > div {
-      background: var(--dark-bg);
-      border-radius: var(--radius);
-      padding: 2rem 1.5rem;
-      max-width: 21.25rem;
-      margin: auto;
-      text-align: center;
+    .popup.active {
+      display: block;
     }
 
-    #authPopup h3 {
-      margin: 0 0 1.125rem;
-      color: var(--accent);
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-
-    #authPopup input {
-      width: 90%;
-      padding: 0.625rem;
-      border-radius: 0.5rem;
-      border: 1px solid #bdbdbd;
-      font-size: 1rem;
-      margin-bottom: 1.125rem;
-      outline: none;
-      text-align: center;
-    }
-
-    #authPopup button {
-      background: var(--accent);
-      color: #222;
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.625rem 1.5rem;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-      min-width: 5rem;
-    }
-
-    #authPopup button:hover {
-      background: #ffe066;
-    }
-
-    #authPopup .error {
-      color: var(--error-red);
-      margin-top: 0.5rem;
-    }
-
-    #wrongKeyPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--error-red);
-      color: var(--white);
-      border-radius: 0.875rem;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.14);
-      padding: 2rem 2.25rem;
-      z-index: 3000;
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      animation: popupFadeIn 0.2s;
-    }
-
-    #howToSubscribePopup .close-btn {
+    .popup-close {
       position: absolute;
-      top: 0.625rem;
-      right: 1.125rem;
+      top: 0.5rem;
+      right: 0.5rem;
       background: none;
       border: none;
       color: var(--accent);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       cursor: pointer;
     }
 
+    .popup-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .popup-content {
+      font-size: 0.875rem;
+    }
+
+    /* Auth Popup */
+    .auth-popup {
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .auth-popup.active {
+      display: flex;
+    }
+
+    .auth-popup form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      max-width: min(90vw, 320px);
+    }
+
+    .auth-popup input {
+      padding: 0.5rem;
+      border: 1px solid var(--text-secondary);
+      border-radius: 0.25rem;
+      background: var(--background);
+      color: var(--text);
+      font-size: 0.875rem;
+    }
+
+    .auth-popup button {
+      background: var(--accent);
+      color: #1a1a1a;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .auth-popup button:hover {
+      background: #ffea00;
+    }
+
+    .auth-error {
+      color: var(--error);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    /* Error Popup */
+    #error-popup {
+      background: var(--error);
+      color: #fff;
+      padding: 1rem;
+      max-width: min(90vw, 300px);
+      text-align: center;
+    }
+
+    /* Loading */
     #loading {
       display: none;
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: var(--white);
-      z-index: 5000;
-      font-size: 1.2rem;
+      z-index: 3000;
+      color: var(--text);
+      font-size: 1rem;
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: var(--radius);
     }
 
-    #previews-videos {
-      width: var(--video-width);
-      height: 100%;
-      margin: 0 auto;
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
-      background: #000;
-      position: relative;
+    #loading.active {
+      display: block;
+    }
+
+    /* Bottom Navigation */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      background: var(--surface);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-    }
-
-    .video-container {
-      width: var(--video-width);
-      height: 100%;
-      scroll-snap-align: center;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-      overflow: hidden;
-    }
-
-    .video-container video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-    }
-
-    #premium-video-holder {
-      width: var(--video-width);
-      height: 100%;
-      margin: 0 auto;
-      background: #000;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    #premium-video-holder video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1;
-    }
-
-    .resolution-selector {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.7);
-      color: var(--white);
-      border: none;
-      border-radius: 0.25rem;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.9rem;
+      gap: 0.25rem;
       cursor: pointer;
+      padding: 0.5rem;
+      transition: color 0.2s, background 0.2s;
     }
 
-    .flip-enter {
-      transform: rotateY(90deg);
-      opacity: 0;
+    .nav-btn img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(0.8);
     }
 
-    .flip-exit {
-      transform: rotateY(-90deg);
-      opacity: 0;
+    .nav-btn.active,
+    .nav-btn:hover {
+      color: var(--primary);
+      background: rgba(0, 183, 255, 0.1);
     }
 
-    @media (max-width: 600px) {
-      #popupMenu {
-        width: 70vw;
-        max-width: 90vw;
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
-      }
-
-      .side-popup-header {
-        padding: 1.5rem 0 0.75rem;
-      }
-
-      .side-popup-links {
-        padding: 1.5rem 0.75rem;
-      }
-
-      :root {
-        --video-width: 100vw;
-        --video-height: calc(100vw * 16 / 9);
-      }
-
-      .video-container,
-      #previews-videos,
-      #premium-video-holder {
-        height: 100%;
-      }
+    .nav-btn.active img,
+    .nav-btn:hover img {
+      filter: brightness(1) hue-rotate(180deg);
     }
 
-    @media (min-width: 601px) {
-      #popupMenu {
-        width: 25vw;
-        max-width: 25rem;
+    /* Responsive Design */
+    @media (min-width: 768px) {
+      .content {
+        max-width: 720px;
+      }
+
+      .home-hero {
+        max-height: 400px;
+      }
+
+      .home-title {
+        font-size: 2rem;
+      }
+
+      #sidebar {
+        width: 320px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Top Bar -->
-  <header class="top-bar">
-    <img src="assets/images/logo.png" class="logo" alt="Supafutaa Logo" />
-    <span class="app-title">supafutaa</span>
-    <button class="menu-btn" id="menu-button" aria-label="Open menu">⋮</button>
+  <!-- Header -->
+  <header>
+    <img src="assets/images/logo.png" class="logo" alt="Baddiez Logo" />
+    <span class="app-title">Baddiez</span>
+    <button class="menu-btn" id="menu-btn" aria-label="Open menu">☰</button>
   </header>
 
-  <!-- Side Popup overlay and menu -->
-  <div id="popupOverlay"></div>
-  <aside id="popupMenu" class="side-popup-menu">
-    <div class="side-popup-header">
-      <img src="assets/images/logo.png" alt="Supafutaa Logo" class="side-popup-logo" />
-      <div class="side-popup-title">Baddiez</div>
-      <div style="color: var(--medium-grey); font-size: 0.8rem; text-align: center; margin-top: 0.25rem;">
-        Copyright © 2025 - T&C Apply
-      </div>
+  <!-- Sidebar -->
+  <div id="overlay"></div>
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <img src="assets/images/logo.png" class="sidebar-logo" alt="Baddiez Logo" />
+      <h2 class="sidebar-title">Baddiez</h2>
+      <small style="color: var(--text-secondary);">© 2025 - T&C Apply</small>
     </div>
-    <nav class="side-popup-links">
-      <button id="infoBtn" aria-label="View information">Info</button>
-      <a href="https://wa.me/254720047018" target="_blank" id="paymentLink" aria-label="Make payment">Payment</a>
-      <button id="privacyBtn" aria-label="View privacy policy">Privacy Policy</button>
+    <nav class="sidebar-links">
+      <button data-page="info">Info</button>
+      <a href="https://wa.me/254720047018" target="_blank">Payment</a>
+      <button data-page="privacy">Privacy Policy</button>
     </nav>
   </aside>
 
-  <!-- Main Content -->
-  <div class="content-wrapper">
-    <main>
-      <!-- Home Page -->
-      <div class="page active" id="home-page">
-        <div class="home-img-holder">
-          <img src="assets/images/home image.jpg" alt="Home background" />
-        </div>
-      </div>
-      <!-- Previews Page -->
-      <div class="page" id="previews-page">
-        <div id="previews-videos"></div>
-      </div>
-      <!-- Premium Page -->
-      <div class="page" id="premium-page">
-        <div id="premium-video-holder"></div>
-      </div>
-      <!-- Info Page -->
-      <div class="page" id="info-page">
-        <div class="info-text">
-          <div style="display: flex; justify-content: center; align-items: center;">
-            <img src="assets/images/logo.png" alt="Supafutaa Logo" class="logo" />
-          </div>
-          <span class="highlight">Unlock Full Premium Experience</span>
-          <span class="blink">Pay via Mpesa</span>
-          <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
-            Till No: 123456 | Amount: Kshs 99/=
-          </span>
-          <span style="color: var(--white); font-weight: bold; font-size: 1.25rem; display: block; text-align: center;">
-            Validity: 1 month
-          </span>
-          <button id="howToSubscribeBtn" class="subscribe-btn" aria-label="Learn how to subscribe">Subscribe Here</button>
-          <span class="highlight">Benefits of Premium Membership</span>
-          <b>Exclusive Videos</b><br>
-          Access 100% exclusive videos not available for free users<br><br>
-          <b>Early Access</b><br>
-          Watch new uploads before anyone else hours or days early.<br><br>
-          <b>Full Length Content</b><br>
-          Enjoy full, uncut scenes with no ads, no limits.<br><br>
-          <b>High Quality Streams</b><br>
-          Enjoy HD and 4K quality for the ultimate viewing experience.<br><br>
-          <b>Ad-Free Experience</b><br>
-          Watch without interruption, 100% ad-free viewing<br><br>
-          <b>Priority Support</b><br>
-          Need help? Premium subscribers get priority replies<br><br>
-          <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
-            Copyright © Baddiez. 2025. All rights reserved
-          </span>
-          <div style="display: flex; justify-content: center; align-items: center;">
-            <img src="assets/images/logo2.png" alt="Supafutaa Secondary Logo" class="small-logo" />
-          </div>
-        </div>
-      </div>
-      <!-- Privacy Policy Page -->
-      <div class="page" id="privacy-page">
-        <div class="privacy-text">
-          <div style="color: var(--accent); font-weight: bold; font-size: 1.3rem;">PRIVACY POLICY</div>
-          <div style="color: var(--medium-grey);">Effective date: 1st January, 2025</div>
-          <br>
-          <button id="privacyDropdownBtn" class="dropdown-btn" aria-label="Toggle privacy policy details">Show Details ▼</button>
-          <div id="privacyDropdownBody" class="dropdown-body" style="display: none;">
-            <b>1. Introduction</b><br>
-            We value your privacy and are committed to protecting your personal information.<br><br>
-            <b>2. Information We Collect</b><br>
-            We do not collect personal information unless you provide it voluntarily (e.g., through payment or support requests).<br><br>
-            <b>3. Use of Information</b><br>
-            Any information you provide is used solely to process your payment and provide access to premium content.<br><br>
-            <b>4. Data Security</b><br>
-            We implement reasonable security measures to protect your data. Payments are processed securely via Mpesa.<br><br>
-            <b>5. Sharing of Information</b><br>
-            We do not sell, trade, or share your personal information with third parties.<br><br>
-            <b>6. Cookies & Tracking</b><br>
-            We do not use cookies or tracking technologies.<br><br>
-            <b>7. Changes to This Policy</b><br>
-            We may update this policy from time to time. Changes will be posted on this page.<br><br>
-            <b>8. Contact Us</b><br>
-            If you have any questions about this Privacy Policy, please contact us via Telegram.<br><br>
-            <span style="color: var(--accent);">Thank you for trusting Baddiez!</span>
-            <span style="color: var(--medium-grey); font-size: 0.75rem; display: block; text-align: center;">
-              Copyright © Baddiez. 2025 All rights reserved
-            </span>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+  <!-- Content -->
+  <main class="content">
+    <!-- Home Page -->
+    <section class="page home-page active" id="home-page">
+      <img src="assets/images/home image.jpg" class="home-hero" alt="Hero Image" />
+      <h1 class="home-title">Welcome to Baddiez</h1>
+      <p class="home-text">Discover exclusive videos and premium content. Subscribe now for an ad-free experience!</p>
+    </section>
 
-  <!-- Auth Popup -->
-  <div id="authPopup">
-    <div>
-      <h3>Sign In</h3>
-      <input id="authEmail" type="email" placeholder="Email" aria-label="Email input" />
-      <input id="authPassword" type="password" placeholder="Password" aria-label="Password input" />
-      <button id="authSignInBtn" aria-label="Sign in or sign up">Sign In / Sign Up</button>
-      <div id="authError" class="error"></div>
+    <!-- Previews Page -->
+    <section class="page" id="previews-page">
+      <div id="videos"></div>
+    </section>
+
+    <!-- Premium Page -->
+    <section class="page" id="premium-page">
+      <div id="premium-video"></div>
+    </section>
+
+    <!-- Info Page -->
+    <section class="page" id="info-page">
+      <img src="assets/images/logo.png" class="info-logo" alt="Baddiez Logo" />
+      <h2 class="info-title">Unlock Premium</h2>
+      <p class="info-blink">Pay via Mpesa</p>
+      <p><strong>Till No: 123456 | Ksh 99 | 1 Month</strong></p>
+      <button class="info-btn" id="subscribe-btn">Subscribe Now</button>
+      <h3 class="info-title">Premium Benefits</h3>
+      <p class="info-text">
+        <strong>Exclusive Videos:</strong> Access unique content.<br>
+        <strong>Early Access:</strong> Watch new videos first.<br>
+        <strong>Full Length:</strong> Uncut, ad-free videos.<br>
+        <strong>HD/4K:</strong> High-quality streaming.<br>
+        <strong>Ad-Free:</strong> Uninterrupted viewing.<br>
+        <strong>Priority Support:</strong> Fast assistance.<br>
+        <small>© 2025 Baddiez. All rights reserved.</small>
+      </p>
+      <img src="assets/images/logo2.png" style="width: 64px; margin: 1rem auto;" alt="Secondary Logo" />
+    </section>
+
+    <!-- Privacy Page -->
+    <section class="page" id="privacy-page">
+      <h2 class="privacy-title">Privacy Policy</h2>
+      <p style="color: var(--text-secondary);">Effective: Jan 1, 2025</p>
+      <button class="privacy-toggle" id="privacy-toggle">Show Details</button>
+      <div class="privacy-content" id="privacy-content">
+        <p><strong>1. Introduction</strong><br>We value your privacy and protect your data.</p>
+        <p><strong>2. Information Collected</strong><br>Only voluntary data (e.g., payment details).</p>
+        <p><strong>3. Use of Data</strong><br>Used for payments and premium access.</p>
+        <p><strong>4. Security</strong><br>Secure payment processing via Mpesa.</p>
+        <p><strong>5. Sharing</strong><br>We do not share your data.</p>
+        <p><strong>6. Cookies</strong><br>No cookies or tracking used.</p>
+        <p><strong>7. Updates</strong><br>Policy updates posted here.</p>
+        <p><strong>8. Contact</strong><br>Reach us via Telegram.</p>
+        <p style="color: var(--accent);">Thank you for trusting Baddiez!</p>
+        <small>© 2025 Baddiez. All rights reserved.</small>
+      </div>
+    </section>
+  </main>
+
+  <!-- Popups -->
+  <div class="popup-overlay" id="subscribe-overlay"></div>
+  <div class="popup" id="subscribe-popup">
+    <button class="popup-close" id="subscribe-close">×</button>
+    <h3 class="popup-title">How to Subscribe</h3>
+    <div class="popup-content">
+      <ol>
+        <li>Pay via Mpesa (Till No: 123456, Ksh 99).</li>
+        <li>Go to Menu > Payment.</li>
+        <li>Send Mpesa transaction code via WhatsApp.</li>
+        <li>Receive access instructions.</li>
+        <li>Sign in on Premium tab.</li>
+      </ol>
     </div>
   </div>
 
-  <!-- Wrong Key Popup -->
-  <div id="wrongKeyPopup" aria-live="polite">Error</div>
-
-  <!-- How to Subscribe Popup -->
-  <div id="howToSubscribePopupOverlay"></div>
-  <div id="howToSubscribePopup">
-    <button id="closeHowToSubscribePopup" class="close-btn" aria-label="Close subscription instructions">×</button>
-    <div style="color: var(--accent); font-weight: bold; font-size: 1.2rem; text-align: center; margin-bottom: 0.75rem;">
-      Steps on How To Subscribe
-    </div>
-    <ul style="color: var(--white); font-size: 1rem; line-height: 1.6; padding-left: 1.375rem; margin: 0;">
-      <li>After payment, go to Menu and click the Payment.</li>
-      <li>You will be redirected to the App WhatsApp.</li>
-      <li>Paste the Mpesa transaction code & receive access instructions.</li>
-      <li>Then, go to the Premium Tab and sign in to access premium content.</li>
-    </ul>
+  <div class="popup-overlay auth-popup" id="auth-overlay"></div>
+  <div class="popup auth-popup" id="auth-popup">
+    <form id="auth-form">
+      <h3 class="popup-title">Sign In</h3>
+      <input type="email" id="auth-email" placeholder="Email" required />
+      <input type="password" id="auth-password" placeholder="Password" required />
+      <button type="submit">Sign In / Sign Up</button>
+      <p class="auth-error" id="auth-error"></p>
+    </form>
   </div>
 
-  <!-- Loading Indicator -->
-  <div id="loading" aria-live="polite">Loading...</div>
+  <div class="popup" id="error-popup">
+    <p id="error-message">An error occurred.</p>
+  </div>
 
-  <!-- Bottom Bar -->
-  <nav class="bottom-bar" id="bottomBar">
-    <button class="bar-btn" id="previewsNav" aria-label="View previews">
-      <span class="icon">
-        <img src="assets/images/previews icon.png" alt="Previews icon" />
-      </span>
+  <div id="loading">Loading...</div>
+
+  <!-- Navigation -->
+  <nav>
+    <button class="nav-btn" data-page="previews">
+      <img src="assets/images/previews icon.png" alt="Previews" />
       Previews
     </button>
-    <button class="bar-btn active" id="homeNav" aria-label="View home">
-      <span class="icon">
-        <img src="assets/images/home icon.png" alt="Home icon" />
-      </span>
+    <button class="nav-btn active" data-page="home">
+      <img src="assets/images/home icon.png" alt="Home" />
       Home
     </button>
-    <button class="bar-btn" id="premiumNav" aria-label="View premium content">
-      <span class="icon">
-        <img src="assets/images/premium icon.png" alt="Premium icon" />
-      </span>
+    <button class="nav-btn" data-page="premium">
+      <img src="assets/images/premium icon.png" alt="Premium" />
       Premium
     </button>
   </nav>
 
-  <!-- External Scripts -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Supabase initialization
       const SUPABASE_URL = 'https://dvicmtexrtfbxqomndxh.supabase.co';
       const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2aWNtdGV4cnRmYnhxb21uZHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcwMDA0NzQsImV4cCI6MjA2MjU3NjQ3NH0.CqTnwcXARVLJsQkELi_xh2XaJ7ixMVjHk7ZZc5LhUrU';
-      if (!window.supabase) {
-        console.error('Supabase library not loaded.');
-        document.getElementById('wrongKeyPopup').textContent = 'Failed to initialize Supabase library.';
-        document.getElementById('wrongKeyPopup').style.display = 'block';
-        setTimeout(() => {
-          document.getElementById('wrongKeyPopup').style.display = 'none';
-        }, 4000);
+      const supabase = window.supabase?.createClient(SUPABASE_URL, SUPABASE_KEY);
+      if (!supabase) {
+        showError('Supabase initialization failed.');
         return;
       }
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      // DOM references
-      const popupMenu = document.getElementById('popupMenu');
-      const popupOverlay = document.getElementById('popupOverlay');
-      const menuButton = document.getElementById('menu-button');
-      const authPopup = document.getElementById('authPopup');
-      const authSignInBtn = document.getElementById('authSignInBtn');
-      const authEmail = document.getElementById('authEmail');
-      const authPassword = document.getElementById('authPassword');
-      const authError = document.getElementById('authError');
-      const howToSubscribeBtn = document.getElementById('howToSubscribeBtn');
-      const howToSubscribePopup = document.getElementById('howToSubscribePopup');
-      const howToSubscribePopupOverlay = document.getElementById('howToSubscribePopupOverlay');
-      const closeHowToSubscribePopup = document.getElementById('closeHowToSubscribePopup');
-      const loading = document.getElementById('loading');
-      const infoBtn = document.getElementById('infoBtn');
-      const privacyBtn = document.getElementById('privacyBtn');
-      const previewsVideos = document.getElementById('previews-videos');
-      const premiumVideoHolder = document.getElementById('premium-video-holder');
-      const pages = {
-        home: document.getElementById('home-page'),
-        previews: document.getElementById('previews-page'),
-        premium: document.getElementById('premium-page'),
-        info: document.getElementById('info-page'),
-        privacy: document.getElementById('privacy-page')
-      };
-      const navBtns = {
-        home: document.getElementById('homeNav'),
-        previews: document.getElementById('previewsNav'),
-        premium: document.getElementById('premiumNav')
+      // DOM Elements
+      const elements = {
+        menuBtn: document.getElementById('menu-btn'),
+        sidebar: document.getElementById('sidebar'),
+        overlay: document.getElementById('overlay'),
+        videos: document.getElementById('videos'),
+        premiumVideo: document.getElementById('premium-video'),
+        subscribeBtn: document.getElementById('subscribe-btn'),
+        subscribePopup: document.getElementById('subscribe-popup'),
+        subscribeOverlay: document.getElementById('subscribe-overlay'),
+        subscribeClose: document.getElementById('subscribe-close'),
+        authPopup: document.getElementById('auth-popup'),
+        authOverlay: document.getElementById('auth-overlay'),
+        authForm: document.getElementById('auth-form'),
+        authEmail: document.getElementById('auth-email'),
+        authPassword: document.getElementById('auth-password'),
+        authError: document.getElementById('auth-error'),
+        errorPopup: document.getElementById('error-popup'),
+        errorMessage: document.getElementById('error-message'),
+        loading: document.getElementById('loading'),
+        privacyToggle: document.getElementById('privacy-toggle'),
+        privacyContent: document.getElementById('privacy-content'),
+        pages: document.querySelectorAll('.page'),
+        navBtns: document.querySelectorAll('.nav-btn'),
+        sidebarLinks: document.querySelectorAll('.sidebar-links button')
       };
 
-      let lastActivePage = 'home';
-      let currentPremiumVideo = null;
+      let currentPage = 'home';
       let observer = null;
 
-      // Ensure menu is hidden on load
-      popupMenu.style.display = 'none';
-      popupOverlay.style.display = 'none';
-
-      // Load preview videos from Supabase Storage
-      async function loadPreviewsVideos() {
-        loading.style.display = 'block';
-        try {
-          const { data: files, error } = await supabase.storage
-            .from('previews')
-            .list('', { limit: 100 });
-
-          if (error) {
-            console.error('Error fetching preview videos:', error);
-            document.getElementById('wrongKeyPopup').textContent = `Failed to load previews: ${error.message || 'Unknown error'}`;
-            document.getElementById('wrongKeyPopup').style.display = 'block';
-            setTimeout(() => {
-              document.getElementById('wrongKeyPopup').style.display = 'none';
-            }, 5000);
-            previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
-            return;
-          }
-
-          previewsVideos.innerHTML = '';
-          if (files && files.length > 0) {
-            const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
-            if (videoFiles.length === 0) {
-              console.warn('No video files found in previews bucket.');
-              previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
-              return;
-            }
-
-            for (const file of videoFiles) {
-              const { data: signedUrlData, error: signedError } = await supabase.storage
-                .from('previews')
-                .createSignedUrl(file.name, 3600);
-              if (signedError) {
-                console.warn(`Failed to get signed URL for ${file.name}:`, signedError);
-                continue;
-              }
-
-              const videoUrl = signedUrlData.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
-              const container = document.createElement('div');
-              container.className = 'video-container';
-              const video = document.createElement('video');
-              video.src = videoUrl;
-              video.muted = true;
-              video.playsinline = true;
-              video.loop = true;
-              video.controls = true;
-              video.autoplay = true;
-              video.setAttribute('aria-label', 'Preview video');
-              video.dataset.lowSrc = videoUrl;
-              video.dataset.highSrc = videoUrl;
-
-              const select = document.createElement('select');
-              select.className = 'resolution-selector';
-              select.innerHTML = `
-                <option value="360p">360p</option>
-                <option value="max">Max</option>
-              `;
-              select.addEventListener('change', () => {
-                const currentTime = video.currentTime;
-                const wasPlaying = !video.paused;
-                video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
-                video.currentTime = currentTime;
-                if (wasPlaying) {
-                  video.play().catch(err => console.warn('Auto-play failed:', err));
-                }
-              });
-
-              container.appendChild(video);
-              container.appendChild(select);
-              previewsVideos.appendChild(container);
-            }
-
-            // Setup IntersectionObserver
-            if (observer) {
-              observer.disconnect();
-            }
-            observer = new IntersectionObserver(
-              (entries) => {
-                entries.forEach(entry => {
-                  console.log('Intersecting:', entry.isIntersecting, entry.target);
-                  const video = entry.target.querySelector('video');
-                  if (entry.isIntersecting) {
-                    gsap.fromTo(
-                      entry.target,
-                      { transform: 'rotateY(90deg)', opacity: 0 },
-                      { transform: 'rotateY(0deg)', opacity: 1, duration: 0.5, ease: 'power2.out' }
-                    );
-                    video.play().catch(err => {
-                      console.warn('Auto-play failed:', err);
-                      video.controls = true;
-                    });
-                  } else {
-                    gsap.to(
-                      entry.target,
-                      { transform: 'rotateY(-90deg)', opacity: 0, duration: 0.5, ease: 'power2.in' }
-                    );
-                    video.pause();
-                    video.currentTime = 0;
-                  }
-                });
-              },
-              { threshold: 0.3 }
-            );
-
-            document.querySelectorAll('.video-container').forEach(container => {
-              observer.observe(container);
-            });
-          } else {
-            console.warn('No files found in previews bucket.');
-            previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">No preview videos available.</p>';
-          }
-        } catch (err) {
-          console.error('Unexpected error in loadPreviewsVideos:', err);
-          document.getElementById('wrongKeyPopup').textContent = `Unexpected error: ${err.message || 'Unknown error'}`;
-          document.getElementById('wrongKeyPopup').style.display = 'block';
-          setTimeout(() => {
-            document.getElementById('wrongKeyPopup').style.display = 'none';
-          }, 5000);
-          previewsVideos.innerHTML = '<p style="color: var(--white); text-align: center;">Unable to load preview videos.</p>';
-        } finally {
-          loading.style.display = 'none';
-        }
+      // Utilities
+      function showLoading() {
+        elements.loading.classList.add('active');
       }
 
-      // Load premium video from Supabase Storage
-      async function loadPremiumVideo() {
-        loading.style.display = 'block';
+      function hideLoading() {
+        elements.loading.classList.remove('active');
+      }
+
+      function showError(message, duration = 5000) {
+        elements.errorMessage.textContent = message;
+        elements.errorPopup.classList.add('active');
+        setTimeout(() => elements.errorPopup.classList.remove('active'), duration);
+      }
+
+      function closePopups() {
+        elements.sidebar.classList.remove('open');
+        elements.overlay.classList.remove('active');
+        elements.subscribePopup.classList.remove('active');
+        elements.subscribeOverlay.classList.remove('active');
+        elements.authPopup.classList.remove('active');
+        elements.authOverlay.classList.remove('active');
+        elements.pages.forEach(page => page.classList.remove('blur'));
+      }
+
+      function showPage(pageId) {
+        closePopups();
+        elements.pages.forEach(page => page.classList.toggle('active', page.id === `${pageId}-page`));
+        elements.navBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.page === pageId));
+        currentPage = pageId;
+        if (pageId === 'previews') loadPreviews();
+        if (pageId === 'premium') loadPremium();
+      }
+
+      // Video Loading
+      async function loadPreviews() {
+        showLoading();
+        elements.videos.innerHTML = '';
         try {
-          if (currentPremiumVideo) {
-            currentPremiumVideo.pause();
-            currentPremiumVideo.currentTime = 0;
-          }
+          const { data: files, error } = await supabase.storage.from('previews').list('', { limit: 10 });
+          if (error) throw new Error(`Failed to fetch previews: ${error.message}`);
 
-          const { data: files, error } = await supabase.storage
-            .from('premium')
-            .list('', { limit: 100 });
-
-          if (error) {
-            console.error('Error fetching premium videos:', error);
-            premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium content: ${error.message || 'Unknown error'}</p>`;
+          const videoFiles = files.filter(file => /\.(mp4|webm)$/i.test(file.name));
+          if (!videoFiles.length) {
+            elements.videos.innerHTML = '<p style="text-align: center;">No preview videos available.</p>';
             return;
           }
 
-          premiumVideoHolder.innerHTML = '';
-          if (files && files.length > 0) {
-            const videoFiles = files.filter(file => file.name.match(/\.(mp4|webm|ogg)$/i));
-            if (videoFiles.length === 0) {
-              console.warn('No video files found in premium bucket.');
-              premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium videos available.</p>';
-              return;
+          for (const file of videoFiles) {
+            const { data, error } = await supabase.storage.from('previews').createSignedUrl(file.name, 3600);
+            if (error) {
+              console.warn(`Signed URL error for ${file.name}:`, error);
+              continue;
             }
 
-            const firstVideo = videoFiles[0];
-            const { data: signedUrlData, error: signedError } = await supabase.storage
-              .from('premium')
-              .createSignedUrl(firstVideo.name, 3600);
-            if (signedError) {
-              console.error('Error creating signed URL:', signedError);
-              premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Failed to load premium video: ${signedError.message || 'Unknown error'}</p>`;
-              return;
-            }
-
-            const videoUrl = signedUrlData.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
-            const container = document.createElement('div');
-            container.className = 'video-container';
+            const videoUrl = data.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+            const card = document.createElement('div');
+            card.className = 'video-card';
             const video = document.createElement('video');
             video.src = videoUrl;
             video.muted = true;
             video.playsinline = true;
-            video.loop = true;
             video.controls = true;
-            video.autoplay = true;
-            video.setAttribute('aria-label', 'Premium video');
             video.dataset.lowSrc = videoUrl;
             video.dataset.highSrc = videoUrl;
 
             const select = document.createElement('select');
             select.className = 'resolution-selector';
-            select.innerHTML = `
-              <option value="360p">360p</option>
-              <option value="max">Max</option>
-            `;
+            select.innerHTML = '<option value="low">Low</option><option value="high">High</option>';
             select.addEventListener('change', () => {
               const currentTime = video.currentTime;
-              const wasPlaying = !video.paused;
-              video.src = select.value === '360p' ? video.dataset.lowSrc : video.dataset.highSrc;
+              const isPlaying = !video.paused;
+              video.src = select.value === 'low' ? video.dataset.lowSrc : video.dataset.highSrc;
               video.currentTime = currentTime;
-              if (wasPlaying) {
-                video.play().catch(err => console.warn('Auto-play failed:', err));
-              }
+              if (isPlaying) video.play().catch(err => console.warn('Play failed:', err));
             });
 
-            container.appendChild(video);
-            container.appendChild(select);
-            premiumVideoHolder.appendChild(container);
-            currentPremiumVideo = video;
+            card.append(video, select);
+            elements.videos.appendChild(card);
+          }
 
-            video.play().catch(err => {
-              console.warn('Auto-play failed:', err);
-              video.controls = true;
-            });
+          if (observer) observer.disconnect();
+          observer = new IntersectionObserver(
+            entries => {
+              entries.forEach(entry => {
+                const video = entry.target.querySelector('video');
+                if (entry.isIntersecting) {
+                  gsap.fromTo(entry.target, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5 });
+                  video.play().catch(() => {
+                    video.controls = true;
+                  });
+                } else {
+                  gsap.to(entry.target, { opacity: 0, scale: 0.9, duration: 0.5 });
+                  video.pause();
+                  video.currentTime = 0;
+                }
+              });
+            },
+            { threshold: 0.5 }
+          );
 
-            const userResponse = await supabase.auth.getUser();
-            if (userResponse.error || !userResponse.data.user) {
-              authPopup.style.display = 'flex';
-              pages.premium.classList.add('blur');
-            }
-          } else {
-            console.warn('No files found in premium bucket.');
-            premiumVideoHolder.innerHTML = '<p style="color: var(--white); text-align: center;">No premium videos available.</p>';
+          document.querySelectorAll('.video-card').forEach(card => observer.observe(card));
+        } catch (err) {
+          showError(`Error loading previews: ${err.message}`);
+          elements.videos.innerHTML = '<p style="text-align: center;">Failed to load previews.</p>';
+        } finally {
+          hideLoading();
+        }
+      }
+
+      async function loadPremium() {
+        showLoading();
+        elements.premiumVideo.innerHTML = '';
+        try {
+          const { data: files, error } = await supabase.storage.from('premium').list('', { limit: 1 });
+          if (error) throw new Error(`Failed to fetch premium video: ${error.message}`);
+
+          if (!files.length) {
+            elements.premiumVideo.innerHTML = '<p style="text-align: center;">No premium videos available.</p>';
+            return;
+          }
+
+          const file = files[0];
+          if (!/\.(mp4|webm)$/i.test(file.name)) {
+            elements.premiumVideo.innerHTML = '<p style="text-align: center;">No valid premium videos.</p>';
+            return;
+          }
+
+          const { data, error: signedError } = await supabase.storage.from('premium').createSignedUrl(file.name, 3600);
+          if (signedError) throw new Error(`Signed URL error: ${signedError.message}`);
+
+          const videoUrl = data.signedUrl || 'https://www.w3schools.com/html/mov_bbb.mp4';
+          const video = document.createElement('video');
+          video.src = videoUrl;
+          video.muted = true;
+          video.playsinline = true;
+          video.controls = true;
+          video.dataset.lowSrc = videoUrl;
+          video.dataset.highSrc = videoUrl;
+
+          const select = document.createElement('select');
+          select.className = 'resolution-selector';
+          select.innerHTML = '<option value="low">Low</option><option value="high">High</option>';
+          select.addEventListener('change', () => {
+            const currentTime = video.currentTime;
+            const isPlaying = !video.paused;
+            video.src = select.value === 'low' ? video.dataset.lowSrc : video.dataset.highSrc;
+            video.currentTime = currentTime;
+            if (isPlaying) video.play().catch(err => console.warn('Play failed:', err));
+          });
+
+          elements.premiumVideo.append(video, select);
+          video.play().catch(() => {
+            video.controls = true;
+          });
+
+          const { data: user, error: authError } = await supabase.auth.getUser();
+          if (authError || !user.user) {
+            elements.authPopup.classList.add('active');
+            elements.authOverlay.classList.add('active');
+            document.getElementById('premium-page').classList.add('blur');
           }
         } catch (err) {
-          console.error('Unexpected error in loadPremiumVideo:', err);
-          premiumVideoHolder.innerHTML = `<p style="color: var(--white); text-align: center;">Unexpected error: ${err.message || 'Unknown error'}</p>`;
+          showError(`Error loading premium video: ${err.message}`);
+          elements.premiumVideo.innerHTML = '<p style="text-align: center;">Failed to load premium video.</p>';
         } finally {
-          loading.style.display = 'none';
+          hideLoading();
         }
       }
 
-      function closeAllPopups() {
-        popupMenu.style.display = 'none';
-        popupOverlay.style.display = 'none';
-        authPopup.style.display = 'none';
-        howToSubscribePopup.style.display = 'none';
-        howToSubscribePopupOverlay.style.display = 'none';
-        document.getElementById('wrongKeyPopup').style.display = 'none';
-        loading.style.display = 'none';
-        document.querySelectorAll('.page.blur').forEach(p => p.classList.remove('blur'));
-      }
-
-      function showPage(page) {
-        closeAllPopups();
-        Object.values(pages).forEach(p => p.classList.remove('active'));
-        Object.values(navBtns).forEach(b => b.classList.remove('active'));
-        if (pages[page]) pages[page].classList.add('active');
-        if (navBtns[page]) navBtns[page].classList.add('active');
-        lastActivePage = page;
-      }
-
-      function handleNavigation(page) {
-        showPage(page);
-        if (page === 'previews') loadPreviewsVideos();
-        if (page === 'premium') loadPremiumVideo();
-      }
-
-      menuButton.onclick = () => {
-        const isOpen = popupMenu.style.display === 'flex';
-        closeAllPopups();
-        if (!isOpen) {
-          popupMenu.style.display = 'flex';
-          popupOverlay.style.display = 'block';
-          pages[lastActivePage].classList.add('blur');
-        }
-      };
-
-      popupOverlay.onclick = () => closeAllPopups();
-
-      navBtns.home.onclick = () => handleNavigation('home');
-      navBtns.previews.onclick = () => handleNavigation('previews');
-      navBtns.premium.onclick = () => handleNavigation('premium');
-      infoBtn.onclick = () => handleNavigation('info');
-      privacyBtn.onclick = () => handleNavigation('privacy');
-
-      async function handleAuth() {
-        authError.textContent = '';
-        loading.style.display = 'block';
-        const email = authEmail.value.trim();
-        const password = authPassword.value.trim();
+      // Authentication
+      async function handleAuth(e) {
+        e.preventDefault();
+        showLoading();
+        const email = elements.authEmail.value.trim();
+        const password = elements.authPassword.value.trim();
         if (!email || !password) {
-          authError.textContent = 'Please enter email and password.';
-          loading.style.display = 'none';
+          elements.authError.textContent = 'Email and password required.';
+          hideLoading();
           return;
         }
-        let { user, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error && error.message.includes('Invalid login credentials')) {
-          ({ user, error } = await supabase.auth.signUp({ email, password }));
+
+        try {
+          let { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error && error.message.includes('Invalid login')) {
+            ({ data, error } = await supabase.auth.signUp({ email, password }));
+          }
+          if (error) throw new Error(error.message);
+
+          closePopups();
+          window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
+        } catch (err) {
+          elements.authError.textContent = err.message;
+        } finally {
+          hideLoading();
         }
-        loading.style.display = 'none';
-        if (error) {
-          authError.textContent = error.message;
-          return;
-        }
-        authPopup.style.display = 'none';
-        pages.premium.classList.remove('blur');
-        window.location.href = 'https://t.me/+BzdnBVoE76EzNWZk';
       }
 
-      authSignInBtn.onclick = async () => {
-        await handleAuth();
-      };
+      // Event Listeners
+      elements.menuBtn.addEventListener('click', () => {
+        elements.sidebar.classList.toggle('open');
+        elements.overlay.classList.toggle('active');
+        document.getElementById(`${currentPage}-page`).classList.toggle('blur');
+      });
 
-      authPopup.onclick = (e) => {
-        if (e.target === authPopup) {
-          closeAllPopups();
-          handleNavigation('previews');
+      elements.overlay.addEventListener('click', closePopups);
+
+      elements.navBtns.forEach(btn => {
+        btn.addEventListener('click', () => showPage(btn.dataset.page));
+      });
+
+      elements.sidebarLinks.forEach(link => {
+        link.addEventListener('click', () => showPage(link.dataset.page));
+      });
+
+      elements.subscribeBtn.addEventListener('click', () => {
+        elements.subscribePopup.classList.add('active');
+        elements.subscribeOverlay.classList.add('active');
+        document.getElementById('info-page').classList.add('blur');
+      });
+
+      elements.subscribeClose.addEventListener('click', closePopups);
+      elements.subscribeOverlay.addEventListener('click', e => {
+        if (e.target === elements.subscribeOverlay) closePopups();
+      });
+
+      elements.authForm.addEventListener('submit', handleAuth);
+      elements.authOverlay.addEventListener('click', e => {
+        if (e.target === elements.authOverlay) {
+          closePopups();
+          showPage('previews');
         }
-      };
+      });
 
-      howToSubscribeBtn.onclick = () => {
-        closeAllPopups();
-        howToSubscribePopup.style.display = 'block';
-        howToSubscribePopupOverlay.style.display = 'block';
-        pages[lastActivePage].classList.add('blur');
-      };
-
-      closeHowToSubscribePopup.onclick = () => {
-        closeAllPopups();
-      };
-
-      howToSubscribePopupOverlay.onclick = (e) => {
-        if (e.target === howToSubscribePopupOverlay) {
-          closeAllPopups();
-        }
-      };
-
-      const dropdownBtn = document.getElementById('privacyDropdownBtn');
-      const dropdownBody = document.getElementById('privacyDropdownBody');
-      let isDropdownOpen = false;
-
-      dropdownBtn.addEventListener('click', () => {
-        isDropdownOpen = !isDropdownOpen;
-        dropdownBody.style.display = isDropdownOpen ? 'block' : 'none';
-        dropdownBtn.innerHTML = isDropdownOpen ? 'Hide Details ▲' : 'Show Details ▼';
+      elements.privacyToggle.addEventListener('click', () => {
+        const isOpen = elements.privacyContent.classList.toggle('active');
+        elements.privacyToggle.textContent = isOpen ? 'Hide Details' : 'Show Details';
       });
     });
   </script>
