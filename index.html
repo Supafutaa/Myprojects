@@ -508,8 +508,8 @@
       font-weight: 700;
     }
 
-    .admin-form input,
-    .admin-form select {
+    .auth-form input,
+    .auth-form select {
       padding: 0.75rem;
       border: 1px solid var(--text-muted);
       border-radius: var(--radius);
@@ -608,7 +608,7 @@
     .static-page h2 {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       font-size: 1.5rem;
-      color: var(--link aurez-vous);
+      color: var(--link);
       margin-bottom: 1rem;
       font-weight: 700;
     }
@@ -916,7 +916,7 @@
       async function checkPremium(userId) {
         if (!userId) return;
         const { data, error } = await supabase
-          .from('access_codes')
+          .from('premium_keys')
           .select('used')
           .eq('assigned_to', userId)
           .eq('used', true)
@@ -1361,14 +1361,14 @@
         }
         try {
           const { data, error } = await supabase
-            .from('access_codes')
+            .from('premium_keys')
             .select('*')
             .eq('code', code)
             .eq('used', false)
             .single();
           if (error || !data) throw new Error('Invalid or used code');
           await supabase
-            .from('access_codes')
+            .from('premium_keys')
             .update({ used: true, assigned_to: user.id })
             .eq('code', code);
           setIsPremium(true);
