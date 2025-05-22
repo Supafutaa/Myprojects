@@ -879,6 +879,15 @@
       document.getElementById('menu').classList.remove('active');
     }
 
+    function generateCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < 8; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
     function App() {
       const [page, setPage] = useState('home');
       const [user, setUser] = useState(null);
@@ -1176,8 +1185,36 @@
           const { data, error } = await supabase.auth.signInWithPassword({ email, password });
           if (error) throw new Error(error.message);
           setUser(data.user);
+          
+          // Generate and store 8-character access code
+          let code = generateCode();
+          let codeExists = true;
+          while (codeExists) {
+            const { data: existing, error: checkError } = await supabase
+              .from('premium_keys')
+              .select('code')
+              .eq('code', code)
+              .single();
+            if (!existing && !checkError) {
+              codeExists = false;
+            } else {
+              code = generateCode();
+            }
+          }
+          const expiresAt = new Date();
+          expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+          const { error: insertError } = await supabase
+            .from('premium_keys')
+            .insert({
+              code,
+              used: false,
+              assigned_to: null,
+              expires_at: expiresAt.toISOString()
+            });
+          if (insertError) throw new Error(`Failed to generate access code: ${insertError.message}`);
+
           setPage('premium');
-          showToast('Signed in successfully');
+          showToast('Login successful! New access code generated.');
         } catch (err) {
           setError(err.message);
         }
